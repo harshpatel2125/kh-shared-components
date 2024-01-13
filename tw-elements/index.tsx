@@ -34,5 +34,5 @@ export const DropdownWrapper = ({ label, options }: DropdownProps) => {
 
 //--------------------------- tw-carousal wrapper-------------------------------------------
 export const CarousalWrapper = ({ images }: CarousalProps) => {
-  return <DynamicCarousal images={images} />;
+  return <DynamicCarousal />;
 };

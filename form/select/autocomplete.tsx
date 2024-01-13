@@ -40,22 +40,22 @@ const AutoCompleteC: React.FC<AutoCompleteCProps> = ({
 	useEffect(() => {}, [options, id]);
 
 	return (
-		<div
-			className="relative flex gap-2 items-center peer min-h-[auto] w-full rounded-full border border-gray-200 focus:border-blue-400 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear peer-focus:text-primary motion-reduce:transition-none bg-[#F0F2F1] !shadow-none"
-			data-te-input-wrapper-init
-			id={`autoc-${id}`}
-		>
-			{icon && <SearchIcon className=""/>}
-			<input
-				type="text"
-				className="bg-transparent outline-none"
-				id={id}
-				ref={ref}
-				onChange={(e) => (onChange ? onChange(e) : {})}
-				placeholder={label}
-			/>
-		</div>
-	);
+    <div
+      className="relative flex gap-2 items-center peer min-h-[auto] w-full rounded-full border border-gray-200 focus:border-blue-400 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear peer-focus:text-primary motion-reduce:transition-none bg-[#F0F2F1] !shadow-none"
+      data-te-input-wrapper-init
+      id={`autoc-${id}`}
+    >
+      {icon && <SearchIcon />}
+      <input
+        type="text"
+        className="bg-transparent outline-none"
+        id={id}
+        ref={ref}
+        onChange={(e) => (onChange ? onChange(e) : {})}
+        placeholder={label}
+      />
+    </div>
+  );
 };
 
 export default AutoCompleteC;

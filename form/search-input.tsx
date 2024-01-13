@@ -4,7 +4,7 @@ import SearchIcon from "@/assets/icons/SearchIcon";
 const SearchInput: React.FC = () => {
   return (
     <div className="inline-block relative">
-      <SearchIcon className="absolute top-3 left-3" />
+      <SearchIcon />
       <input
         type="text"
         placeholder="Search"
