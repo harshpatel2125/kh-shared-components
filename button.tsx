@@ -15,6 +15,12 @@ export enum IButtonColor {
   Light = "light",
 }
 
+export enum IButtonType {
+  formSubmit = "formSubmit",
+  goBack = "goBack",
+  createNew = "createNew",
+}
+
 type ButtonColorType =
   | IButtonColor
   | "primary"
@@ -33,8 +39,9 @@ export interface IButton {
   icon?: JSX.Element | string;
   children?: JSX.Element | string;
   btnName?: string;
-  onClick?: (e: any) => void;
+  onClick?: (e?: any) => void;
   className?: string;
+  btnType?: string;
 }
 
 const Button: React.FC<IButton> = ({

@@ -55,23 +55,15 @@ export interface IDataFormReturnType {
 interface DataFormProps {
   fields: Array<IFieldType>;
   onSubmit: (e: Array<IDataFormReturnType>) => void;
-  onDiscard?: () => void;
   column?: number;
   containerClassName?: string;
-  THeaderTitle?: string;
-  THeaderSitemap?: string[];
-  THButtons?: IButton[];
 }
 
 const DataForm: FC<DataFormProps> = ({
   fields,
   onSubmit,
-  onDiscard,
   column,
   containerClassName,
-  THeaderTitle,
-  THeaderSitemap,
-  THButtons,
 }) => {
   const router = useRouter();
 
@@ -127,14 +119,6 @@ const DataForm: FC<DataFormProps> = ({
       default:
         updateState(event, fieldIndex);
         break;
-    }
-  };
-
-  const handleFormDiscard = () => {
-    if (onDiscard) {
-      onDiscard();
-    } else {
-      router.back();
     }
   };
 
@@ -343,12 +327,7 @@ const DataForm: FC<DataFormProps> = ({
   const iconButtonClass: string = "h-3 w-3 p-0 m-0";
 
   return (
-    <div className="mx-10 my-5 table-wrapper">
-      <TableHeader
-        headerButtons={THButtons}
-        tableSitemap={THeaderSitemap}
-        title={THeaderTitle}
-      />
+    <div className="table-wrapper">
       <div className="h-full p-3">
         <div className={containerClassName}>
           {/* <div className={`w-full mb-5`}>

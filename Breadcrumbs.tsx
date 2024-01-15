@@ -7,10 +7,7 @@ interface BreadcrumbsProps {
   hideDivider?: boolean;
 }
 
-const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
-  children,
-  hideDivider,
-}) => {
+const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ children, hideDivider }) => {
   const pathname = usePathname();
   const router = useRouter();
   const breads = pathname && pathname?.split("/");
@@ -48,7 +45,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
         </div>
       </Subtitle>
       {!hideDivider ? (
-        <div className="divider mt-0"></div>
+        <div className="divider my-0"></div>
       ) : (
         <div className="mt-5"></div>
       )}

@@ -1,15 +1,21 @@
-import Button, { IButton } from "../button";
+import Button, { IButton, IButtonType } from "../button";
 
 export interface TableHeaderProps {
   headerButtons: Array<IButton> | undefined;
   tableSitemap?: string[];
   title?: string;
+  handleCreateNew?: () => any;
+  handleFormSubmission?: (data: any) => any;
+  handleGoBack?: () => any;
 }
 
 const TableHeader = ({
   headerButtons,
   tableSitemap,
   title,
+  handleCreateNew,
+  handleFormSubmission,
+  handleGoBack,
 }: TableHeaderProps) => {
   return (
     <div className={`table-header w-full`}>
@@ -23,16 +29,27 @@ const TableHeader = ({
           ))}
         </p>
         <div className="flex gap-3">
-          {headerButtons?.map((btn, i) => (
-            <Button
-              key={i}
-              onClick={btn.onClick}
-              color={btn.color}
-              icon={btn.icon}
-              btnName={btn.btnName}
-              className={btn.className}
-            />
-          ))}
+          {headerButtons?.map((btn, i) => {
+            const clickHandler =
+              btn?.btnType === IButtonType.createNew
+                ? handleCreateNew
+                : btn?.btnType === IButtonType.formSubmit
+                ? handleFormSubmission
+                : btn?.btnType === IButtonType.goBack
+                ? handleGoBack
+                : btn.onClick;
+
+            return (
+              <Button
+                key={i}
+                onClick={clickHandler}
+                color={btn.color}
+                icon={btn.icon}
+                btnName={btn.btnName}
+                className={btn.className}
+              />
+            );
+          })}
         </div>
       </div>
     </div>
