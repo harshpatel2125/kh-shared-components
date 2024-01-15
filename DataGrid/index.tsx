@@ -77,7 +77,7 @@ const DataGrid: FC<IDataGrid> = ({
         lowercasedSearchValue &&
         lowercasedSearchValue !== "" &&
         lowercasedSearchValue?.length > 0 &&
-        originalString.includes(lowercasedSearchValue);
+        originalString?.includes(lowercasedSearchValue);
       const splitedString = originalString?.split("");
 
       return splitedString?.map((char: string, index: number) => (
@@ -92,6 +92,7 @@ const DataGrid: FC<IDataGrid> = ({
         </span>
       ));
     };
+
     const renderEditCell = (e: any, a: any) => {
       return (
         <Button
@@ -168,6 +169,7 @@ const DataGrid: FC<IDataGrid> = ({
     gridRef.current!.api.setFilterModel(null);
     gridRef.current!.api.setGridOption("quickFilterText", "");
   };
+
   const autoSizeStrategy: any = {
     type: "fitGridWidth",
     columnLimits: [
