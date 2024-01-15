@@ -10,6 +10,7 @@ export interface TableHeaderProps {
   handleFormSubmission?: (data: any) => any;
   handleGoBack?: () => any;
   drawerId?: string;
+  showFilterBtn?: boolean;
 }
 
 const TableHeader = ({
@@ -20,6 +21,7 @@ const TableHeader = ({
   handleFormSubmission,
   handleGoBack,
   drawerId,
+  showFilterBtn,
 }: TableHeaderProps) => {
   const getClickHandler = (btn: any) => {
     const clickHandlerFunc =
@@ -50,7 +52,7 @@ const TableHeader = ({
           </p>
           <div className="flex gap-3 ms-3 items-center">
             {headerButtons?.map((btn, i) => {
-              if (btn?.btnType === IButtonType.Filter) {
+              if (btn?.btnType === IButtonType.Filter && showFilterBtn) {
                 return (
                   <>
                     <div className=" bg-tertiary drawer-content flex items-center justify-center  w-[28px] h-[28px] rounded-full hover:bg-tertiary-dark">
@@ -61,6 +63,7 @@ const TableHeader = ({
                   </>
                 );
               }
+
               const clickHandlerFunc = getClickHandler(btn);
 
               return (
