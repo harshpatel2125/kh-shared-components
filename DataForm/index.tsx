@@ -44,6 +44,7 @@ export interface IFieldType {
   showPassword?: boolean;
   options?: Array<optionsType>;
   icon?: React.ReactNode; // @harsh need to implement for showing icon after input
+  isFilterType?: boolean;
 }
 
 export interface IDataFormReturnType {
@@ -327,7 +328,7 @@ const DataForm: FC<DataFormProps> = ({
   const iconButtonClass: string = "h-3 w-3 p-0 m-0";
 
   return (
-    <div className="table-wrapper">
+    <div className="table-wrapper " style={{ height: "100%" }}>
       <div className="h-full p-3">
         <div className={containerClassName}>
           {/* <div className={`w-full mb-5`}>

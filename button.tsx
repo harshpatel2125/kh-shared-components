@@ -16,9 +16,10 @@ export enum IButtonColor {
 }
 
 export enum IButtonType {
-  formSubmit = "formSubmit",
-  goBack = "goBack",
-  createNew = "createNew",
+  FormSubmit = "formSubmit",
+  GoBack = "goBack",
+  CreateNew = "createNew",
+  Filter = "filter",
 }
 
 type ButtonColorType =
