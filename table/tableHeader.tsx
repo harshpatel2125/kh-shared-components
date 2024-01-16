@@ -52,30 +52,32 @@ const TableHeader = ({
           </p>
           <div className="flex gap-3 ms-3 items-center">
             {headerButtons?.map((btn, i) => {
-              if (btn?.btnType === IButtonType.Filter && showFilterBtn) {
+              if (btn?.btnType === IButtonType.Filter) {
+                if (showFilterBtn) {
+                  return (
+                    <>
+                      <div className=" bg-tertiary drawer-content flex items-center justify-center  w-[28px] h-[28px] rounded-full hover:bg-tertiary-dark">
+                        <label htmlFor={drawerId} className="cursor-pointer">
+                          <FilterIcon width={14} height={14} color="white" />
+                        </label>
+                      </div>
+                    </>
+                  );
+                }
+              } else {
+                const clickHandlerFunc = getClickHandler(btn);
+
                 return (
-                  <>
-                    <div className=" bg-tertiary drawer-content flex items-center justify-center  w-[28px] h-[28px] rounded-full hover:bg-tertiary-dark">
-                      <label htmlFor={drawerId} className="cursor-pointer">
-                        <FilterIcon width={14} height={14} color="white" />
-                      </label>
-                    </div>
-                  </>
+                  <Button
+                    key={i}
+                    onClick={clickHandlerFunc}
+                    color={btn.color}
+                    icon={btn.icon}
+                    btnName={btn.btnName}
+                    className={btn.className}
+                  />
                 );
               }
-
-              const clickHandlerFunc = getClickHandler(btn);
-
-              return (
-                <Button
-                  key={i}
-                  onClick={clickHandlerFunc}
-                  color={btn.color}
-                  icon={btn.icon}
-                  btnName={btn.btnName}
-                  className={btn.className}
-                />
-              );
             })}
           </div>
         </div>
