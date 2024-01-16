@@ -11,6 +11,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ children, hideDivider }) => {
   const pathname = usePathname();
   const router = useRouter();
   const breads = pathname && pathname?.split("/");
+
   return (
     <div className={"card w-full mt-1"}>
       <Subtitle styleClass={"text-[#48a4f9] pl-3"}>
