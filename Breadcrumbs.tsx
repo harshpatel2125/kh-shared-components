@@ -30,7 +30,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ children, hideDivider }) => {
                           router.back();
                         }
                       }}
-                      className="capitalize text-[#000] text-[18px]"
+                      className="capitalize text-black font-[600]  text-[16px]"
                     >
                       {index === breads?.length - 1 ? (
                         ele?.split("-")?.join(" ")
