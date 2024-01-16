@@ -11,6 +11,8 @@ import {
   DocumentArrowDownIcon,
   PencilIcon,
 } from "@heroicons/react/24/outline";
+import { getToolTips } from "@/utils/getTooltips";
+import { Icons } from "@/utils/getIcons";
 
 var checkboxSelection = function (params: CheckboxSelectionCallbackParams) {
   // we put checkbox on the name if we are not doing grouping
@@ -93,19 +95,34 @@ const DataGrid: FC<IDataGrid> = ({
       ));
     };
 
-    const renderEditCell = (e: any, a: any) => {
-      return (
-        <Button
-          onClick={() =>
-            onEditPress &&
-            propertyForEdit &&
-            onEditPress(e?.data?.[propertyForEdit])
-          }
-          icon={<PencilIcon className="h-3 w-3" />}
-          className="px-1 m-0 py-0 bg-transparent hover:bg-transparent"
-        />
-      );
-    };
+    const cellIcons = [
+      Icons.Pen,
+      Icons.Bin,
+      Icons.Rights,
+      Icons.Close,
+      Icons.Copy,
+      // Icons.Reset,
+    ];
+
+    // const renderEditCell = (e: any, a: any) => {
+    //   return (
+    //     <div className="flex h-full flex-row gap-1 items-center">
+    //       {getToolTips(cellIcons)}
+    //     </div>
+    //   );
+
+    // return (
+    //   <Button
+    //     onClick={() =>
+    //       onEditPress &&
+    //       propertyForEdit &&
+    //       onEditPress(e?.data?.[propertyForEdit])
+    //     }
+    //     icon={<PencilIcon className="h-3 w-3" />}
+    //     className="px-1 m-0 py-0 bg-transparent hover:bg-transparent"
+    //   />
+    // );
+    // };
     const newColumnDefs = columnDefs?.map((ele) => {
       if (ele?.checkboxSelection && ele?.headerCheckboxSelection) {
         return {
@@ -132,22 +149,22 @@ const DataGrid: FC<IDataGrid> = ({
           cellRenderer: renderCell,
         };
     });
-    const editColumn = {
-      headerName: "",
-      field: "",
-      cellRenderer: renderEditCell,
-      width: 50,
-    };
-    const headerColumn = {
-      headerName: "",
-      field: "",
-      checkboxSelection: true,
-      headerCheckboxSelection: true,
-      // width: 50,
-    };
+    // const editColumn = {
+    //   headerName: "Action",
+    //   field: "",
+    //   cellRenderer: renderEditCell,
+    //   // width: 100,
+    // };
+    // const headerColumn = {
+    //   headerName: "",
+    //   field: "",
+    //   checkboxSelection: true,
+    //   headerCheckboxSelection: true,
+    //   // width: 50,
+    // };
     if (enableEditBtn) {
-      return [headerColumn, editColumn, ...newColumnDefs];
-    } else return [headerColumn, ...newColumnDefs];
+      return [...newColumnDefs];
+    } else return [...newColumnDefs];
   }, [
     quickFilterText,
     columnDefs,
