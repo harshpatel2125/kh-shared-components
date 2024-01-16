@@ -21,6 +21,7 @@ export interface IFieldType {
   placeholder?: string;
   key: string;
   value?: string | boolean | Array<any> | Object | undefined;
+  selectedOption?: Object;
   type: IInputType;
   required?: boolean;
   readOnly?: boolean;
@@ -44,7 +45,7 @@ export interface IDataFormReturnType {
 }
 
 interface DataFormProps {
-  handleChange?: any;
+  setFieldsState?: any;
   handleTogglePassword?: any;
   column?: number;
   containerClassName?: string;
@@ -65,8 +66,84 @@ const DataForm: FC<DataFormProps> = ({
   formError,
   formState,
   handleTogglePassword,
-  handleChange,
+  setFieldsState,
 }) => {
+  const getFileUri = (event: any, fieldIndex: any) => {
+    const binaryFile = event?.target?.files?.[0];
+    if (binaryFile) {
+      const reader = new FileReader();
+      reader.onload = (event: any) => {
+        const imageUrl = event.target.result;
+        setFieldsState((prev: any) =>
+          prev?.map((ele: any, index: number) => {
+            if (index === fieldIndex) {
+              return {
+                ...ele,
+                value: imageUrl,
+              };
+            } else return ele;
+          })
+        );
+      };
+      reader.readAsDataURL(binaryFile);
+    }
+  };
+
+  const updateState = (event: any, fieldIndex: number) => {
+    setFieldsState((prev: any) =>
+      prev?.map((ele: any, index: number) => {
+        if (index === fieldIndex) {
+          return {
+            ...ele,
+            value: event?.target?.value,
+            emptyError: false,
+          };
+        } else return ele;
+      })
+    );
+  };
+
+  const updateDropDownState = (event: any, fieldIndex: number) => {
+    setFieldsState((prev: any) =>
+      prev?.map((ele: any, index: number) => {
+        if (index === fieldIndex) {
+          console.log({
+            ...ele,
+            value: event?.value,
+            selectedOption: event,
+            emptyError: false,
+          });
+          return {
+            ...ele,
+            value: event?.value,
+            selectedOption: event,
+            emptyError: false,
+          };
+        } else return ele;
+      })
+    );
+  };
+
+  const handleChange = (
+    event: any,
+    fieldIndex: number,
+    fieldType: IInputType
+  ) => {
+    switch (fieldType) {
+      case IInputType.Image:
+        getFileUri(event, fieldIndex);
+        break;
+      case IInputType.DropDown:
+        console.log(event, fieldIndex);
+        updateDropDownState(event, fieldIndex);
+        // getFileUri(event, fieldIndex);
+        break;
+      default:
+        updateState(event, fieldIndex);
+        break;
+    }
+  };
+
   const renderFields = (ele: IFieldType, index: number) => {
     switch (ele?.type) {
       case IInputType.Text:
@@ -115,11 +192,12 @@ const DataForm: FC<DataFormProps> = ({
         return (
           <div className={`${ele.className}`}>
             <SelectDropdown
-              onChange={() => {}}
+              onChange={(e) => handleChange(e, index, ele?.type)}
               options={
                 ele?.options ? ele.options : [{ label: "one", value: "one" }]
               }
               isSearchable={true}
+              value={ele?.selectedOption ? [ele?.selectedOption] : []}
             />
           </div>
         );

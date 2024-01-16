@@ -11,6 +11,8 @@ import {
   DocumentArrowDownIcon,
   PencilIcon,
 } from "@heroicons/react/24/outline";
+import { getToolTips } from "@/utils/getTooltips";
+import { Icons } from "@/utils/getIcons";
 
 var checkboxSelection = function (params: CheckboxSelectionCallbackParams) {
   // we put checkbox on the name if we are not doing grouping
@@ -69,98 +71,81 @@ const DataGrid: FC<IDataGrid> = ({
     };
   }, [editable, filter]);
 
-  const updatedColumnDefs = useMemo(() => {
-    const renderCell = (e: any) => {
-      const lowercasedSearchValue = quickFilterText.toLowerCase();
-      const originalString = e?.value?.toString().toLowerCase();
-      const isMatch =
-        lowercasedSearchValue &&
-        lowercasedSearchValue !== "" &&
-        lowercasedSearchValue?.length > 0 &&
-        originalString?.includes(lowercasedSearchValue);
-      const splitedString = originalString?.split("");
+  // // const updatedColumnDefs = useMemo(() => {
+  //   // const renderCell = (e: any) => {
+  //   //   const lowercasedSearchValue = quickFilterText.toLowerCase();
+  //   //   const originalString = e?.value?.toString().toLowerCase();
+  //   //   const isMatch =
+  //   //     lowercasedSearchValue &&
+  //   //     lowercasedSearchValue !== "" &&
+  //   //     lowercasedSearchValue?.length > 0 &&
+  //   //     originalString?.includes(lowercasedSearchValue);
+  //   //   const splitedString = originalString?.split("");
 
-      return splitedString?.map((char: string, index: number) => (
-        <span
-          key={index}
-          style={{
-            background:
-              isMatch && lowercasedSearchValue?.includes(char) ? "yellow" : "",
-          }}
-        >
-          {char}
-        </span>
-      ));
-    };
+  //   //   return (
+  //   //     <div>
+  //   //       {splitedString?.map((char: string, index: number) => (
+  //   //         <span
+  //   //           key={index}
+  //   //           style={{
+  //   //             background:
+  //   //               isMatch && lowercasedSearchValue?.includes(char)
+  //   //                 ? "yellow"
+  //   //                 : "",
+  //   //           }}
+  //   //         >
+  //   //           {char}
+  //   //         </span>
+  //   //       ))}
+  //   //     </div>
+  //   //   );
+  //   // };
 
-    const renderEditCell = (e: any, a: any) => {
-      return (
-        <Button
-          onClick={() =>
-            onEditPress &&
-            propertyForEdit &&
-            onEditPress(e?.data?.[propertyForEdit])
-          }
-          icon={<PencilIcon className="h-3 w-3" />}
-          className="px-1 m-0 py-0 bg-transparent hover:bg-transparent"
-        />
-      );
-    };
-    const newColumnDefs = columnDefs?.map((ele) => {
-      if (ele?.checkboxSelection && ele?.headerCheckboxSelection) {
-        return {
-          ...ele,
-          checkboxSelection: checkboxSelection,
-          headerCheckboxSelection: headerCheckboxSelection,
-          cellRenderer: renderCell,
-        };
-      } else if (ele?.checkboxSelection) {
-        return {
-          ...ele,
-          checkboxSelection: checkboxSelection,
-          cellRenderer: renderCell,
-        };
-      } else if (ele?.headerCheckboxSelection) {
-        return {
-          ...ele,
-          headerCheckboxSelection: headerCheckboxSelection,
-          cellRenderer: renderCell,
-        };
-      } else
-        return {
-          ...ele,
-          cellRenderer: renderCell,
-        };
-    });
-    const editColumn = {
-      headerName: "",
-      field: "",
-      cellRenderer: renderEditCell,
-      width: 50,
-    };
-    const headerColumn = {
-      headerName: "",
-      field: "",
-      checkboxSelection: true,
-      headerCheckboxSelection: true,
-      // width: 50,
-    };
-    if (enableEditBtn) {
-      return [headerColumn, editColumn, ...newColumnDefs];
-    } else return [headerColumn, ...newColumnDefs];
-  }, [
-    quickFilterText,
-    columnDefs,
-    onEditPress,
-    propertyForEdit,
-    enableEditBtn,
-  ]);
+  //   // const renderEditCell = (e: any, a: any) => {
+  //   //   return (
+  //   //     <div className="flex h-full flex-row gap-1 items-center">
+  //   //       {getToolTips(cellIcons)}
+  //   //     </div>
+  //   //   );
+
+  //   // return (
+  //   //   <Button
+  //   //     onClick={() =>
+  //   //       onEditPress &&
+  //   //       propertyForEdit &&
+  //   //       onEditPress(e?.data?.[propertyForEdit])
+  //   //     }
+  //   //     icon={<PencilIcon className="h-3 w-3" />}
+  //   //     className="px-1 m-0 py-0 bg-transparent hover:bg-transparent"
+  //   //   />
+  //   // );
+  //   // };
+
+  // //   return columnDefs;
+  //   // const editColumn = {
+  //   //   headerName: "Action",
+  //   //   field: "",
+  //   //   cellRenderer: renderEditCell,
+  //   //   // width: 100,
+  //   // };
+  //   // const headerColumn = {
+  //   //   headerName: "",
+  //   //   field: "",
+  //   //   checkboxSelection: true,
+  //   //   headerCheckboxSelection: true,
+  //   //   // width: 50,
+  //   // };
+  //   // if (enableEditBtn) {
+  //   //   return [...newColumnDefs];
+  //   // } else return [...newColumnDefs];
+  // // }, [quickFilterText, columnDefs]);
 
   const handleExport = useCallback(() => {
     gridRef.current!.api.exportDataAsCsv();
   }, []);
 
   const handleSearch = (e: any) => {
+    gridRef.current!.api.setGridOption("quickFilterText", e?.target?.value);
     setQuickFilterText(e?.target?.value);
   };
 
@@ -172,13 +157,7 @@ const DataGrid: FC<IDataGrid> = ({
 
   const autoSizeStrategy: any = {
     type: "fitGridWidth",
-    columnLimits: [
-      {
-        colId: "0",
-        minWidth: 40,
-        maxWidth: 40,
-      },
-    ],
+    width: 1500,
   };
   return (
     <div
@@ -237,17 +216,18 @@ const DataGrid: FC<IDataGrid> = ({
         autoSizeStrategy={autoSizeStrategy}
         ref={gridRef}
         rowData={rowData}
-        columnDefs={updatedColumnDefs}
+        columnDefs={columnDefs}
         defaultColDef={defaultColDef}
         pivotPanelShow={"always"}
         rowGroupPanelShow={"always"}
         suppressRowClickSelection={true}
-        suppressMovableColumns={false}
-        suppressMoveWhenRowDragging={false}
+        suppressMovableColumns={true}
+        suppressMoveWhenRowDragging={true}
         groupSelectsChildren={true}
         rowSelection={"multiple"}
         enableRangeSelection={true}
         suppressExcelExport={true}
+        suppressScrollOnNewData={false}
         // Pagination Props
         pagination={disablePagination ? false : true}
         paginationPageSize={defaultPageSize || 10}

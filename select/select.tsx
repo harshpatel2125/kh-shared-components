@@ -5,8 +5,8 @@ const primaryColor = "#2C2C2C";
 const secondaryColor = "#eeeff1";
 
 interface Option {
-  label: any;
-  value: any;
+  label?: any;
+  value?: any;
 }
 
 //  new
