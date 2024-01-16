@@ -20,6 +20,7 @@ export enum IButtonType {
   GoBack = "goBack",
   CreateNew = "createNew",
   Filter = "filter",
+  Reset = "reset",
 }
 
 type ButtonColorType =

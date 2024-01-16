@@ -1,17 +1,7 @@
 import React, { FC } from "react";
 import { IInputType } from "./enums";
-import Button, { IButton, IButtonColor } from "../button";
-import { useRouter } from "next/navigation";
-import {
-  CheckIcon,
-  XMarkIcon,
-  ArrowLeftIcon,
-} from "@heroicons/react/24/outline";
 import dynamic from "next/dynamic";
 import SelectDropdown from "../select/select";
-import ToggleInput from "../FormElements/ToogleInput";
-import TableHeader from "../table/tableHeader";
-import { validateEmail, validateMobile } from "@/utils/dataValidation";
 
 const TextInput = dynamic(() => import("../FormElements/TextInput"), {
   ssr: false,
@@ -54,165 +44,29 @@ export interface IDataFormReturnType {
 }
 
 interface DataFormProps {
-  fields: Array<IFieldType>;
-  onSubmit: (e: Array<IDataFormReturnType>) => void;
+  handleChange?: any;
+  handleTogglePassword?: any;
   column?: number;
   containerClassName?: string;
+  formError: any;
+  formState: any;
+}
+
+{
+  /** @harsh form submission should be handled by parent of dataForm (component who is invoking) so  moving form callbacks to parent
+   *  check --> user-management/user/create
+   *
+   */
 }
 
 const DataForm: FC<DataFormProps> = ({
-  fields,
-  onSubmit,
   column,
   containerClassName,
+  formError,
+  formState,
+  handleTogglePassword,
+  handleChange,
 }) => {
-  const router = useRouter();
-
-  const [fieldsState, setFieldsState] =
-    React.useState<Array<IFieldType>>(fields);
-
-  const [formError, setFormError] = React.useState(false);
-
-  const getFileUri = (event: any, fieldIndex: any) => {
-    const binaryFile = event?.target?.files?.[0];
-    if (binaryFile) {
-      const reader = new FileReader();
-      reader.onload = (event: any) => {
-        const imageUrl = event.target.result;
-        setFieldsState((prev: any) =>
-          prev?.map((ele: any, index: number) => {
-            if (index === fieldIndex) {
-              return {
-                ...ele,
-                value: imageUrl,
-              };
-            } else return ele;
-          })
-        );
-      };
-      reader.readAsDataURL(binaryFile);
-    }
-  };
-
-  const updateState = (event: any, fieldIndex: number) => {
-    setFieldsState((prev: any) =>
-      prev?.map((ele: any, index: number) => {
-        if (index === fieldIndex) {
-          return {
-            ...ele,
-            value: event?.target?.value,
-            emptyError: false,
-          };
-        } else return ele;
-      })
-    );
-  };
-
-  const handleChange = (
-    event: any,
-    fieldIndex: number,
-    fieldType: IInputType
-  ) => {
-    switch (fieldType) {
-      case IInputType.Image:
-        getFileUri(event, fieldIndex);
-        break;
-      default:
-        updateState(event, fieldIndex);
-        break;
-    }
-  };
-
-  const handleSubmitForm = () => {
-    const verifyFormData = fieldsState?.map((ele: IFieldType) => {
-      if (
-        (ele?.required && !ele?.readOnly) ||
-        (ele?.type === IInputType.Email &&
-          ele?.value &&
-          ele?.value?.toString()?.length > 0) ||
-        (ele?.type === IInputType.Phone &&
-          ele?.value &&
-          ele?.value?.toString()?.length > 0)
-      ) {
-        if (ele?.type === IInputType.Image || ele?.type === IInputType.File) {
-          if (!ele?.binaryFiles || !ele?.value) {
-            return {
-              ...ele,
-              emptyError: true,
-            };
-          } else return { ...ele, finished: true };
-        } else if (
-          ele?.type === IInputType.Email &&
-          ele?.value &&
-          ele?.value?.toString()?.length > 0 &&
-          !validateEmail(ele?.value?.toString() || "")
-        ) {
-          return {
-            ...ele,
-            validationError: true,
-            validationMessage: "Invalid email address.",
-          };
-        } else if (
-          ele?.type === IInputType.Phone &&
-          ele?.value &&
-          ele?.value?.toString()?.length > 0 &&
-          !validateMobile(ele?.value?.toString() || "")
-        ) {
-          return {
-            ...ele,
-            validationError: true,
-            validationMessage: "Invalid phone number.",
-          };
-        } else {
-          if (!ele?.value && ele?.value === "") {
-            return {
-              ...ele,
-              emptyError: true,
-              validationError: false,
-            };
-          } else return { ...ele, finished: true, validationError: false };
-        }
-      } else return { ...ele, finished: true };
-    });
-    setFieldsState(verifyFormData);
-    const finished =
-      verifyFormData?.filter((ele: IFieldType) => ele?.finished)?.length ===
-      fieldsState?.length;
-    if (finished) {
-      const retrunData: Array<IDataFormReturnType> = fieldsState?.map(
-        (ele: IFieldType) => {
-          if (ele?.type === IInputType.Image || ele?.type === IInputType.File) {
-            return {
-              key: ele?.key,
-              value: ele?.value,
-              binaryFiles: ele?.binaryFiles,
-            };
-          } else
-            return {
-              key: ele?.key,
-              value: ele?.value,
-            };
-        }
-      );
-      onSubmit(retrunData);
-    } else {
-      setFormError(true);
-    }
-  };
-
-  const handleTogglePassword = (fieldIndex: number) => {
-    setFieldsState((prev: any) =>
-      prev?.map((ele: any, index: number) => {
-        if (index === fieldIndex) {
-          return {
-            ...ele,
-            showPassword: !ele?.showPassword,
-          };
-        } else return ele;
-      })
-    );
-  };
-
   const renderFields = (ele: IFieldType, index: number) => {
     switch (ele?.type) {
       case IInputType.Text:
@@ -325,43 +179,20 @@ const DataForm: FC<DataFormProps> = ({
     }
   };
 
-  const iconButtonClass: string = "h-3 w-3 p-0 m-0";
-
   return (
     <div className="table-wrapper " style={{ height: "100%" }}>
-      <div className="h-full p-3">
+      <div className="h-full p-3 py-10">
         <div className={containerClassName}>
-          {/* <div className={`w-full mb-5`}>
-          <div className="flex justify-end">
-            <Button
-              color={IButtonColor.Success}
-              icon={<CheckIcon className={iconButtonClass} />}
-              onClick={handleSubmitForm}
-            >
-              Save
-            </Button>
-            <Button
-              className="ml-4"
-              color={IButtonColor.Error}
-              onClick={handleFormDiscard}
-              icon={<XMarkIcon className={iconButtonClass} />}
-            >
-              Discard
-            </Button>
-          </div>
-        </div> */}
-          {/* @harsh form submission should be handled by parent of data form (component who is invoking) so we will need to move submit form callback to parent */}
-
-          {/* using reusable table header  */}
+          {/* using reusable table header for displaying form buttons */}
 
           <div
             className={`grid grid-cols-${column || 3} ${
-              formError ? "gap-y-4" : "gap-y-3"
+              formError ? "gap-y-6" : "gap-y-3"
             } gap-x-3`}
           >
-            {fieldsState &&
-              fieldsState?.length > 0 &&
-              fieldsState?.map((ele: IFieldType, index: number) => (
+            {formState &&
+              formState?.length > 0 &&
+              formState?.map((ele: IFieldType, index: number) => (
                 <React.Fragment key={index}>
                   {renderFields(ele, index)}
                 </React.Fragment>

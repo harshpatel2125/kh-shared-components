@@ -187,8 +187,8 @@ const DataGrid: FC<IDataGrid> = ({
         height: gridHeight
           ? gridHeight
           : enableSearch || enableCSVExport
-          ? "75vh"
-          : "80vh",
+          ? "65vh"
+          : "70vh",
       }}
     >
       {(enableSearch || enableCSVExport) && (
@@ -250,7 +250,7 @@ const DataGrid: FC<IDataGrid> = ({
         suppressExcelExport={true}
         // Pagination Props
         pagination={disablePagination ? false : true}
-        paginationPageSize={defaultPageSize || 20}
+        paginationPageSize={defaultPageSize || 10}
         paginationPageSizeSelector={pageSizeSelector || [10, 20, 50]}
       />
     </div>
