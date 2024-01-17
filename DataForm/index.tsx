@@ -1,285 +1,140 @@
-import React, { FC } from "react";
+"use client";
+import { useRouter } from "next/navigation";
+import React from "react";
+import FormUI, { IDataFormReturnType, IFieldType } from "./FormUI";
 import { IInputType } from "./enums";
-import dynamic from "next/dynamic";
-import SelectDropdown from "../select/select";
+import { validateEmail, validateMobile } from "@/utils/dataValidation";
+import TableHeader from "../table/tableHeader";
 
-const TextInput = dynamic(() => import("../FormElements/TextInput"), {
-  ssr: false,
-});
-const ImageInput = dynamic(() => import("../FormElements/ImageInput"), {
-  ssr: false,
-});
+/**
+ * All form related business logic will be
+ * in this parent component of forms
+ */
 
-interface optionsType {
-  label: string;
-  value: string;
-}
+const DataFormWrapper = ({ data }: any) => {
+	const [fieldsState, setFieldsState] = React.useState<Array<IFieldType>>(
+		data?.formFields
+	);
+	const [formError, setFormError] = React.useState(false);
 
-export interface IFieldType {
-  id?: number | undefined;
-  label?: string;
-  placeholder?: string;
-  key: string;
-  value?: string | boolean | Array<any> | Object | undefined;
-  selectedOption?: Object;
-  type: IInputType;
-  required?: boolean;
-  readOnly?: boolean;
-  className?: string;
-  column?: string;
-  binaryFiles?: any;
-  finished?: boolean;
-  emptyError?: boolean;
-  validationError?: boolean;
-  validationMessage?: string;
-  showPassword?: boolean;
-  options?: Array<optionsType>;
-  icon?: React.ReactNode; // @harsh need to implement for showing icon after input
-  isFilterType?: boolean;
-}
+	const router = useRouter();
 
-export interface IDataFormReturnType {
-  key: string;
-  value?: string | boolean | Array<any> | Object | undefined;
-  binaryFiles?: any | undefined;
-}
+	const handleSubmitForm = () => {
+		const verifyFormData = fieldsState?.map((ele: IFieldType) => {
+			if (
+				(ele?.required && !ele?.readOnly) ||
+				(ele?.type === IInputType.Email &&
+					ele?.value &&
+					ele?.value?.toString()?.length > 0) ||
+				(ele?.type === IInputType.Phone &&
+					ele?.value &&
+					ele?.value?.toString()?.length > 0)
+			) {
+				if (ele?.type === IInputType.Image || ele?.type === IInputType.File) {
+					if (!ele?.binaryFiles || !ele?.value) {
+						return {
+							...ele,
+							emptyError: true,
+						};
+					} else return { ...ele, finished: true };
+				} else if (
+					ele?.type === IInputType.Email &&
+					ele?.value &&
+					ele?.value?.toString()?.length > 0 &&
+					!validateEmail(ele?.value?.toString() || "")
+				) {
+					return {
+						...ele,
+						validationError: true,
+						validationMessage: "Invalid email address.",
+					};
+				} else if (
+					ele?.type === IInputType.Phone &&
+					ele?.value &&
+					ele?.value?.toString()?.length > 0 &&
+					!validateMobile(ele?.value?.toString() || "")
+				) {
+					return {
+						...ele,
+						validationError: true,
+						validationMessage: "Invalid phone number.",
+					};
+				} else {
+					if (!ele?.value && ele?.value === "") {
+						return {
+							...ele,
+							emptyError: true,
+							validationError: false,
+						};
+					} else return { ...ele, finished: true, validationError: false };
+				}
+			} else return { ...ele, finished: true };
+		});
 
-interface DataFormProps {
-  setFieldsState?: any;
-  handleTogglePassword?: any;
-  column?: number;
-  containerClassName?: string;
-  formError: any;
-  formState: any;
-}
+		setFieldsState(verifyFormData);
+		console.log(verifyFormData, "finished");
 
-{
-  /** @harsh form submission should be handled by parent of dataForm (component who is invoking) so  moving form callbacks to parent
-   *  check --> user-management/user/create
-   *
-   */
-}
+		const finished =
+			verifyFormData?.filter((ele: IFieldType) => ele?.finished)?.length ===
+			fieldsState?.length;
+		if (finished) {
+			const retrunData: Array<IDataFormReturnType> = fieldsState?.map(
+				(ele: IFieldType) => {
+					if (ele?.type === IInputType.Image || ele?.type === IInputType.File) {
+						return {
+							key: ele?.key,
+							value: ele?.value,
+							binaryFiles: ele?.binaryFiles,
+						};
+					} else
+						return {
+							key: ele?.key,
+							value: ele?.value,
+						};
+				}
+			);
+			console.log(retrunData, "submitted");
+			// onSubmit(retrunData);
+		} else {
+			setFormError(true);
+		}
+	};
 
-const DataForm: FC<DataFormProps> = ({
-  column,
-  containerClassName,
-  formError,
-  formState,
-  handleTogglePassword,
-  setFieldsState,
-}) => {
-  const getFileUri = (event: any, fieldIndex: any) => {
-    const binaryFile = event?.target?.files?.[0];
-    if (binaryFile) {
-      const reader = new FileReader();
-      reader.onload = (event: any) => {
-        const imageUrl = event.target.result;
-        setFieldsState((prev: any) =>
-          prev?.map((ele: any, index: number) => {
-            if (index === fieldIndex) {
-              return {
-                ...ele,
-                value: imageUrl,
-              };
-            } else return ele;
-          })
-        );
-      };
-      reader.readAsDataURL(binaryFile);
-    }
-  };
+	//  --------------------------------------
 
-  const updateState = (event: any, fieldIndex: number) => {
-    setFieldsState((prev: any) =>
-      prev?.map((ele: any, index: number) => {
-        if (index === fieldIndex) {
-          return {
-            ...ele,
-            value: event?.target?.value,
-            emptyError: false,
-          };
-        } else return ele;
-      })
-    );
-  };
+	const handleGoBack = () => {
+		router.back();
+	};
 
-  const updateDropDownState = (event: any, fieldIndex: number) => {
-    setFieldsState((prev: any) =>
-      prev?.map((ele: any, index: number) => {
-        if (index === fieldIndex) {
-          console.log({
-            ...ele,
-            value: event?.value,
-            selectedOption: event,
-            emptyError: false,
-          });
-          return {
-            ...ele,
-            value: event?.value,
-            selectedOption: event,
-            emptyError: false,
-          };
-        } else return ele;
-      })
-    );
-  };
+	if (!data || !data?.formFields?.length) {
+		return (
+			<div className="h-96 flex items-center justify-center">
+				<p>No such route: 404</p>
+			</div>
+		);
+	}
 
-  const handleChange = (
-    event: any,
-    fieldIndex: number,
-    fieldType: IInputType
-  ) => {
-    switch (fieldType) {
-      case IInputType.Image:
-        getFileUri(event, fieldIndex);
-        break;
-      case IInputType.DropDown:
-        console.log(event, fieldIndex);
-        updateDropDownState(event, fieldIndex);
-        // getFileUri(event, fieldIndex);
-        break;
-      default:
-        updateState(event, fieldIndex);
-        break;
-    }
-  };
+	const { THButtons, THSitemap, THtitle, formFields, column } = data;
+	// api -->
 
-  const renderFields = (ele: IFieldType, index: number) => {
-    switch (ele?.type) {
-      case IInputType.Text:
-      case IInputType.DateTimePicker:
-      case IInputType.AutoComplete:
-        return (
-          <TextInput
-            readOnly={ele?.readOnly}
-            required={ele?.required}
-            emptyError={ele?.emptyError}
-            label={ele?.label || ele?.key}
-            value={ele?.value}
-            onChange={(e) => handleChange(e, index, ele?.type)}
-          />
-        );
-      case IInputType.Number:
-        return (
-          <TextInput
-            type="number"
-            readOnly={ele?.readOnly}
-            required={ele?.required}
-            emptyError={ele?.emptyError}
-            label={ele?.label || ele?.key}
-            value={ele?.value}
-            onChange={(e) => handleChange(e, index, ele?.type)}
-          />
-        );
-      case IInputType.Password:
-        return (
-          <TextInput
-            type="password"
-            readOnly={ele?.readOnly}
-            required={ele?.required}
-            label={ele?.label || ele?.key}
-            value={ele?.value}
-            onChange={(e) => handleChange(e, index, ele?.type)}
-            togglePassword={() => handleTogglePassword(index)}
-            showPassword={ele?.showPassword}
-            emptyError={ele?.emptyError}
-            validationError={ele?.validationError}
-            validationMessage={ele?.validationMessage}
-          />
-        );
-
-      case IInputType.DropDown:
-        return (
-          <div className={`${ele.className}`}>
-            <SelectDropdown
-              onChange={(e) => handleChange(e, index, ele?.type)}
-              options={
-                ele?.options ? ele.options : [{ label: "one", value: "one" }]
-              }
-              isSearchable={true}
-              value={ele?.selectedOption ? [ele?.selectedOption] : []}
-            />
-          </div>
-        );
-
-      case IInputType.Email:
-        return (
-          <TextInput
-            type="email"
-            readOnly={ele?.readOnly}
-            required={ele?.required}
-            label={ele?.label || ele?.key}
-            value={ele?.value}
-            onChange={(e) => handleChange(e, index, ele?.type)}
-            emptyError={ele?.emptyError}
-            validationError={ele?.validationError}
-            validationMessage={ele?.validationMessage}
-          />
-        );
-      // case IInputType.AutoComplete:
-      // 	return (
-      // 		<SelectDropdown
-      // 			onChange={() => {}}
-      // 			options={[
-      // 				{
-      // 					label: "one",
-      // 					value: "one",
-      // 				},
-      // 			]}
-      // 			isMulti={false}
-      // 			isSearchable={true}
-      // 		/>
-      // 	);
-      case IInputType.Image:
-      case IInputType.File:
-        return (
-          <div className={`row-span-4 flex justify-start ${ele?.className}`}>
-            <ImageInput
-              selectedImageUri={ele?.value?.toString()}
-              onChange={(e) => handleChange(e, index, ele?.type)}
-            />
-          </div>
-        );
-      case IInputType.Checkbox:
-        return (
-          <div className={`col-span-1 `}>
-            <div className="flex items-center gap-2 h-7">
-              {/* need to be change later with actual component  */}
-              <input type="checkbox" name="mycheckbox" id="mycheckbox" />
-              <label htmlFor="mycheckbox" className="text-xs text-[#737373]">
-                {ele.label}
-              </label>
-            </div>
-          </div>
-        );
-      default:
-        return <TextInput label={ele?.label || ele?.key} />;
-    }
-  };
-
-  return (
-    <div className="table-wrapper " style={{ height: "100%" }}>
-      <div className="h-full p-3 py-10">
-        <div className={containerClassName}>
-          {/* using reusable table header for displaying form buttons */}
-
-          <div
-            className={`grid grid-cols-${column || 3} ${
-              formError ? "gap-y-6" : "gap-y-3"
-            } gap-x-3`}
-          >
-            {formState &&
-              formState?.length > 0 &&
-              formState?.map((ele: IFieldType, index: number) => (
-                <React.Fragment key={index}>
-                  {renderFields(ele, index)}
-                </React.Fragment>
-              ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+	return (
+		<div className="m-5">
+			<TableHeader
+				headerButtons={THButtons}
+				tableSitemap={THSitemap}
+				title={THtitle}
+				handleGoBack={handleGoBack}
+				handleFormSubmission={handleSubmitForm}
+			/>
+			<FormUI
+				// formState={formFields}
+				formState={fieldsState}
+				setFieldsState={setFieldsState}
+				column={column ? column : 3}
+				formError={formError}
+			/>
+		</div>
+	);
 };
 
-export default DataForm;
+export default DataFormWrapper;
