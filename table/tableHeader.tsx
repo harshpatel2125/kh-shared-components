@@ -37,7 +37,7 @@ const TableHeader = ({
 
   return (
     <>
-      <div className={`table-header w-full`}>
+      <div className={`table-header w-full sampleClass`}>
         <h4 className="font-normal text-sm ">{title}</h4>
         <div className="flex items-center gap-2">
           <p>
