@@ -192,6 +192,7 @@ const FormUI: FC<DataFormProps> = ({
 				return (
 					<div className={`${ele.className}`}>
 						<SelectDropdown
+							label={ele?.label || "label"}
 							onChange={(e) => handleChange(e, index, ele?.type)}
 							options={ele?.options ? ele.options : [{ label: "one", value: "one" }]}
 							isSearchable={true}
