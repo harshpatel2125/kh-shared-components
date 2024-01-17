@@ -11,8 +11,8 @@ import {
   DocumentArrowDownIcon,
   PencilIcon,
 } from "@heroicons/react/24/outline";
-import { getToolTips } from "@/utils/getTooltips";
-import { Icons } from "@/utils/getIcons";
+import { getIcon } from "@/utils/getIcons";
+import { TableCellActionTypes } from "@/constants/tableCols";
 
 var checkboxSelection = function (params: CheckboxSelectionCallbackParams) {
   // we put checkbox on the name if we are not doing grouping
@@ -71,7 +71,10 @@ const DataGrid: FC<IDataGrid> = ({
     };
   }, [editable, filter]);
 
+  /** getTooltip utility has been deleted --  */
+
   // // const updatedColumnDefs = useMemo(() => {
+
   //   // const renderCell = (e: any) => {
   //   //   const lowercasedSearchValue = quickFilterText.toLowerCase();
   //   //   const originalString = e?.value?.toString().toLowerCase();
@@ -139,6 +142,84 @@ const DataGrid: FC<IDataGrid> = ({
   //   //   return [...newColumnDefs];
   //   // } else return [...newColumnDefs];
   // // }, [quickFilterText, columnDefs]);
+
+  const isCellRendererType = columnDefs[0]?.hasOwnProperty("isCellrenderer");
+
+  function getClickHandlerCallback(actionType: string) {
+    switch (actionType) {
+      case TableCellActionTypes.Delete:
+        // call detele record
+        return () => {
+          console.log("delete clicked");
+        };
+
+      case TableCellActionTypes.Edit:
+        // call edit record
+        return () => {
+          console.log("edit clicked");
+        };
+
+      case TableCellActionTypes.Rights:
+        // call rights record
+        return () => {
+          console.log("Rights clicked");
+        };
+
+      case TableCellActionTypes.Reset:
+        // call reset record
+        return () => {
+          console.log("reset clicked");
+        };
+
+      case TableCellActionTypes.Suspend:
+        // call suspend record
+        return () => {
+          console.log("Suspend clicked");
+        };
+
+      default:
+        return () => {
+          console.log("button clicked");
+        };
+    }
+  }
+
+  const cellRendererFunc = (cellIcons: any) => {
+    return (
+      <div className="flex h-full flex-row gap-1 items-center">
+        {cellIcons?.map((item: any, i: number) => {
+          const clickHandler = getClickHandlerCallback(item?.actionType);
+
+          return (
+            <div
+              key={i}
+              className={`cursor-pointer tooltip ${
+                i < 3 ? "tooltip-right" : "tooltip-left"
+              }`}
+              data-tip={item?.icon}
+              onClick={clickHandler}
+            >
+              {getIcon(item?.icon)}
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
+  const getUpdatedColumnDefs = () => {
+    const actionColumn = columnDefs[0];
+    const updatedColumn = {
+      headerName: actionColumn.headerName,
+      field: actionColumn.field,
+      cellRenderer: () => cellRendererFunc(actionColumn?.cellActions),
+    };
+
+    columnDefs[0] = updatedColumn;
+    return columnDefs;
+  };
+
+  // if()
 
   const handleExport = useCallback(() => {
     gridRef.current!.api.exportDataAsCsv();
@@ -216,7 +297,7 @@ const DataGrid: FC<IDataGrid> = ({
         autoSizeStrategy={autoSizeStrategy}
         ref={gridRef}
         rowData={rowData}
-        columnDefs={columnDefs}
+        columnDefs={isCellRendererType ? getUpdatedColumnDefs() : columnDefs}
         defaultColDef={defaultColDef}
         pivotPanelShow={"always"}
         rowGroupPanelShow={"always"}
