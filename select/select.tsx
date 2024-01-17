@@ -12,6 +12,7 @@ interface Option {
 //  new
 
 interface SelectDropdownProps {
+	label?: string;
 	isSearchable?: boolean;
 	options?: Option[];
 	isLoading?: boolean;
@@ -21,37 +22,53 @@ interface SelectDropdownProps {
 }
 
 const SelectDropdown: React.FC<SelectDropdownProps> = ({
+	label,
 	isSearchable,
 	options,
 	isLoading,
 	value,
-	onChange = () => {},
+	onChange = () => { },
 	onCreateOption,
 }) => {
+	const [labelColor, setLabelColor] = useState<any>(false);
+
 	return (
 		<div className="relative">
 			<CreatableSelect
 				styles={{
+					option: (base) => ({
+						...base,
+						borderBottom: "1px solid #f1f3f9",
+						height: '100%',
+						margin: "0px",
+						paddingBottom: "3px",
+						paddingTop: "3px",
+						zIndex: "999",
+						borderRadius: "3px",
+					}),
 					control: (baseStyles, state) => ({
 						...baseStyles,
 						fontSize: "14px",
-						minHeight: "28px",
+						minHeight: "26px",
 						margin: "0px",
 						border: "1px solid #ccc",
-						borderRadius: "5px",
+						borderRadius: "3px",
 						padding: "0px",
 						paddingBottom: "0px",
 						paddingTop: "0px",
 						borderColor: state.isFocused ? "#ccc" : "#ccc",
 						outlineColor: state.isFocused ? "ccc" : "#ccc",
+
 					}),
 					valueContainer: (provided, state) => ({
 						...provided,
-						height: "28px",
+						height: "27px",
 						paddingBottom: "0px",
 						paddingTop: "0px",
-						borderRadius: "5px",
+						borderRadius: "3px",
 						fontSize: "12px",
+
+
 					}),
 
 					indicatorSeparator: (state) => ({
@@ -59,19 +76,29 @@ const SelectDropdown: React.FC<SelectDropdownProps> = ({
 					}),
 					indicatorsContainer: (provided, state) => ({
 						...provided,
-						height: "30px",
+						height: "26px",
 					}),
 					dropdownIndicator: (provided, state) => ({
 						...provided,
-						height: "28px",
+						height: "26px",
 						paddingBottom: "0px",
 						paddingTop: "0px",
-						borderRadius: "5px",
+						borderRadius: "3px",
+
+					}),
+					menuList: (provided, state) => ({
+						...provided,
+						paddingBottom: "0px",
+						paddingTop: "0px",
+						borderRadius: "3px",
+						color: "#332941",
+						zIndex: "999999",
+
 					}),
 				}}
 				theme={(theme) => ({
 					...theme,
-					borderRadius: 0,
+					borderRadius: 3,
 
 					colors: {
 						...theme.colors,
@@ -79,6 +106,8 @@ const SelectDropdown: React.FC<SelectDropdownProps> = ({
 						primary: primaryColor,
 					},
 				})}
+				onFocus={() => setLabelColor(true)}
+				onBlur={() => setLabelColor(false)}
 				isSearchable={isSearchable}
 				isClearable
 				isDisabled={isLoading}
@@ -88,8 +117,7 @@ const SelectDropdown: React.FC<SelectDropdownProps> = ({
 				options={options}
 				value={value}
 			/>
-			<label className="font-light  absolute selectDropDown">Pattern thumb</label>
-		</div>
+			<label className={`font-light   absolute selectDropDown ${labelColor ? "text-blue-800" : "text-slate-700"} `}>{label ? label : "Label"}</label>		</div>
 	);
 };
 

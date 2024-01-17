@@ -85,11 +85,30 @@ const SearchBar: React.FC<SearchBarProps> =({isSearchable, isMulti, options, isL
               paddingTop: "0px",
               borderRadius: "5px",
             }),
+            menuList  :  (provided, state) => ({
+              ...provided,
+              paddingBottom: "0px",
+              paddingTop: "0px",
+              borderRadius: "3px",
+              color: "#332941",
+              zIndex: "999999",
+            
+            }),
+            option: (base) => ({
+              ...base,
+              borderBottom : "1px solid #f1f3f9",
+              height: '100%',
+              margin: "0px",
+              paddingBottom: "3px",
+              paddingTop: "3px",
+              zIndex: "999",
+              borderRadius: "3px",
+            }),
             
           }}
           theme={(theme) => ({
             ...theme,
-            borderRadius: 0,
+            borderRadius: 3,
             
             colors: {
               ...theme.colors,
