@@ -118,7 +118,7 @@ const DataFormWrapper = ({ data }: any) => {
 	// api -->
 
 	return (
-		<div className="m-5">
+		<div className="m-0">
 			<TableHeader
 				headerButtons={THButtons}
 				tableSitemap={THSitemap}

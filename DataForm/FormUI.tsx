@@ -41,6 +41,8 @@ export interface IFieldType {
   isFilterType?: boolean;
   showPopup?: boolean;
   popupTitle?: string;
+  inputReadOnlyBg?: boolean;
+  inputMandatoryBg?: boolean;
 }
 
 export interface IDataFormReturnType {
@@ -156,6 +158,8 @@ const FormUI: FC<DataFormProps> = ({
       case IInputType.AutoComplete:
         return (
           <TextInput
+            inputReadOnlyBg={ele.inputReadOnlyBg}
+            inputMandatoryBg={ele.inputMandatoryBg}
             readOnly={ele?.readOnly}
             required={ele?.required}
             emptyError={ele?.emptyError}
@@ -167,6 +171,8 @@ const FormUI: FC<DataFormProps> = ({
       case IInputType.Number:
         return (
           <TextInput
+            inputReadOnlyBg={ele.inputReadOnlyBg}
+            inputMandatoryBg={ele.inputMandatoryBg}
             type="number"
             readOnly={ele?.readOnly}
             required={ele?.required}
@@ -179,6 +185,8 @@ const FormUI: FC<DataFormProps> = ({
       case IInputType.Password:
         return (
           <TextInput
+            inputReadOnlyBg={ele.inputReadOnlyBg}
+            inputMandatoryBg={ele.inputMandatoryBg}
             type="password"
             readOnly={ele?.readOnly}
             required={ele?.required}
@@ -218,6 +226,8 @@ const FormUI: FC<DataFormProps> = ({
       case IInputType.Email:
         return (
           <TextInput
+            inputReadOnlyBg={ele.inputReadOnlyBg}
+            inputMandatoryBg={ele.inputMandatoryBg}
             type="email"
             readOnly={ele?.readOnly}
             required={ele?.required}

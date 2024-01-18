@@ -2,8 +2,8 @@ import FilterIcon from "@/assets/icons/FilterIcon";
 import { IButton, IButtonType } from "@/shared/button";
 import { PlusIcon } from "@heroicons/react/24/outline";
 
-const buttonClass: string = "rounded-md px-2";
-const filterButtonClass: string = "rounded-full p-2";
+const buttonClass: string = " px-2";
+const filterButtonClass: string = " p-2";
 
 interface headerButtonTypes {
   save: IButton;
