@@ -258,7 +258,7 @@ const DataGrid: FC<IDataGrid> = ({
     >
       {(enableSearch || enableCSVExport) && (
         <div
-          className="w-full  py-1  px-3 mb-[-2px] rounded-t-[7px] flex flex-row justify-between content-center border border-s border-gray-300 rounded-none"
+          className="w-full  py-1  px-3  mb-[-2px] rounded-t-[7px] flex flex-row justify-between content-center border border-s border-gray-300 rounded-none"
           style={{
             alignItems: "center",
             justifyContent: !enableCSVExport ? "flex-end" : "between",
@@ -275,7 +275,7 @@ const DataGrid: FC<IDataGrid> = ({
           )}
           {enableSearch && (
             <div className="flex content-center">
-              <div className="w-60 mr-8 ms-auto">
+              <div className="w-60  ms-auto">
                 <TextInput
                   label="Search"
                   value={quickFilterText}
@@ -290,6 +290,7 @@ const DataGrid: FC<IDataGrid> = ({
                   color="tertiary"
                   onClick={handleReset}
                   icon={<ArrowPathIcon className="h-3 w-3" />}
+                  className="ms-8"
                 >
                   Reset All
                 </Button>

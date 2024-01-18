@@ -7,6 +7,7 @@ import {
   DropdownProps,
   TextInputProps,
   CarousalProps,
+  PopupProps,
 } from "../../constants/types";
 
 // ----------------------------dynamic imports----------------------------------------
@@ -19,6 +20,10 @@ const DynamicDropdown = dynamic(() => import("../form/Dropdown"), {
 });
 
 const DynamicCarousal = dynamic(() => import("../carousal"), {
+  ssr: false,
+});
+
+const DynamicPopup = dynamic(() => import("../popup"), {
   ssr: false,
 });
 
@@ -35,4 +40,22 @@ export const DropdownWrapper = ({ label, options }: DropdownProps) => {
 //--------------------------- tw-carousal wrapper-------------------------------------------
 export const CarousalWrapper = ({ images }: CarousalProps) => {
   return <DynamicCarousal />;
+};
+
+//--------------------------- tw-Modal wrapper-------------------------------------------
+export const CustomPopupWrapper = ({
+  title,
+  showModal,
+  setShowModal,
+  children,
+}: PopupProps) => {
+  return (
+    <DynamicPopup
+      title={title}
+      setShowModal={setShowModal}
+      showModal={showModal}
+    >
+      {children}
+    </DynamicPopup>
+  );
 };

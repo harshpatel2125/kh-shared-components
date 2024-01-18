@@ -2,6 +2,9 @@ import React, { FC } from "react";
 import { IInputType } from "./enums";
 import dynamic from "next/dynamic";
 import SelectDropdown from "../select/select";
+import AddButton from "./formInputPopup";
+import { CustomPopupWrapper } from "../tw-elements";
+import FormInputPopup from "./formInputPopup";
 
 const TextInput = dynamic(() => import("../FormElements/TextInput"), {
   ssr: false,
@@ -36,6 +39,8 @@ export interface IFieldType {
   options?: Array<optionsType>;
   icon?: React.ReactNode; // @harsh need to implement for showing icon after input
   isFilterType?: boolean;
+  showPopup?: boolean;
+  popupTitle?: string;
 }
 
 export interface IDataFormReturnType {
@@ -190,16 +195,23 @@ const FormUI: FC<DataFormProps> = ({
 
       case IInputType.DropDown:
         return (
-          <div className={`${ele.className}`}>
-            <SelectDropdown
-              label={ele?.label || "label"}
-              onChange={(e) => handleChange(e, index, ele?.type)}
-              options={
-                ele?.options ? ele.options : [{ label: "one", value: "one" }]
-              }
-              isSearchable={true}
-              value={ele?.selectedOption ? [ele?.selectedOption] : []}
-            />
+          <div className={`${ele.className} flex w-100 gap-2`}>
+            <div className="flex-1">
+              <SelectDropdown
+                label={ele?.label || "label"}
+                onChange={(e) => handleChange(e, index, ele?.type)}
+                options={
+                  ele?.options ? ele.options : [{ label: "one", value: "one" }]
+                }
+                isSearchable={true}
+                value={ele?.selectedOption ? [ele?.selectedOption] : []}
+              />
+            </div>
+            {ele?.showPopup ? (
+              <div>
+                <FormInputPopup title={ele?.popupTitle} />
+              </div>
+            ) : null}
           </div>
         );
 
@@ -259,27 +271,29 @@ const FormUI: FC<DataFormProps> = ({
   };
 
   return (
-    <div className="table-wrapper " style={{ height: "100%" }}>
-      <div className="h-full p-3 py-5">
-        <div className={containerClassName}>
-          {/* using reusable table header for displaying form buttons */}
+    <>
+      <div className="table-wrapper " style={{ height: "100%" }}>
+        <div className="h-full p-3 py-5">
+          <div className={containerClassName}>
+            {/* using reusable table header for displaying form buttons */}
 
-          <div
-            className={`grid grid-cols-${column || 3} ${
-              formError ? "gap-y-6" : "gap-y-3"
-            } gap-x-3`}
-          >
-            {formState &&
-              formState?.length > 0 &&
-              formState?.map((ele: IFieldType, index: number) => (
-                <React.Fragment key={index}>
-                  {renderFields(ele, index)}
-                </React.Fragment>
-              ))}
+            <div
+              className={`grid grid-cols-${column || 3} ${
+                formError ? "gap-y-6" : "gap-y-3"
+              } gap-x-3`}
+            >
+              {formState &&
+                formState?.length > 0 &&
+                formState?.map((ele: IFieldType, index: number) => (
+                  <React.Fragment key={index}>
+                    {renderFields(ele, index)}
+                  </React.Fragment>
+                ))}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
