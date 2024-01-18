@@ -69,6 +69,13 @@ const DataGrid: FC<IDataGrid> = ({
       enablePivot: true,
       enableValue: false,
       filter: filter || true,
+      cellStyle: function (params: any) {
+        if (typeof params.value === "number") {
+          return { textAlign: "right" };
+        } else {
+          return null;
+        }
+      },
     };
   }, [editable, filter]);
 
