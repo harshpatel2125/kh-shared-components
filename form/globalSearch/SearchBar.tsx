@@ -70,7 +70,6 @@ const SearchBar: React.FC<SearchBarProps> =({isSearchable, isMulti, options, isL
               paddingTop: "0px",
               borderRadius: "5px",
             }),
-            
             indicatorSeparator: state => ({
               display: 'none',
             }),
@@ -92,7 +91,6 @@ const SearchBar: React.FC<SearchBarProps> =({isSearchable, isMulti, options, isL
               borderRadius: "3px",
               color: "#332941",
               zIndex: "999999",
-            
             }),
             option: (base) => ({
               ...base,
