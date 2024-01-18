@@ -24,7 +24,7 @@ export const BadgeUI: React.FC<{ notificationCount?: number }> = ({ notification
   return (
     <>
       {notificationCount && 
-        <div style={{fontSize : "10px"}} className='absolute bottom-auto left-auto right-1 top-0.5 z-10 inline-block -translate-y-1/2 translate-x-2/4 rotate-0 skew-x-0 skew-y-0 scale-x-100 scale-y-100 whitespace-nowrap rounded-full bg-[#4f6ea1e2] px-1.5 py-0.5 text-center align-baseline  font-bold leading-none text-white'>
+        <div style={{fontSize : "9px"}} className='absolute bottom-auto left-auto right-1 top-0.5 z-10 inline-block -translate-y-1/2 translate-x-2/4 rotate-0 skew-x-0 skew-y-0 scale-x-100 scale-y-100 whitespace-nowrap rounded-full bg-[#4f6ea1e2] px-1.5 py-0.5 text-center align-baseline  font-bold leading-none text-white'>
           {notificationCount}
         </div>
       }
