@@ -44,7 +44,7 @@ interface SearchBarProps {
 const SearchBar: React.FC<SearchBarProps> =({isSearchable, isMulti, options, isLoading, value,  onChange = () => {}, onCreateOption }) => {
   return (
     <div className='flex border rounded-lg'>
-      <div className='mt-1.5 px-3'>
+      <div className='mt-1 px-3'>
         <SearchIcon />
       </div>
       <div className='w-full'>
@@ -52,8 +52,8 @@ const SearchBar: React.FC<SearchBarProps> =({isSearchable, isMulti, options, isL
           styles={{
             control: (baseStyles, state) => ({
               ...baseStyles,
-              fontSize: "14px",
-              minHeight: "28px",
+              fontSize: "12px",
+              minHeight: "26px",
               margin: "0px",
               border: 0,
               borderRadius: "5px",
@@ -65,7 +65,7 @@ const SearchBar: React.FC<SearchBarProps> =({isSearchable, isMulti, options, isL
             }),
             valueContainer: (provided, state) => ({
               ...provided,
-              height: "28px",
+              height: "26px",
               paddingBottom: "0px",
               paddingTop: "0px",
               borderRadius: "5px",
@@ -75,11 +75,11 @@ const SearchBar: React.FC<SearchBarProps> =({isSearchable, isMulti, options, isL
             }),
             indicatorsContainer: (provided, state) => ({
               ...provided,
-              height: '30px',
+              height: '26px',
             }),
             dropdownIndicator  : (provided, state) => ({
               ...provided,
-              height: "28px",
+              height: "26px",
               paddingBottom: "0px",
               paddingTop: "0px",
               borderRadius: "5px",
@@ -91,6 +91,7 @@ const SearchBar: React.FC<SearchBarProps> =({isSearchable, isMulti, options, isL
               borderRadius: "3px",
               color: "#332941",
               zIndex: "999999",
+              fontSize: "13px",
             }),
             option: (base) => ({
               ...base,
@@ -101,6 +102,7 @@ const SearchBar: React.FC<SearchBarProps> =({isSearchable, isMulti, options, isL
               paddingTop: "3px",
               zIndex: "999",
               borderRadius: "3px",
+              
             }),
             
           }}
