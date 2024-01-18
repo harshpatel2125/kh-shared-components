@@ -40,7 +40,7 @@ const TableHeader = ({
       <div className={`table-header w-full`}>
         <h4 className="font-normal text-sm ">{title}</h4>
         <div className="flex items-center gap-2">
-          <p>
+          {/* <p>
             {tableSitemap?.map((text, i) => (
               <span
                 key={i}
@@ -49,9 +49,11 @@ const TableHeader = ({
                 {text} /{" "}
               </span>
             ))}
-          </p>
+          </p> */}
           <div className="flex gap-3 ms-3 items-center">
             {headerButtons?.map((btn, i) => {
+              console.log(btn, "btn-", i);
+
               if (btn?.btnType === IButtonType.Filter) {
                 if (showFilterBtn) {
                   return (

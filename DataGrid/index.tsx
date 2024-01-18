@@ -1,5 +1,6 @@
 import React, { useMemo, FC, useCallback, useRef } from "react";
 import { AgGridReact } from "ag-grid-react";
+import { useRouter, usePathname } from "next/navigation";
 import {
   CheckboxSelectionCallbackParams,
   HeaderCheckboxSelectionCallbackParams,
@@ -143,6 +144,9 @@ const DataGrid: FC<IDataGrid> = ({
   //   // } else return [...newColumnDefs];
   // // }, [quickFilterText, columnDefs]);
 
+  const router = useRouter();
+  const pathname = usePathname();
+
   const isCellRendererType = columnDefs[0]?.hasOwnProperty("isCellrenderer");
 
   function getClickHandlerCallback(actionType: string) {
@@ -155,14 +159,15 @@ const DataGrid: FC<IDataGrid> = ({
 
       case TableCellActionTypes.Edit:
         // call edit record
+
         return () => {
-          console.log("edit clicked");
+          router.push(`${pathname}/create`);
         };
 
       case TableCellActionTypes.Rights:
         // call rights record
         return () => {
-          console.log("Rights clicked");
+          router.push("/user-management/user-rights");
         };
 
       case TableCellActionTypes.Reset:
@@ -194,7 +199,7 @@ const DataGrid: FC<IDataGrid> = ({
             <div
               key={i}
               className={`cursor-pointer tooltip ${
-                i < 3 ? "tooltip-right" : "tooltip-left"
+                i <= 3 ? "tooltip-right" : "tooltip-left"
               }`}
               data-tip={item?.icon}
               onClick={clickHandler}
