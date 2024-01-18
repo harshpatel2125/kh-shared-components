@@ -58,7 +58,7 @@ const TableHeader = ({
                 if (showFilterBtn) {
                   return (
                     <>
-                      <div className=" bg-tertiary drawer-content flex items-center justify-center  w-[28px] h-[28px] rounded-full hover:bg-tertiary-dark">
+                      <div className=" bg-tertiary drawer-content flex items-center justify-center  w-[28px] h-[28px]  hover:bg-tertiary-dark">
                         <label htmlFor={drawerId} className="cursor-pointer">
                           <FilterIcon width={14} height={14} color="white" />
                         </label>
@@ -72,6 +72,7 @@ const TableHeader = ({
                 return (
                   <Button
                     key={i}
+                    
                     onClick={clickHandlerFunc}
                     color={btn.color}
                     icon={btn.icon}

@@ -84,7 +84,7 @@ const Button: React.FC<IButton> = ({
     <button
       onClick={onClick}
       className={clsx(
-        "btn border-0 py-[6px] px-[5px] pe-[6px]  h-min min-h-min antialiased hover:text-white hover:bg-tertiary-dark text-xs font-normal gap-1 rounded-[5px]",
+        "btn border-0 py-[6px] px-[5px] pe-[6px]  h-min min-h-min antialiased hover:text-white hover:bg-tertiary-dark text-xs font-normal gap-1 ",
         bgColorHandler(),
         className
       )}

@@ -36,6 +36,8 @@ export interface IFieldType {
   options?: Array<optionsType>;
   icon?: React.ReactNode; // @harsh need to implement for showing icon after input
   isFilterType?: boolean;
+  inputReadOnlyBg?: boolean;
+  inputMandatoryBg?: boolean;
 }
 
 export interface IDataFormReturnType {
@@ -151,6 +153,8 @@ const FormUI: FC<DataFormProps> = ({
       case IInputType.AutoComplete:
         return (
           <TextInput
+            inputReadOnlyBg={ele.inputReadOnlyBg}
+            inputMandatoryBg={ele.inputMandatoryBg}
             readOnly={ele?.readOnly}
             required={ele?.required}
             emptyError={ele?.emptyError}
@@ -162,6 +166,8 @@ const FormUI: FC<DataFormProps> = ({
       case IInputType.Number:
         return (
           <TextInput
+            inputReadOnlyBg={ele.inputReadOnlyBg}
+            inputMandatoryBg={ele.inputMandatoryBg}
             type="number"
             readOnly={ele?.readOnly}
             required={ele?.required}
@@ -174,6 +180,8 @@ const FormUI: FC<DataFormProps> = ({
       case IInputType.Password:
         return (
           <TextInput
+            inputReadOnlyBg={ele.inputReadOnlyBg}
+            inputMandatoryBg={ele.inputMandatoryBg}
             type="password"
             readOnly={ele?.readOnly}
             required={ele?.required}
@@ -206,6 +214,8 @@ const FormUI: FC<DataFormProps> = ({
       case IInputType.Email:
         return (
           <TextInput
+            inputReadOnlyBg={ele.inputReadOnlyBg}
+            inputMandatoryBg={ele.inputMandatoryBg}
             type="email"
             readOnly={ele?.readOnly}
             required={ele?.required}
@@ -265,9 +275,8 @@ const FormUI: FC<DataFormProps> = ({
           {/* using reusable table header for displaying form buttons */}
 
           <div
-            className={`grid grid-cols-${column || 3} ${
-              formError ? "gap-y-6" : "gap-y-3"
-            } gap-x-3`}
+            className={`grid grid-cols-${column || 3} ${formError ? "gap-y-6" : "gap-y-3"
+              } gap-x-3`}
           >
             {formState &&
               formState?.length > 0 &&

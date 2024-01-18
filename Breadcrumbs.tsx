@@ -16,10 +16,10 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ children, hideDivider }) => {
   return (
     <div className={"card w-full "}>
       <div className="flex justify-between align-middle h-fit ">
-      <div className=" ml-3">
+      <div className="">
           <Tabs />
         </div>
-        <div className="mr-4 mt-1">
+        <div className=" mt-1">
           <Subtitle styleClass={"text-[#48a4f9] pl-3"}>
             <div className="text-sm breadcrumbs pt-2 pb-0">
               <ul>

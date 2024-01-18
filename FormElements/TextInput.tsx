@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { IInputType } from "../DataForm/enums";
@@ -25,6 +25,8 @@ interface InputTextProps {
   formWhite?: boolean;
   validationError?: boolean;
   validationMessage?: string;
+  inputMandatoryBg?: boolean | undefined;
+  inputReadOnlyBg?: boolean | undefined;
 }
 
 const TextInput: React.FC<InputTextProps> = ({
@@ -41,19 +43,29 @@ const TextInput: React.FC<InputTextProps> = ({
   validationError,
   validationMessage,
   showPassword,
+  inputMandatoryBg,
+  inputReadOnlyBg,
+  
 }) => {
+
+   
+   // Define the style object based on the 'mandatory' state
+   const dynamicStyle = {
+    backgroundColor: inputReadOnlyBg ? '#efefef' : inputMandatoryBg ? '#fdf5ca63' : 'transparent',
+  };
+
   return (
     <>
       <TEInput
+         style={dynamicStyle}
         type={showPassword ? "text" : type ? type : "text"}
-        label={`${label || "Input"}${
-          required && !readOnly && !emptyError ? "*" : ""
-        }`}
+        label={`${label || "Input"}${required && !readOnly && !emptyError ? "*" : ""
+          }`}
         size="sm"
         value={value}
         onChange={onChange}
         disabled={readOnly}
-        className={className}
+        className={`${className}`}
         formWhite={formWhite}
         theme={{
           focusedNotchLeadingDefault:
@@ -66,14 +78,14 @@ const TextInput: React.FC<InputTextProps> = ({
       >
         {(emptyError || (validationError && validationMessage)) && (
           <div
-            className="absolute w-full text-[10px] ml-[2px] mt-[-1px] text-[red] dark:text-[red]"
+            className="absolute  w-full text-[10px] ml-[2px] mt-[-1px] text-[red] dark:text-[red]"
             data-te-input-helper-ref
           >
             {emptyError
               ? `${label || "Input"}${emptyError ? " is required." : ""}*`
               : validationError
-              ? validationMessage
-              : ""}
+                ? validationMessage
+                : ""}
           </div>
         )}
         {type === IInputType.Password && togglePassword && (
