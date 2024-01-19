@@ -31,7 +31,7 @@ export const HEADER_BUTTONS: headerButtonTypes = {
   filter: {
     btnName: "",
     color: "tertiary",
-    icon: <FilterIcon height={12} width={12} color="#fff" />,
+    icon: <FilterIcon height="12" width="12" color="#fff" />,
     className: filterButtonClass,
     btnType: IButtonType.Filter,
   },
