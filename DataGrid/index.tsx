@@ -254,18 +254,18 @@ const DataGrid: FC<IDataGrid> = ({
   };
   return (
     <div
-      className="ag-theme-balham h-full"
+      className="ag-theme-balham h-full rounded"
       style={{
         height: gridHeight
           ? gridHeight
           : enableSearch || enableCSVExport
-          ? "65vh"
-          : "70vh",
+          ? "71vh"
+          : "74vh",
       }}
     >
       {(enableSearch || enableCSVExport) && (
         <div
-          className="w-full  py-1  px-3  mb-[-2px] rounded-t-[7px] flex flex-row justify-between content-center border border-s border-gray-300 rounded-none"
+          className="w-full  py-1  px-3  mb-[-2px] rounded-t flex flex-row justify-between content-center border border-s border-gray-300 "
           style={{
             alignItems: "center",
             justifyContent: !enableCSVExport ? "flex-end" : "between",
@@ -326,6 +326,7 @@ const DataGrid: FC<IDataGrid> = ({
         pagination={disablePagination ? false : true}
         paginationPageSize={defaultPageSize || 10}
         paginationPageSizeSelector={pageSizeSelector || [10, 20, 50]}
+       
       />
     </div>
   );
