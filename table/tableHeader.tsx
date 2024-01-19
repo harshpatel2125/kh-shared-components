@@ -5,6 +5,9 @@ import Drawer from "../drawer";
 import AscendingIcon from "@/assets/icons/ascending.svg";
 import DescendingIcon from "@/assets/icons/descending.svg";
 import Image from "next/image";
+import Buttons from "../ButtonGroup/Button";
+import UpArrowIcon from "@/assets/icons/UpArrowIcon";
+import DownArrowIcon from "@/assets/icons/DownArrowIcon";
 
 export interface TableHeaderProps {
   headerButtons?: Array<IButton> | undefined;
@@ -36,10 +39,10 @@ const TableHeader = ({
       btn?.btnType === IButtonType.CreateNew
         ? handleCreateNew
         : btn?.btnType === IButtonType.FormSubmit
-        ? handleFormSubmission
-        : btn?.btnType === IButtonType.GoBack
-        ? handleGoBack
-        : btn?.onClick;
+          ? handleFormSubmission
+          : btn?.btnType === IButtonType.GoBack
+            ? handleGoBack
+            : btn?.onClick;
     return clickHandlerFunc;
   };
 
@@ -51,13 +54,14 @@ const TableHeader = ({
         }
       `}</style>
 
-      <div className={`table-header w-full`}>
+      <div className={`table-header rounded mb-2 text-white flex justify-between items-center p-2 py-1  bg-slate-700 w-full`}>
         <h4 className="font-normal text-sm ">{title}</h4>
         <div className="flex items-center gap-2">
           <div className="flex gap-3 ms-3 items-center">
             {/* Ascending Button in Table Header */}
             {showSortIcon && (
-              <button
+              <>
+                {/* <button
                 className="bg-tertiary drawer-content flex items-center justify-center w-[28px] h-[28px] rounded-full hover:bg-tertiary-dark"
                 onClick={() => handleSort && handleSort("asc")}
                 data-tip="Ascending"
@@ -69,32 +73,34 @@ const TableHeader = ({
                   height={20}
                   className="white-icon"
                 />
-              </button>
+              </button> */}
+                {/* -------- new reusable btn added ------- */}
+                <Buttons btnVariant="btn-xs " onClick={() => handleSort && handleSort("asc")} icon={<UpArrowIcon />} />
+              </>
             )}
 
             {/* Descending Button in Table Header */}
             {showSortIcon && (
-              <button
-                className="bg-tertiary drawer-content flex items-center justify-center w-[28px] h-[28px] rounded-full hover:bg-tertiary-dark"
-                onClick={() => handleSort && handleSort("desc")}
-                data-tip="Descending"
-              >
-                <Image
-                  src={DescendingIcon}
-                  alt="Descending Icon"
-                  width={20}
-                  height={20}
-                  className="white-icon"
-                />
-              </button>
+              // <button
+              //   className="bg-tertiary drawer-content flex items-center justify-center w-[28px] h-[28px] rounded-full hover:bg-tertiary-dark"
+              //   onClick={() => handleSort && handleSort("desc")}
+              //   data-tip="Descending"
+              // >
+              //   <Image
+              //     src={DescendingIcon}
+              //     alt="Descending Icon"
+              //     width={20}
+              //     height={20}
+              //     className="white-icon"
+              //   />
+              // </button>
+              <Buttons btnVariant="btn-xs " onClick={() => handleSort && handleSort("asc")} icon={<DownArrowIcon />} />
             )}
 
             {showFilterBtn && (
-              <div className="bg-tertiary drawer-content flex items-center justify-center w-[28px] h-[28px] rounded-full hover:bg-tertiary-dark">
-                <label htmlFor={drawerId} className="cursor-pointer">
-                  <FilterIcon width={14} height={14} color="white" />
+                <label htmlFor={drawerId} className="font-light text-xs pt-1 pb-1 min-h-5 h-5 leading-none btn btn-xs btn-outine">
+                  <FilterIcon height="14" width="14"  color="#000" />
                 </label>
-              </div>
             )}
 
             {/* Other Buttons */}
@@ -105,13 +111,16 @@ const TableHeader = ({
                 const clickHandlerFunc = getClickHandler(btn);
 
                 return (
-                  <Button
+                  <Buttons
+                    
                     key={i}
                     onClick={clickHandlerFunc}
-                    color={btn.color}
+                    btnSize=""
+                    // color={btn.color}
                     icon={btn.icon}
-                    btnName={btn.btnName}
-                    className={btn.className}
+                    // btnName={btn.btnName}
+                    label={btn.btnName}
+                    btnVariant="btn  btn-xs "
                   />
                 );
               }

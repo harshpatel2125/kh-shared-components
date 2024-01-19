@@ -205,7 +205,7 @@ const DataGrid: FC<IDataGrid> = ({
           return (
             <div
               key={i}
-              className={`cursor-pointer tooltip ${
+              className={`py-0.5 px-1 rounded-sm  border hover:bg-slate-300 cursor-pointer tooltip ${
                 i <= 3 ? "tooltip-right" : "tooltip-left"
               }`}
               data-tip={item?.icon}

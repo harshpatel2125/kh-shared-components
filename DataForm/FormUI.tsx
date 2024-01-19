@@ -282,8 +282,8 @@ const FormUI: FC<DataFormProps> = ({
 
   return (
     <>
-      <div className="table-wrapper " style={{ height: "100%" }}>
-        <div className="h-full p-3 py-5">
+      <div className="table-wrapper  bg-white rounded" style={{ height: "74vh" }}>
+        <div className="h-full p-3 ">
           <div className={containerClassName}>
             {/* using reusable table header for displaying form buttons */}
 
