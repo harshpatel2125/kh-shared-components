@@ -56,7 +56,7 @@ interface DataFormProps {
   handleTogglePassword?: any;
   column?: number;
   containerClassName?: string;
-  formError: any;
+  formError?: any;
   formState: any;
 }
 

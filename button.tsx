@@ -21,6 +21,8 @@ export enum IButtonType {
   CreateNew = "createNew",
   Filter = "filter",
   Reset = "reset",
+  sortAsc = "sortasc",
+  sortDesc = "sortdesc",
 }
 
 type ButtonColorType =
