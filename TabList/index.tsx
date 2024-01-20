@@ -13,19 +13,21 @@ const TabList: React.FC<TabListProps> = ({ tabs, activeTab, onTabChange }) => {
   return (
     <div
       role="tablist"
-      className="mt-2 bg-[#efefef] tabs tabs-boxed col-span-2"
+      className="mt-2 mb-1  bg-none tabs  col-span-2"
     >
       {tabs.map((tab, index) => (
         <a
           key={index}
           role="tab"
-          className={`h-fit py-0.5 text-xs font-light px-2 tab ${
-            tab === activeTab ? "tab-active" : ""
+    
+          className={`h-fit py-0.5 border border-slate-500 rounded mr-1 text-xs font-light px-2 tab ${
+            tab === activeTab ? "bg-slate-600" : ""
           }`}
           onClick={() => onTabChange(tab)}
           style={{
+            fontSize: "12px",
             // Set styles dynamically based on the active state
-            backgroundColor: tab === activeTab ? "#1f6698" : "",
+            // backgroundColor: tab === activeTab ? "bg-slate-700" : "",
             color:
               tab === activeTab
                 ? "your-active-text-color"
@@ -35,6 +37,8 @@ const TabList: React.FC<TabListProps> = ({ tabs, activeTab, onTabChange }) => {
           <div className="flex">
             <span
               style={{
+                fontSize: "12px",
+
                 // Set styles dynamically based on the active state
                 color: tab === activeTab ? "#fff" : "",
               }}

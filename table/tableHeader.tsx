@@ -54,7 +54,7 @@ const TableHeader = ({
         }
       `}</style>
 
-      <div className={`table-header rounded mb-1 text-white flex justify-between items-center p-2 py-2  bg-gray-600  w-full`}>
+      <div className={`table-header rounded mb-1 text-white flex justify-between items-center p-1  bg-gray-600  w-full`}>
         <h4 className="font-normal text-sm ">{title}</h4>
         <div className="flex items-center gap-2">
           <div className="flex gap-3 ms-3 items-center">

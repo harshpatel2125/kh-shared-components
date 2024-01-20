@@ -26,21 +26,4 @@ const Buttons: React.FC<ButtonProps> = ({ htmlFor, btnSize, icon, label, onClick
 };
 
 
-const ButtonBorder: React.FC<ButtonProps> = ({ htmlFor, btnSize, icon, label, onClick, btnVariant }) => {
-  return (
-    <>
-      <button
-
-        onClick={onClick}
-        className={`flex justify-center align-middle ${btnSize} text-xs font-light px-2 py-0.5 border border-white  ${btnVariant}  rounded-sm `}
-      >
-       <span className="mt-0.5 mr-1"> {icon}</span>
-        {label}
-      </button>
-    </>
-  );
-};
-
-
-export {ButtonBorder}
 export default Buttons;

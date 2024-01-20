@@ -14,6 +14,8 @@ import {
 } from "@heroicons/react/24/outline";
 import { getIcon } from "@/utils/getIcons";
 import { TableCellActionTypes } from "@/constants/tableCols";
+import ButtonBorder from "../ButtonGroup/ButtonBorder";
+import { TETooltip } from "tw-elements-react";
 
 var checkboxSelection = function (params: CheckboxSelectionCallbackParams) {
   // we put checkbox on the name if we are not doing grouping
@@ -203,16 +205,25 @@ const DataGrid: FC<IDataGrid> = ({
           const clickHandler = getClickHandlerCallback(item?.actionType);
 
           return (
-            <div
+            // ------(tw element) new tooltip added --------
+            <TETooltip
               key={i}
-              className={`py-0.5 px-1 rounded-sm  border hover:bg-slate-300 cursor-pointer tooltip ${
-                i <= 3 ? "tooltip-right" : "tooltip-left"
-              }`}
-              data-tip={item?.icon}
-              onClick={clickHandler}
+              tag="a"
+              title={item?.icon}
+              wrapperProps={{ href: '#' }}
+              // style={{fontSize : "10px"}}
+              className="  text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600 pointer-events-auto cursor-pointer"
             >
-              {getIcon(item?.icon)}
-            </div>
+              <div
+
+                className={`py-0.5 px-1 rounded-sm  border hover:bg-slate-300 cursor-pointer 
+                  }`}
+                // data-tip={item?.icon}
+                onClick={clickHandler}
+              >
+                {getIcon(item?.icon)}
+              </div>
+            </TETooltip>
           );
         })}
       </div>
@@ -259,31 +270,36 @@ const DataGrid: FC<IDataGrid> = ({
         height: gridHeight
           ? gridHeight
           : enableSearch || enableCSVExport
-          ? "71vh"
-          : "74vh",
+            ? "74vh"
+            : "74vh",
       }}
     >
       {(enableSearch || enableCSVExport) && (
         <div
-          className="w-full  py-1  px-3  mb-[-2px] rounded-t flex flex-row justify-between content-center border border-s border-gray-300 "
+          className="w-full  py-1  px-1  mb-[-2px] rounded-t flex flex-row justify-between content-center border border-s border-gray-300 "
           style={{
             alignItems: "center",
             justifyContent: !enableCSVExport ? "flex-end" : "between",
           }}
         >
           {enableCSVExport && (
-            <Button
+            <>
+              {/* <Button
               color="tertiary"
               onClick={handleExport}
               icon={<DocumentArrowDownIcon className="h-3 w-3" />}
             >
               Export to CSV
-            </Button>
+            </Button> */}
+              {/* ------ Reusable button added -------- */}
+              <ButtonBorder label="Export to CSV" onClick={handleExport} icon={<DocumentArrowDownIcon className="h-3 w-3" />} />
+            </>
           )}
           {enableSearch && (
-            <div className="flex content-center">
-              <div className="w-60  ms-auto">
+            <div className="flex content-center ">
+              <div className="w-60 mr-3  ms-auto">
                 <TextInput
+                  className=""
                   label="Search"
                   value={quickFilterText}
                   // formWhite={true}
@@ -293,14 +309,18 @@ const DataGrid: FC<IDataGrid> = ({
                 />
               </div>
               {enableCSVExport && (
-                <Button
+                <div className="mt-1">
+                  {/* <Button
                   color="tertiary"
                   onClick={handleReset}
                   icon={<ArrowPathIcon className="h-3 w-3" />}
                   className="ms-8"
                 >
                   Reset All
-                </Button>
+                  </Button> */}
+                  {/* ------ Reusable button added -------- */}
+                  <ButtonBorder  label="Reset All" onClick={handleReset} icon={<ArrowPathIcon className="h-3 w-3 " />} />
+                </div>
               )}
             </div>
           )}
@@ -326,7 +346,7 @@ const DataGrid: FC<IDataGrid> = ({
         pagination={disablePagination ? false : true}
         paginationPageSize={defaultPageSize || 10}
         paginationPageSizeSelector={pageSizeSelector || [10, 20, 50]}
-       
+
       />
     </div>
   );
