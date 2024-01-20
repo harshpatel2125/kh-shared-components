@@ -10,6 +10,8 @@ interface headerButtonTypes {
   new: IButton;
   filter: IButton;
   back: IButton;
+  asc: IButton;
+  desc: IButton;
 }
 
 export const HEADER_BUTTONS: headerButtonTypes = {
@@ -41,5 +43,20 @@ export const HEADER_BUTTONS: headerButtonTypes = {
     // icon: <PlusIcon className="h-3 w-3" />,
     className: buttonClass,
     btnType: IButtonType.GoBack,
+  },
+
+  asc: {
+    btnName: "",
+    color: "tertiary",
+    icon: <PlusIcon className="h-3 w-3" />,
+    className: buttonClass,
+    btnType: IButtonType.sortAsc,
+  },
+  desc: {
+    btnName: "",
+    color: "tertiary",
+    icon: <PlusIcon className="h-3 w-3" />,
+    className: buttonClass,
+    btnType: IButtonType.sortDesc,
   },
 };

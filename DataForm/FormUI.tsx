@@ -56,7 +56,7 @@ interface DataFormProps {
   handleTogglePassword?: any;
   column?: number;
   containerClassName?: string;
-  formError: any;
+  formError?: any;
   formState: any;
 }
 
@@ -282,25 +282,21 @@ const FormUI: FC<DataFormProps> = ({
 
   return (
     <>
-      <div className="table-wrapper  bg-white rounded" style={{ height: "74vh" }}>
-        <div className="h-full p-3 ">
-          <div className={containerClassName}>
-            {/* using reusable table header for displaying form buttons */}
-
-            <div
-              className={`grid grid-cols-${column || 3} ${
-                formError ? "gap-y-6" : "gap-y-3"
-              } gap-x-3`}
-            >
-              {formState &&
-                formState?.length > 0 &&
-                formState?.map((ele: IFieldType, index: number) => (
-                  <React.Fragment key={index}>
-                    {renderFields(ele, index)}
-                  </React.Fragment>
-                ))}
-            </div>
-          </div>
+      <div
+        className={`table-wrapper p-5 px-3  bg-white rounded ${containerClassName}`}
+      >
+        <div
+          className={`grid grid-cols-${column || 3} ${
+            formError ? "gap-y-6" : "gap-y-3"
+          } gap-x-3`}
+        >
+          {formState &&
+            formState?.length > 0 &&
+            formState?.map((ele: IFieldType, index: number) => (
+              <React.Fragment key={index}>
+                {renderFields(ele, index)}
+              </React.Fragment>
+            ))}
         </div>
       </div>
     </>
