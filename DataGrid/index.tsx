@@ -270,8 +270,8 @@ const DataGrid: FC<IDataGrid> = ({
         height: gridHeight
           ? gridHeight
           : enableSearch || enableCSVExport
-            ? "74vh"
-            : "74vh",
+            ? "76vh"
+            : "76vh",
       }}
     >
       {(enableSearch || enableCSVExport) && (
