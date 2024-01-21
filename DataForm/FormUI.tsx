@@ -283,20 +283,27 @@ const FormUI: FC<DataFormProps> = ({
   return (
     <>
       <div
-        className={`table-wrapper p-5 px-3  bg-white rounded ${containerClassName}`}
+        className="table-wrapper  bg-white rounded"
+        style={{ height: "82vh" }}
       >
-        <div
-          className={`grid grid-cols-${column || 3} ${
-            formError ? "gap-y-6" : "gap-y-3"
-          } gap-x-3`}
-        >
-          {formState &&
-            formState?.length > 0 &&
-            formState?.map((ele: IFieldType, index: number) => (
-              <React.Fragment key={index}>
-                {renderFields(ele, index)}
-              </React.Fragment>
-            ))}
+        <div className="h-full p-3 ">
+          <div className={containerClassName}>
+            {/* using reusable table header for displaying form buttons */}
+
+            <div
+              className={`grid grid-cols-${column || 3} ${
+                formError ? "gap-y-6" : "gap-y-3"
+              } gap-x-3`}
+            >
+              {formState &&
+                formState?.length > 0 &&
+                formState?.map((ele: IFieldType, index: number) => (
+                  <React.Fragment key={index}>
+                    {renderFields(ele, index)}
+                  </React.Fragment>
+                ))}
+            </div>
+          </div>
         </div>
       </div>
     </>

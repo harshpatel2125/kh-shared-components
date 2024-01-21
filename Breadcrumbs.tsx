@@ -21,7 +21,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ children, hideDivider }) => {
         </div>
         <div className=" mt-1">
           <Subtitle styleClass={"text-[#48a4f9] pl-3"}>
-            <div className="text-sm breadcrumbs pt-2 pb-0">
+            <div className="text-sm breadcrumbs pt-1 pb-0">
               <ul>
                 {breads &&
                   breads?.length > 0 &&
@@ -54,16 +54,17 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ children, hideDivider }) => {
         </div>
        
       </div>
-      {!hideDivider ? (
+      {/* ----- commented bottom divider line ------ */}
+      {/* {!hideDivider ? (
         <>
           <div className="my-2 h-0.5 border-t-0 bg-neutral-100 opacity-100 dark:opacity-50"></div>
         </>
       ) : (
         <div className="mt-5"></div>
-      )}
+      )} */}
       <div>
       </div>
-      <div className="h-full w-full pb-6 ">{children}</div>
+      <div className="h-full w-full  ">{children}</div>
     </div>
   );
 };
