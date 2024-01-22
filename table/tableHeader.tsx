@@ -39,14 +39,14 @@ const TableHeader = ({
       btn?.btnType === IButtonType.CreateNew
         ? handleCreateNew
         : btn?.btnType === IButtonType.FormSubmit
-        ? handleFormSubmission
-        : btn?.btnType === IButtonType.GoBack
-        ? handleGoBack
-        : btn?.btnType === IButtonType.sortAsc
-        ? handleSort
-        : btn?.btnType === IButtonType.sortAsc
-        ? handleSort
-        : btn?.onClick;
+          ? handleFormSubmission
+          : btn?.btnType === IButtonType.GoBack
+            ? handleGoBack
+            : btn?.btnType === IButtonType.sortAsc
+              ? handleSort
+              : btn?.btnType === IButtonType.sortAsc
+                ? handleSort
+                : btn?.onClick;
     return clickHandlerFunc;
   };
 
@@ -79,10 +79,10 @@ const TableHeader = ({
                 return (
                   <label
                     htmlFor={drawerId}
-                    className="font-light text-xs pt-1 pb-1 min-h-5 h-5 leading-none btn btn-xs btn-outine"
+                    className=""
                     key={i}
                   >
-                    <FilterIcon height="14" width="14" color="#000" />
+                    {btn.icon}
                   </label>
                 );
               } else if (
@@ -102,17 +102,15 @@ const TableHeader = ({
                 );
               } else {
                 return (
-                  <Buttons
-                    key={i}
-                    onClick={clickHandlerFunc}
-                    btnSize=""
-                    // color={btn.color}
-                    icon={btn.icon}
-                    // btnName={btn.btnName}
-                    label={btn.btnName}
-                    btnVariant="btn  btn-xs "
-                  />
-                );
+                  <>
+                    <Button
+                      key={i}
+                      icon={btn.icon}
+                      onClick={() => clickHandlerFunc(btn.btnType)}
+                      btnName={btn.btnName}
+                    />
+                  </>
+                )
               }
             })}
           </div>

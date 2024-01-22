@@ -67,8 +67,6 @@ const SelectDropdown: React.FC<SelectDropdownProps> = ({
 						paddingTop: "0px",
 						borderRadius: "3px",
 						fontSize: "12px",
-
-
 					}),
 
 					indicatorSeparator: (state) => ({
@@ -93,8 +91,9 @@ const SelectDropdown: React.FC<SelectDropdownProps> = ({
 						borderRadius: "3px",
 						color: "#332941",
 						zIndex: "999999",
-
+						fontSize: "13px",
 					}),
+					
 				}}
 				theme={(theme) => ({
 					...theme,

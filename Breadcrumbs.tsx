@@ -37,7 +37,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ children, hideDivider }) => {
                               router.back();
                             }
                           }}
-                          className=" ml-1 capitalize text-slate-700 font-[300]  text-xs "
+                          className=" capitalize text-slate-700 font-[300]  text-xs "
                         >
                           {index === breads?.length - 1 ? (
                             ele?.split("-")?.join(" ")
@@ -75,7 +75,7 @@ const Tabs: React.FC = () => {
   const [activeTab, setActiveTab] = useState('Tab1'); // Set the initial active tab
 
   // Define your tabs
-  const tabs = ['user', 'Tab2', 'Tab3'];
+  const tabs = ['Tab1', 'Tab2', 'Tab3'];
 
   // Handle tab change
   const handleTabChange = (tab: string) => {

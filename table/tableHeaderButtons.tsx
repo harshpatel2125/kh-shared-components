@@ -1,6 +1,9 @@
+
 import FilterIcon from "@/assets/icons/FilterIcon";
 import { IButton, IButtonType } from "@/shared/button";
 import { PlusIcon } from "@heroicons/react/24/outline";
+import UpArrowIcon from "@/assets/icons/UpArrowIcon";
+import DownArrowIcon from "@/assets/icons/DownArrowIcon";
 
 const buttonClass: string = " px-2";
 const filterButtonClass: string = " p-2";
@@ -48,14 +51,14 @@ export const HEADER_BUTTONS: headerButtonTypes = {
   asc: {
     btnName: "",
     color: "tertiary",
-    icon: <PlusIcon className="h-3 w-3" />,
+    icon: <DownArrowIcon height="12" width="12" color="#fff" />,
     className: buttonClass,
     btnType: IButtonType.sortAsc,
   },
   desc: {
     btnName: "",
     color: "tertiary",
-    icon: <PlusIcon className="h-3 w-3" />,
+    icon: <UpArrowIcon height="12" width="12" color="#fff" />,
     className: buttonClass,
     btnType: IButtonType.sortDesc,
   },
