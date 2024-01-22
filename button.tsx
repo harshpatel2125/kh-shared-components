@@ -23,6 +23,7 @@ export enum IButtonType {
   Reset = "reset",
   sortAsc = "sortasc",
   sortDesc = "sortdesc",
+  payment = "payment",
 }
 
 type ButtonColorType =

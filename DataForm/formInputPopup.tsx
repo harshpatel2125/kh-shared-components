@@ -1,12 +1,14 @@
+"use client";
+
 import React, { useState } from "react";
 import Button from "@/shared/button";
 import AddIcon from "@/assets/icons/AddIcon";
-import CustomPopup from "../popup";
 import TextInput from "../FormElements/TextInput";
 import DataGrid from "../DataGrid";
 import { TableCellActionTypes, tableActionsCell } from "@/constants/tableCols";
 import { Icons } from "@/utils/getIcons";
 import generateRandomData from "@/utils/generateRandomData";
+import { CustomPopupWrapper } from "../tw-elements";
 
 const FormInputPopup = ({ title }: { title: string | undefined }) => {
   const [showPopup, setShowPopup] = useState<boolean>(false);
@@ -36,17 +38,17 @@ const FormInputPopup = ({ title }: { title: string | undefined }) => {
       <Button
         icon={<AddIcon />}
         onClick={handleClick}
-        className="bg-secondary hover:bg-tertiary"
+        className="bg-secondary hover:bg-tertiary h-full rounded-sm"
       />
 
-      <CustomPopup
+      <CustomPopupWrapper
         title={title}
         showModal={showPopup}
         setShowModal={setShowPopup}
       >
         <div className="flex flex-col gap-5">
-          <div className="p_form">
-            <form action="" className="flex gap-3">
+          <div>
+            <form action="" className=" flex gap-3 items-center">
               <div className="flex-1">
                 <TextInput
                   required={true}
@@ -67,23 +69,24 @@ const FormInputPopup = ({ title }: { title: string | undefined }) => {
               </div>
               <Button
                 onClick={handleClick}
-                className="bg-tertiary hover:bg-tertiary px-5 text-white"
+                className="bg-tertiary hover:bg-tertiary-dark hover:text-white px-5 py-1.5 text-white"
               >
                 Save
               </Button>
             </form>
           </div>
-          <div className="p_table  overflow-hidden ">
+          <div className="p_table  overflow-hidden pb-9">
             <DataGrid
-              rowData={generateRandomData(25, columnDefs)}
+              rowData={generateRandomData(7, columnDefs)}
               columnDefs={columnDefs}
               enableSearch
               enableEditBtn
               defaultPageSize={10}
+              gridHeight={250}
             />
           </div>
         </div>
-      </CustomPopup>
+      </CustomPopupWrapper>
     </>
   );
 };

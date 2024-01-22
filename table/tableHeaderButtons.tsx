@@ -10,6 +10,7 @@ const filterButtonClass: string = " p-2";
 interface headerButtonTypes {
   save: IButton;
   new: IButton;
+  pay: IButton;
   filter: IButton;
   back: IButton;
   asc: IButton;
@@ -30,6 +31,13 @@ export const HEADER_BUTTONS: headerButtonTypes = {
     icon: <PlusIcon className="h-3 w-3" />,
     className: buttonClass,
     btnType: IButtonType.CreateNew,
+  },
+  pay: {
+    btnName: "Pay",
+    color: "tertiary",
+    // icon: <FilterIcon height={12} width={12} color="#fff" />,
+    className: buttonClass,
+    btnType: IButtonType.payment,
   },
 
   filter: {

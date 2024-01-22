@@ -216,7 +216,7 @@ const FormUI: FC<DataFormProps> = ({
               />
             </div>
             {ele?.showPopup ? (
-              <div>
+              <div className="h-full">
                 <FormInputPopup title={ele?.popupTitle} />
               </div>
             ) : null}
@@ -284,7 +284,7 @@ const FormUI: FC<DataFormProps> = ({
     <>
       <div
         className="table-wrapper  bg-white rounded"
-        style={{ height: "82vh" }}
+        // style={{ height: "82vh" }}
       >
         <div className="h-full p-3 ">
           <div className={containerClassName}>
