@@ -43,6 +43,7 @@ export interface IFieldType {
   popupTitle?: string;
   inputReadOnlyBg?: boolean;
   inputMandatoryBg?: boolean;
+  mandatory?: boolean;
 }
 
 export interface IDataFormReturnType {
@@ -211,6 +212,7 @@ const FormUI: FC<DataFormProps> = ({
                 options={
                   ele?.options ? ele.options : [{ label: "one", value: "one" }]
                 }
+                mandatory={ele?.mandatory}
                 isSearchable={true}
                 value={ele?.selectedOption ? [ele?.selectedOption] : []}
               />
@@ -284,16 +286,15 @@ const FormUI: FC<DataFormProps> = ({
     <>
       <div
         className="table-wrapper  bg-white rounded"
-        style={{ height: "82vh" }}
+        
       >
         <div className="h-full p-3 ">
           <div className={containerClassName}>
             {/* using reusable table header for displaying form buttons */}
 
             <div
-              className={`grid grid-cols-${column || 3} ${
-                formError ? "gap-y-6" : "gap-y-3"
-              } gap-x-3`}
+              className={`grid grid-cols-${column || 3} ${formError ? "gap-y-6" : "gap-y-3"
+                } gap-x-3`}
             >
               {formState &&
                 formState?.length > 0 &&

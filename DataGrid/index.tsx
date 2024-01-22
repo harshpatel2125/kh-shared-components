@@ -299,8 +299,8 @@ const DataGrid: FC<IDataGrid> = ({
             <div className="flex content-center ">
               <div className="w-60 mr-3  ms-auto">
                 <TextInput
-                  className=""
-                  label="Search"
+                  className="h-7"
+                  label="Search . . ."
                   value={quickFilterText}
                   // formWhite={true}
                   onChange={(e) => {

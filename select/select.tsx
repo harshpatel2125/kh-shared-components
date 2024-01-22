@@ -19,9 +19,10 @@ interface SelectDropdownProps {
 	value?: Option | Option[] | null;
 	onChange?: (newValue: any) => void;
 	onCreateOption?: (inputValue: string) => void;
+	mandatory?: boolean;
 }
-
 const SelectDropdown: React.FC<SelectDropdownProps> = ({
+	mandatory,
 	label,
 	isSearchable,
 	options,
@@ -93,7 +94,7 @@ const SelectDropdown: React.FC<SelectDropdownProps> = ({
 						zIndex: "999999",
 						fontSize: "13px",
 					}),
-					
+
 				}}
 				theme={(theme) => ({
 					...theme,
@@ -115,8 +116,12 @@ const SelectDropdown: React.FC<SelectDropdownProps> = ({
 				onCreateOption={onCreateOption}
 				options={options}
 				value={value}
+				
 			/>
-			<label className={`font-light   absolute selectDropDown ${labelColor ? "text-blue-800" : "text-slate-700"} `}>{label ? label : "Label"}</label>		</div>
+			<label className={`font-light absolute selectDropDown ${labelColor ? "text-blue-800" : "text-slate-700"} `}>
+				{label ? label : "Label"}{mandatory  ? "*" : ""}
+			</label>
+		</div>
 	);
 };
 

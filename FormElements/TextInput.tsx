@@ -65,7 +65,7 @@ const TextInput: React.FC<InputTextProps> = ({
         value={value}
         onChange={onChange}
         disabled={readOnly}
-        className={`${className}`}
+        className={`${className} p-0 m-0`}
         formWhite={formWhite}
         theme={{
           focusedNotchLeadingDefault:

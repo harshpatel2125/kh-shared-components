@@ -61,7 +61,7 @@ const TableHeader = ({
       >
         <h4 className="font-normal text-sm ">{title}</h4>
         <div className="flex items-center gap-2">
-          <div className="flex gap-3 ms-3 items-center">
+          <div className="flex gap-2 ms-3 items-center">
             {/* Other Buttons */}
 
             {headerButtons?.map((btn, i) => {
@@ -75,7 +75,7 @@ const TableHeader = ({
 
               if (btn?.btnType === IButtonType.Filter && showFilterBtn) {
                 return (
-                  <label htmlFor={drawerId} className="" key={i}>
+                  <label htmlFor={drawerId} className="mr-2" key={i}>
                     {btn.icon}
                   </label>
                 );
