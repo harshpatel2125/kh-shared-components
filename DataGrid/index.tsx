@@ -16,6 +16,8 @@ import { getIcon } from "@/utils/getIcons";
 import { TableCellActionTypes } from "@/constants/tableCols";
 import ButtonBorder from "../ButtonGroup/ButtonBorder";
 import { TETooltip } from "tw-elements-react";
+import GridDropdown from "./GridDropdown";
+import { CellEditorComponent } from "ag-grid-community/dist/lib/components/framework/componentTypes";
 
 var checkboxSelection = function (params: CheckboxSelectionCallbackParams) {
   // we put checkbox on the name if we are not doing grouping
@@ -210,12 +212,11 @@ const DataGrid: FC<IDataGrid> = ({
               key={i}
               tag="a"
               title={item?.icon}
-              wrapperProps={{ href: '#' }}
+              wrapperProps={{ href: "#" }}
               // style={{fontSize : "10px"}}
               className="  text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600 pointer-events-auto cursor-pointer"
             >
               <div
-
                 className={`py-0.5 px-1 rounded-sm  border hover:bg-slate-300 cursor-pointer 
                   }`}
                 // data-tip={item?.icon}
@@ -237,9 +238,21 @@ const DataGrid: FC<IDataGrid> = ({
       field: actionColumn.field,
       cellRenderer: () => cellRendererFunc(actionColumn?.cellActions),
     };
-
     columnDefs[0] = updatedColumn;
     return columnDefs;
+  };
+
+  const getNewColumnDefs = () => {
+    return columnDefs.map((ele, index) => {
+      if (ele?.dropdown) {
+        return {
+          ...ele,
+          cellEditor: GridDropdown,
+          // cellEditorPopup: true,
+          editable: true,
+        };
+      } else return ele;
+    });
   };
 
   // if()
@@ -263,6 +276,7 @@ const DataGrid: FC<IDataGrid> = ({
     type: "fitGridWidth",
     width: 1500,
   };
+
   return (
     <div
       className="ag-theme-balham h-full rounded"
@@ -270,8 +284,8 @@ const DataGrid: FC<IDataGrid> = ({
         height: gridHeight
           ? gridHeight
           : enableSearch || enableCSVExport
-            ? "76vh"
-            : "76vh",
+          ? "76vh"
+          : "76vh",
       }}
     >
       {(enableSearch || enableCSVExport) && (
@@ -292,7 +306,11 @@ const DataGrid: FC<IDataGrid> = ({
               Export to CSV
             </Button> */}
               {/* ------ Reusable button added -------- */}
-              <ButtonBorder label="Export to CSV" onClick={handleExport} icon={<DocumentArrowDownIcon className="h-3 w-3" />} />
+              <ButtonBorder
+                label="Export to CSV"
+                onClick={handleExport}
+                icon={<DocumentArrowDownIcon className="h-3 w-3" />}
+              />
             </>
           )}
           {enableSearch && (
@@ -319,7 +337,11 @@ const DataGrid: FC<IDataGrid> = ({
                   Reset All
                   </Button> */}
                   {/* ------ Reusable button added -------- */}
-                  <ButtonBorder  label="Reset All" onClick={handleReset} icon={<ArrowPathIcon className="h-3 w-3 " />} />
+                  <ButtonBorder
+                    label="Reset All"
+                    onClick={handleReset}
+                    icon={<ArrowPathIcon className="h-3 w-3 " />}
+                  />
                 </div>
               )}
             </div>
@@ -330,7 +352,9 @@ const DataGrid: FC<IDataGrid> = ({
         autoSizeStrategy={autoSizeStrategy}
         ref={gridRef}
         rowData={rowData}
-        columnDefs={isCellRendererType ? getUpdatedColumnDefs() : columnDefs}
+        columnDefs={
+          isCellRendererType ? getUpdatedColumnDefs() : getNewColumnDefs()
+        }
         defaultColDef={defaultColDef}
         pivotPanelShow={"always"}
         rowGroupPanelShow={"always"}
@@ -346,7 +370,6 @@ const DataGrid: FC<IDataGrid> = ({
         pagination={disablePagination ? false : true}
         paginationPageSize={defaultPageSize || 10}
         paginationPageSizeSelector={pageSizeSelector || [10, 20, 50]}
-
       />
     </div>
   );
