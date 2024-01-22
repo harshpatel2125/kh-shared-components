@@ -39,14 +39,14 @@ const TableHeader = ({
       btn?.btnType === IButtonType.CreateNew
         ? handleCreateNew
         : btn?.btnType === IButtonType.FormSubmit
-          ? handleFormSubmission
-          : btn?.btnType === IButtonType.GoBack
-            ? handleGoBack
-            : btn?.btnType === IButtonType.sortAsc
-              ? handleSort
-              : btn?.btnType === IButtonType.sortAsc
-                ? handleSort
-                : btn?.onClick;
+        ? handleFormSubmission
+        : btn?.btnType === IButtonType.GoBack
+        ? handleGoBack
+        : btn?.btnType === IButtonType.sortAsc
+        ? handleSort
+        : btn?.btnType === IButtonType.sortAsc
+        ? handleSort
+        : btn?.onClick;
     return clickHandlerFunc;
   };
 
@@ -77,11 +77,7 @@ const TableHeader = ({
 
               if (btn?.btnType === IButtonType.Filter && showFilterBtn) {
                 return (
-                  <label
-                    htmlFor={drawerId}
-                    className=""
-                    key={i}
-                  >
+                  <label htmlFor={drawerId} className="" key={i}>
                     {btn.icon}
                   </label>
                 );
@@ -110,7 +106,7 @@ const TableHeader = ({
                       btnName={btn.btnName}
                     />
                   </>
-                )
+                );
               }
             })}
           </div>
