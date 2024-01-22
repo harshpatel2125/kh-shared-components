@@ -1,4 +1,3 @@
-
 import FilterIcon from "@/assets/icons/FilterIcon";
 import { IButton, IButtonType } from "@/shared/button";
 import { PlusIcon } from "@heroicons/react/24/outline";
@@ -52,7 +51,7 @@ export const HEADER_BUTTONS: headerButtonTypes = {
     btnName: "",
     color: "tertiary",
     icon: <DownArrowIcon height="12" width="12" color="#fff" />,
-    className: buttonClass,
+    className: `${buttonClass} bg-transparent hover:bg-transparent`,
     btnType: IButtonType.sortAsc,
   },
   desc: {

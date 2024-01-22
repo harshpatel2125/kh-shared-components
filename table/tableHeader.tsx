@@ -18,7 +18,6 @@ export interface TableHeaderProps {
   handleGoBack?: () => any;
   drawerId?: string;
   showFilterBtn?: boolean;
-  showSortButtons?: boolean; // Controls visibility in table header
   handleSort?: (sortType: any) => any;
 }
 
@@ -31,7 +30,6 @@ const TableHeader = ({
   handleGoBack,
   drawerId,
   showFilterBtn,
-  showSortButtons, // Default to true if not provided
   handleSort,
 }: TableHeaderProps) => {
   const getClickHandler = (btn: any) => {
@@ -81,21 +79,6 @@ const TableHeader = ({
                     {btn.icon}
                   </label>
                 );
-              } else if (
-                (btn?.btnType === IButtonType.sortAsc ||
-                  btn?.btnType === IButtonType.sortDesc) &&
-                showSortButtons
-              ) {
-                return (
-                  <Buttons
-                    key={i}
-                    onClick={() => clickHandlerFunc(btn.btnType)}
-                    btnSize=""
-                    icon={btn.icon}
-                    label={btn.btnName}
-                    btnVariant="btn  btn-xs "
-                  />
-                );
               } else {
                 return (
                   <>
@@ -104,6 +87,7 @@ const TableHeader = ({
                       icon={btn.icon}
                       onClick={() => clickHandlerFunc(btn.btnType)}
                       btnName={btn.btnName}
+                      className={btn?.className}
                     />
                   </>
                 );
