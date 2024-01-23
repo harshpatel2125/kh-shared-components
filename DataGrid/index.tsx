@@ -193,6 +193,12 @@ const DataGrid: FC<IDataGrid> = ({
           console.log("Suspend clicked");
         };
 
+      case TableCellActionTypes.showTaxPopup:
+        // call suspend record
+        return () => {
+          console.log("show Tax Popup");
+        };
+
       default:
         return () => {
           console.log("button clicked");
@@ -254,7 +260,6 @@ const DataGrid: FC<IDataGrid> = ({
       } else return ele;
     });
   };
-
 
   const handleExport = useCallback(() => {
     gridRef.current!.api.exportDataAsCsv();
