@@ -16,11 +16,13 @@ interface ColourOption {
     readonly color: string;
     readonly isFixed?: boolean;
     readonly isDisabled?: boolean;
+    
 }
 const colourOptions: readonly ColourOption[] = [
     { value: 'ocean', label: 'Ocean', color: '#00B8D9', isFixed: true },
     { value: 'blue', label: 'Blue', color: '#666666', isDisabled: true },
     { value: 'purple', label: 'Purple', color: '#5243AA' },
+    { value: 'purple', label: 'Purple', color: '#5243AA'},
     { value: 'red', label: 'Red', color: '#FF5630', isFixed: true },
     { value: 'orange', label: 'Orange', color: '#FF8B00' },
     { value: 'yellow', label: 'Yellow', color: '#FFC400' },
@@ -39,6 +41,7 @@ const Control = ({ children, ...props }: ControlProps<ColourOption, false>) => {
             <span onMouseDown={onEmojiClick} style={style}>
                 {emoji}
             </span>
+            
             {children}
         </components.Control>
     );
@@ -139,7 +142,7 @@ const CustomSearchBar = (props: Props<ColourOption>) => {
             // @ts-ignore
             emoji={emoji}
             // onEmojiClick={onClick}
-            components={{ Control, DropdownIndicator: null }}
+            components={{ Control, DropdownIndicator: null, }}
             isSearchable
             isClearable
             name="emoji"

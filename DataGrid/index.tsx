@@ -200,7 +200,7 @@ const DataGrid: FC<IDataGrid> = ({
 
   const cellRendererFunc = (cellIcons: any) => {
     return (
-      <div className="flex h-full flex-row gap-1 items-center">
+      <div className="flex h-full flex-row gap-0.5 items-center">
         {cellIcons?.map((item: any, i: number) => {
           const clickHandler = getClickHandlerCallback(item?.actionType);
 
@@ -216,7 +216,7 @@ const DataGrid: FC<IDataGrid> = ({
             >
               <div
 
-                className={`py-0.5 px-1 rounded-sm  border hover:bg-slate-300 cursor-pointer 
+                className={`py-0.5 px-1 rounded-sm   hover:bg-slate-300 cursor-pointer 
                   }`}
                 // data-tip={item?.icon}
                 onClick={clickHandler}
@@ -297,9 +297,9 @@ const DataGrid: FC<IDataGrid> = ({
           )}
           {enableSearch && (
             <div className="flex content-center ">
-              <div className="w-60 mr-3  ms-auto">
+              <div className="w-60 mr-3   ms-auto">
                 <TextInput
-                  className="h-7"
+                  className="h-7  "
                   label="Search . . ."
                   value={quickFilterText}
                   // formWhite={true}

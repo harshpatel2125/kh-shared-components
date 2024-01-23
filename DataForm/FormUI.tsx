@@ -159,6 +159,7 @@ const FormUI: FC<DataFormProps> = ({
       case IInputType.AutoComplete:
         return (
           <TextInput
+          className="mb-2"
             inputReadOnlyBg={ele.inputReadOnlyBg}
             inputMandatoryBg={ele.inputMandatoryBg}
             readOnly={ele?.readOnly}
@@ -172,6 +173,7 @@ const FormUI: FC<DataFormProps> = ({
       case IInputType.Number:
         return (
           <TextInput
+            className="mb-2"
             inputReadOnlyBg={ele.inputReadOnlyBg}
             inputMandatoryBg={ele.inputMandatoryBg}
             type="number"
@@ -186,6 +188,7 @@ const FormUI: FC<DataFormProps> = ({
       case IInputType.Password:
         return (
           <TextInput
+            className="mb-2"
             inputReadOnlyBg={ele.inputReadOnlyBg}
             inputMandatoryBg={ele.inputMandatoryBg}
             type="password"
@@ -204,7 +207,7 @@ const FormUI: FC<DataFormProps> = ({
 
       case IInputType.DropDown:
         return (
-          <div className={`${ele.className} flex w-100 gap-2`}>
+          <div className={`${ele.className} mb-2 flex w-100 gap-2`}>
             <div className="flex-1">
               <SelectDropdown
                 label={ele?.label || "label"}
@@ -228,6 +231,7 @@ const FormUI: FC<DataFormProps> = ({
       case IInputType.Email:
         return (
           <TextInput
+          className="mb-2"
             inputReadOnlyBg={ele.inputReadOnlyBg}
             inputMandatoryBg={ele.inputMandatoryBg}
             type="email"
@@ -258,7 +262,7 @@ const FormUI: FC<DataFormProps> = ({
       case IInputType.Image:
       case IInputType.File:
         return (
-          <div className={`row-span-4 flex justify-start ${ele?.className}`}>
+          <div className={`row-span-4 flex justify-start mb-2 ${ele?.className}`}>
             <ImageInput
               selectedImageUri={ele?.value?.toString()}
               onChange={(e) => handleChange(e, index, ele?.type)}
@@ -286,20 +290,20 @@ const FormUI: FC<DataFormProps> = ({
     <>
       <div
         className="table-wrapper  bg-white rounded"
-        
+
       >
-        <div className="h-full p-3 ">
+        <div className="h-full p-3  ">
           <div className={containerClassName}>
             {/* using reusable table header for displaying form buttons */}
 
             <div
               className={`grid grid-cols-${column || 3} ${formError ? "gap-y-6" : "gap-y-3"
-                } gap-x-3`}
+                } gap-x-3 `}
             >
               {formState &&
                 formState?.length > 0 &&
                 formState?.map((ele: IFieldType, index: number) => (
-                  <React.Fragment key={index}>
+                  <React.Fragment key={index} >
                     {renderFields(ele, index)}
                   </React.Fragment>
                 ))}

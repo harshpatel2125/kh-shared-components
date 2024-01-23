@@ -7,8 +7,9 @@ import SaveIcon from "@/assets/icons/SaveIcon";
 import BackIconTwo from "@/assets/icons/BackIconTwo";
 import BackIcon from "@/assets/icons/back-icon";
 
-const buttonClass: string = " px-2 border-0";
+const buttonClass: string = "  border-0";
 const filterButtonClass: string = " p-0";
+const btnPadding : string = "px-2"
 
 interface headerButtonTypes {
   save: IButton;
@@ -23,15 +24,15 @@ export const HEADER_BUTTONS: headerButtonTypes = {
   save: {
     btnName: "Save",
     color: "tertiary",
-    icon: <SaveIcon height="16" width="16" color="#000" />,
-    className: buttonClass,
+    icon: <SaveIcon  height="16" width="16" color="#000" />,
+    className: `${buttonClass} ${btnPadding}` ,
     btnType: IButtonType.FormSubmit,
   },
   new: {
     btnName: "New",
     color: "tertiary",
     icon: <PlusIcon className="h-3 w-3" />,
-    className: buttonClass,
+    className: `${buttonClass} ${btnPadding}` ,
     btnType: IButtonType.CreateNew,
   },
 
@@ -46,7 +47,7 @@ export const HEADER_BUTTONS: headerButtonTypes = {
     btnName: "Back",
     color: "tertiary",
     icon: <BackIcon height="14" width="10" color="#000" />,
-    className: buttonClass,
+    className: `${buttonClass} ${btnPadding}` ,
     btnType: IButtonType.GoBack,
   },
 

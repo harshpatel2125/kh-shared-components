@@ -59,7 +59,7 @@ const TableHeader = ({
       <div
         className={`table-header rounded mb-1 text-white flex justify-between items-center p-1  bg-gray-600  w-full`}
       >
-        <h4 className="font-normal text-sm ">{title}</h4>
+        <h4 className="ml-1 text-sm font-semibold  ">{title}</h4>
         <div className="flex items-center gap-2">
           <div className="flex gap-2 ms-3 items-center">
             {/* Other Buttons */}
