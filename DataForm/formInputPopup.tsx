@@ -1,6 +1,15 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
+import Button from "@/shared/button";
+import AddIcon from "@/assets/icons/AddIcon";
+import TextInput from "../FormElements/TextInput";
+import DataGrid from "../DataGrid";
+import { TableCellActionTypes, tableActionsCell } from "@/constants/tableCols";
+import { Icons } from "@/utils/getIcons";
+import generateRandomData from "@/utils/generateRandomData";
+import { CustomPopupWrapper } from "../tw-elements";
 import CustomPopup from "../popup";
-import Button from "../button";
 
 interface ConfirmationPopupProps {
   title?: string | undefined;

@@ -16,6 +16,8 @@ import { getIcon } from "@/utils/getIcons";
 import { TableCellActionTypes } from "@/constants/tableCols";
 import ButtonBorder from "../ButtonGroup/ButtonBorder";
 import { TETooltip } from "tw-elements-react";
+import GridDropdown from "./GridDropdown";
+import { CellEditorComponent } from "ag-grid-community/dist/lib/components/framework/componentTypes";
 import ConfirmationPopup from "../DataForm/formInputPopup";
 
 var checkboxSelection = function (params: CheckboxSelectionCallbackParams) {
@@ -194,6 +196,12 @@ const DataGrid: FC<IDataGrid> = ({
           console.log("Suspend clicked");
         };
 
+      case TableCellActionTypes.showTaxPopup:
+        // call suspend record
+        return () => {
+          console.log("show Tax Popup");
+        };
+
       default:
         return () => {
           console.log("button clicked");
@@ -252,13 +260,22 @@ const DataGrid: FC<IDataGrid> = ({
       cellRenderer: (params: any) =>
         cellRendererFunc(actionColumn?.cellActions),
     };
-
     columnDefs[0] = updatedColumn;
     return columnDefs;
   };
 
-
-  // if()
+  const getNewColumnDefs = () => {
+    return columnDefs.map((ele, index) => {
+      if (ele?.dropdown) {
+        return {
+          ...ele,
+          cellEditor: GridDropdown,
+          // cellEditorPopup: true,
+          editable: true,
+        };
+      } else return ele;
+    });
+  };
 
   const handleExport = useCallback(() => {
     gridRef.current!.api.exportDataAsCsv();
@@ -279,6 +296,7 @@ const DataGrid: FC<IDataGrid> = ({
     type: "fitGridWidth",
     width: 1500,
   };
+
   return (
     <div
       className="ag-theme-balham h-full rounded"
@@ -286,8 +304,8 @@ const DataGrid: FC<IDataGrid> = ({
         height: gridHeight
           ? gridHeight
           : enableSearch || enableCSVExport
-            ? "76vh"
-            : "76vh",
+          ? "76vh"
+          : "76vh",
       }}
     >
       {(enableSearch || enableCSVExport) && (
@@ -308,7 +326,11 @@ const DataGrid: FC<IDataGrid> = ({
               Export to CSV
             </Button> */}
               {/* ------ Reusable button added -------- */}
-              <ButtonBorder label="Export to CSV" onClick={handleExport} icon={<DocumentArrowDownIcon className="h-3 w-3" />} />
+              <ButtonBorder
+                label="Export to CSV"
+                onClick={handleExport}
+                icon={<DocumentArrowDownIcon className="h-3 w-3" />}
+              />
             </>
           )}
           {enableSearch && (
@@ -335,7 +357,11 @@ const DataGrid: FC<IDataGrid> = ({
                   Reset All
                   </Button> */}
                   {/* ------ Reusable button added -------- */}
-                  <ButtonBorder label="Reset All" onClick={handleReset} icon={<ArrowPathIcon className="h-3 w-3 " />} />
+                  <ButtonBorder
+                    label="Reset All"
+                    onClick={handleReset}
+                    icon={<ArrowPathIcon className="h-3 w-3 " />}
+                  />
                 </div>
               )}
             </div>
@@ -346,7 +372,9 @@ const DataGrid: FC<IDataGrid> = ({
         autoSizeStrategy={autoSizeStrategy}
         ref={gridRef}
         rowData={rowData}
-        columnDefs={isCellRendererType ? getUpdatedColumnDefs() : columnDefs}
+        columnDefs={
+          isCellRendererType ? getUpdatedColumnDefs() : getNewColumnDefs()
+        }
         defaultColDef={defaultColDef}
         pivotPanelShow={"always"}
         rowGroupPanelShow={"always"}
@@ -362,7 +390,6 @@ const DataGrid: FC<IDataGrid> = ({
         pagination={disablePagination ? false : true}
         paginationPageSize={defaultPageSize || 10}
         paginationPageSizeSelector={pageSizeSelector || [10, 20, 50]}
-
       />
       <ConfirmationPopup
         title="Are you sure to delete this data?"

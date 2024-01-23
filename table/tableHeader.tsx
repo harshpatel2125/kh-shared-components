@@ -32,6 +32,7 @@ const TableHeader = ({
   showFilterBtn,
   handleSort,
 }: TableHeaderProps) => {
+  console.log(showFilterBtn, "showFilterBtn");
   const getClickHandler = (btn: any) => {
     const clickHandlerFunc =
       btn?.btnType === IButtonType.CreateNew
@@ -66,14 +67,8 @@ const TableHeader = ({
 
             {headerButtons?.map((btn, i) => {
               const clickHandlerFunc = getClickHandler(btn);
-              console.log(
-                btn.btnType == IButtonType.sortAsc ||
-                  btn.btnType == IButtonType.sortDesc
-                  ? clickHandlerFunc
-                  : "no"
-              );
 
-              if (btn?.btnType === IButtonType.Filter && showFilterBtn) {
+              if (btn?.btnType === IButtonType.Filter) {
                 return (
                   <label htmlFor={drawerId} className="mr-2" key={i}>
                     {btn.icon}
