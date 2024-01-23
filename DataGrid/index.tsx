@@ -1,4 +1,4 @@
-import React, { useMemo, FC, useCallback, useRef } from "react";
+import React, { useMemo, FC, useCallback, useRef, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
 import { useRouter, usePathname } from "next/navigation";
 import {
@@ -16,6 +16,7 @@ import { getIcon } from "@/utils/getIcons";
 import { TableCellActionTypes } from "@/constants/tableCols";
 import ButtonBorder from "../ButtonGroup/ButtonBorder";
 import { TETooltip } from "tw-elements-react";
+import ConfirmationPopup from "../DataForm/formInputPopup";
 
 var checkboxSelection = function (params: CheckboxSelectionCallbackParams) {
   // we put checkbox on the name if we are not doing grouping
@@ -157,6 +158,8 @@ const DataGrid: FC<IDataGrid> = ({
   const pathname = usePathname();
 
   const isCellRendererType = columnDefs[0]?.hasOwnProperty("isCellrenderer");
+  const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
+  const [selectedRowData, setSelectedRowData] = useState<any | null>(null);
 
   function getClickHandlerCallback(actionType: string) {
     switch (actionType) {
@@ -198,28 +201,38 @@ const DataGrid: FC<IDataGrid> = ({
     }
   }
 
+
+  const handleDelete = useCallback(() => {
+    console.log("Deleting data:", selectedRowData);
+    // Perform delete logic here using selectedRowData
+    setShowConfirmation(false);
+  }, [selectedRowData]);
+
   const cellRendererFunc = (cellIcons: any) => {
     return (
       <div className="flex h-full flex-row gap-1 items-center">
         {cellIcons?.map((item: any, i: number) => {
-          const clickHandler = getClickHandlerCallback(item?.actionType);
+          const clickHandler = (e: any) => {
+            if (item?.actionType === TableCellActionTypes.Delete) {
+              setSelectedRowData(e.data);
+              setShowConfirmation(true);
+            } else {
+              const handler = getClickHandlerCallback(item?.actionType);
+              handler();
+            }
+          };
 
           return (
-            // ------(tw element) new tooltip added --------
             <TETooltip
               key={i}
               tag="a"
               title={item?.icon}
               wrapperProps={{ href: '#' }}
-              // style={{fontSize : "10px"}}
-              className="  text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600 pointer-events-auto cursor-pointer"
+              className="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600 pointer-events-auto cursor-pointer"
             >
               <div
-
-                className={`py-0.5 px-1 rounded-sm  border hover:bg-slate-300 cursor-pointer 
-                  }`}
-                // data-tip={item?.icon}
-                onClick={clickHandler}
+                className={`py-0.5 px-1 rounded-sm border hover:bg-slate-300 cursor-pointer`}
+                onClick={() => clickHandler({ data: rowData[i] })}
               >
                 {getIcon(item?.icon)}
               </div>
@@ -229,18 +242,19 @@ const DataGrid: FC<IDataGrid> = ({
       </div>
     );
   };
-
   const getUpdatedColumnDefs = () => {
     const actionColumn = columnDefs[0];
     const updatedColumn = {
       headerName: actionColumn.headerName,
       field: actionColumn.field,
-      cellRenderer: () => cellRendererFunc(actionColumn?.cellActions),
+      cellRenderer: (params: any) =>
+        cellRendererFunc(actionColumn?.cellActions),
     };
 
     columnDefs[0] = updatedColumn;
     return columnDefs;
   };
+
 
   // if()
 
@@ -348,6 +362,11 @@ const DataGrid: FC<IDataGrid> = ({
         paginationPageSizeSelector={pageSizeSelector || [10, 20, 50]}
 
       />
+      <ConfirmationPopup
+        title="Are you sure to delete this data?"
+        showModal={showConfirmation}
+        setShowModal={setShowConfirmation}
+        onConfirm={handleDelete}    />
     </div>
   );
 };
