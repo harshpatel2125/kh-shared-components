@@ -223,28 +223,22 @@ const DataGrid: FC<IDataGrid> = ({
           };
 
           return (
-            <TETooltip
-              key={i}
-              tag="a"
-              title={item?.icon}
-              wrapperProps={{ href: '#' }}
-              className="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600 pointer-events-auto cursor-pointer"
-            >
+            // <TETooltip
+            //   key={i}
+            //   tag="a"
+            //   title={item?.icon}
+            //   wrapperProps={{ href: '#' }}
+            //   className="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600 pointer-events-auto cursor-pointer"
+            // >
+            <div key={i} className=" tooltip tooltip-top " data-tip={item?.icon}>
               <div
-<<<<<<< HEAD
-
-                className={`py-0.5 px-1 rounded-sm   hover:bg-slate-300 cursor-pointer 
-                  }`}
-                // data-tip={item?.icon}
-                onClick={clickHandler}
-=======
-                className={`py-0.5 px-1 rounded-sm border hover:bg-slate-300 cursor-pointer`}
+                className={`py-0.5 px-1 rounded-sm  hover:bg-slate-300 cursor-pointer`}
                 onClick={() => clickHandler({ data: rowData[i] })}
->>>>>>> a05bd29ecbcc45e58c5169660253345cf20c0ad2
               >
                 {getIcon(item?.icon)}
               </div>
-            </TETooltip>
+            </div>
+            // </TETooltip>
           );
         })}
       </div>
@@ -341,7 +335,7 @@ const DataGrid: FC<IDataGrid> = ({
                   Reset All
                   </Button> */}
                   {/* ------ Reusable button added -------- */}
-                  <ButtonBorder  label="Reset All" onClick={handleReset} icon={<ArrowPathIcon className="h-3 w-3 " />} />
+                  <ButtonBorder label="Reset All" onClick={handleReset} icon={<ArrowPathIcon className="h-3 w-3 " />} />
                 </div>
               )}
             </div>
@@ -374,7 +368,7 @@ const DataGrid: FC<IDataGrid> = ({
         title="Are you sure to delete this data?"
         showModal={showConfirmation}
         setShowModal={setShowConfirmation}
-        onConfirm={handleDelete}    />
+        onConfirm={handleDelete} />
     </div>
   );
 };
