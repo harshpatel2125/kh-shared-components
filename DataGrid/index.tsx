@@ -255,7 +255,6 @@ const DataGrid: FC<IDataGrid> = ({
     });
   };
 
-  // if()
 
   const handleExport = useCallback(() => {
     gridRef.current!.api.exportDataAsCsv();
