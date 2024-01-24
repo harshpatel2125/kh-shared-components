@@ -21,8 +21,6 @@ const GridDropdown = ({ value, rowIndex, colDef, colId, api }: any) => {
     });
   };
 
-  console.log("selectedValue", selectedValue);
-
   const onDropdownChange = (e: any) => {
     dropdownRef.current.blur();
     // Update the state when the dropdown changes
