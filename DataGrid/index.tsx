@@ -20,6 +20,8 @@ import GridDropdown from "./GridDropdown";
 import { CellEditorComponent } from "ag-grid-community/dist/lib/components/framework/componentTypes";
 import ConfirmationPopup from "../DataForm/formInputPopup";
 import { getLocalStorage } from "@/utils/localStorage";
+import { FunctionPagesApis } from "@/constants/functionPagesApis";
+import { IApiRequestsType } from "@/constants/functionPagesApis/apiTypes";
 
 var checkboxSelection = function (params: CheckboxSelectionCallbackParams) {
   // we put checkbox on the name if we are not doing grouping
@@ -47,6 +49,8 @@ interface IDataGrid {
   enableSearch?: boolean;
   propertyForEdit?: string;
   enableEditBtn?: boolean;
+  functionType?: string;
+  pageType?: string;
 }
 
 const DataGrid: FC<IDataGrid> = ({
@@ -63,6 +67,8 @@ const DataGrid: FC<IDataGrid> = ({
   enableSearch,
   propertyForEdit,
   enableEditBtn,
+  functionType,
+  pageType,
 }) => {
   const gridRef = useRef<AgGridReact>(null);
 
@@ -165,10 +171,27 @@ const DataGrid: FC<IDataGrid> = ({
   const [selectedRowData, setSelectedRowData] = useState<any | null>(null);
 
   function getClickHandlerCallback(actionType: string) {
+    let pageApis =
+      functionType &&
+      pageType &&
+      FunctionPagesApis.hasOwnProperty(functionType) &&
+      FunctionPagesApis[functionType][pageType];
+
     switch (actionType) {
       case TableCellActionTypes.Delete:
         // call detele record
-        return () => {
+        return async () => {
+          // @harsh
+          // const userId=1; //get id from datagrid
+          //  const res =
+          //    !!pageApis &&
+          //    (await pageApis[IApiRequestsType.deleteRecordById](userId)
+          //      .then((res: any) => {
+          //        return res?.data;
+          //      })
+          //      .catch((err: any) => {
+          //        console.log(err);
+          //      }));
           console.log("delete clicked");
         };
 
