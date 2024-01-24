@@ -72,7 +72,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ children, hideDivider }) => {
 
 
 const Tabs: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('Tab1'); // Set the initial active tab
+  const [activeTab, setActiveTab] = useState('Tab1'); 
 
   // Define your tabs
   const tabs = ['Tab1', 'Tab2', 'Tab3'];
