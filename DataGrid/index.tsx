@@ -175,7 +175,7 @@ const DataGrid: FC<IDataGrid> = ({
         // call edit record
 
         return () => {
-          router.push(`${pathname}/create`);
+          router.push(`${pathname}/edit`);
         };
 
       case TableCellActionTypes.Rights:
@@ -209,7 +209,6 @@ const DataGrid: FC<IDataGrid> = ({
     }
   }
 
-
   const handleDelete = useCallback(() => {
     console.log("Deleting data:", selectedRowData);
     // Perform delete logic here using selectedRowData
@@ -238,7 +237,11 @@ const DataGrid: FC<IDataGrid> = ({
             //   wrapperProps={{ href: '#' }}
             //   className="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600 pointer-events-auto cursor-pointer"
             // >
-            <div key={i} className=" tooltip tooltip-top " data-tip={item?.icon}>
+            <div
+              key={i}
+              className=" tooltip tooltip-top "
+              data-tip={item?.icon}
+            >
               <div
                 className={`py-0.5 px-1 rounded-sm  hover:bg-slate-300 cursor-pointer`}
                 onClick={() => clickHandler({ data: rowData[i] })}
@@ -395,7 +398,8 @@ const DataGrid: FC<IDataGrid> = ({
         title="Are you sure to delete this data?"
         showModal={showConfirmation}
         setShowModal={setShowConfirmation}
-        onConfirm={handleDelete} />
+        onConfirm={handleDelete}
+      />
     </div>
   );
 };
