@@ -19,6 +19,7 @@ import { TETooltip } from "tw-elements-react";
 import GridDropdown from "./GridDropdown";
 import { CellEditorComponent } from "ag-grid-community/dist/lib/components/framework/componentTypes";
 import ConfirmationPopup from "../DataForm/formInputPopup";
+import { getLocalStorage } from "@/utils/localStorage";
 
 var checkboxSelection = function (params: CheckboxSelectionCallbackParams) {
   // we put checkbox on the name if we are not doing grouping
@@ -175,7 +176,9 @@ const DataGrid: FC<IDataGrid> = ({
         // call edit record
 
         return () => {
-          router.push(`${pathname}/edit`);
+          const { UserID } = JSON.parse(getLocalStorage("UserInfo"));
+
+          router.push(`${pathname}/edit/${UserID}`);
         };
 
       case TableCellActionTypes.Rights:
