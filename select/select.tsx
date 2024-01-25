@@ -35,16 +35,16 @@ const SelectDropdown: React.FC<SelectDropdownProps> = ({ defaultValue, btnName, 
           MenuList: (props) => (
             <components.MenuList {...props}>
               {props.children}
-              <div className='p-3'>
-                {btnName && (
+              {btnName && (
+                <div className='p-3'>
                   <button
                     className='rounded px-4 btn btn-xs w-fit btn-outline'
                     onClick={() => alert("hello buddy")}
                   >
                     {btnName}
                   </button>
-                )}
-              </div>
+                </div>
+              )}
             </components.MenuList>
           ),
         }}

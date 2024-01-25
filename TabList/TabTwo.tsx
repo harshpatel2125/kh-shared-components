@@ -7,13 +7,13 @@ const TabTwo: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const existingPathsString = localStorage.getItem("clickedPaths");
+  const existingPathsString = typeof window !== "undefined" && localStorage.getItem("clickedPaths");
   const [existingPaths, setExistingPaths] = useState(existingPathsString ? JSON.parse(existingPathsString) : []);
 
   useEffect(() => {
     // ----- Function to fetch existing paths from local storage
     const fetchExistingPaths = () => {
-      const existingPathsString = localStorage.getItem("clickedPaths");
+      const existingPathsString = typeof window !== "undefined" && localStorage.getItem("clickedPaths");
       setExistingPaths(existingPathsString ? JSON.parse(existingPathsString) : []);
     };
 
