@@ -18,7 +18,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ children, hideDivider }) => {
   return (
     <div className={"card w-full "}>
       <div className='px-3 flex justify-between align-middle h-fit '>
-        <div className=''>
+        <div className=' mt-2'>
           {/* <Tabs /> */}
           <TabTwo />
         </div>
