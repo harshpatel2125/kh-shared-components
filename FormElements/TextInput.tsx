@@ -3,16 +3,12 @@ import dynamic from "next/dynamic";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { IInputType } from "../DataForm/enums";
 
-const TEInput = dynamic(() =>
-  import("tw-elements-react").then((res) => res.TEInput)
-);
+const TEInput = dynamic(() => import("tw-elements-react").then((res) => res.TEInput));
 
-const TERipple = dynamic(() =>
-  import("tw-elements-react").then((res) => res.TERipple)
-);
+const TERipple = dynamic(() => import("tw-elements-react").then((res) => res.TERipple));
 
 interface InputTextProps {
-  label: string;
+  label?: string;
   type?: React.HTMLInputTypeAttribute;
   value?: any;
   readOnly?: boolean;
@@ -29,66 +25,42 @@ interface InputTextProps {
   inputReadOnlyBg?: boolean | undefined;
 }
 
-const TextInput: React.FC<InputTextProps> = ({
-  label,
-  type,
-  value,
-  readOnly = false,
-  required = false,
-  emptyError = false,
-  onChange,
-  togglePassword,
-  className = "",
-  formWhite,
-  validationError,
-  validationMessage,
-  showPassword,
-  inputMandatoryBg,
-  inputReadOnlyBg,
-
-}) => {
-
-
+const TextInput: React.FC<InputTextProps> = ({ label, type, value, readOnly = false, required = false, emptyError = false, onChange, togglePassword, className = "", formWhite, validationError, validationMessage, showPassword, inputMandatoryBg, inputReadOnlyBg }) => {
   // Define the style object based on the 'mandatory' state
   const dynamicStyle = {
-
-    backgroundColor: inputReadOnlyBg ? '#00000012' : inputMandatoryBg ? '#f9ed2f1f' : 'transparent',
+    backgroundColor: inputReadOnlyBg ? "#00000012" : inputMandatoryBg ? "#f9ed2f1f" : "transparent",
   };
 
   return (
     <>
       {/* ------ new custom input ----- */}
       <div className={` form__div ${className}`}>
-        
-        <input  style={dynamicStyle} className={`  form__input`} disabled={readOnly} type={showPassword ? "text" : type ? type : "text"}
-          onChange={onChange} value={value} placeholder="type here . . . ">
-        </input>
-        <label className=" form__label">{`${label || "Input"}${required && !readOnly && !emptyError ? "*" : ""
-          }`}</label>
+        <input
+          style={dynamicStyle}
+          className={`  form__input`}
+          disabled={readOnly}
+          type={showPassword ? "text" : type ? type : "text"}
+          onChange={onChange}
+          value={value}
+          placeholder='type here . . . '
+        ></input>
+        <label className='font-light rounded-full form__label'>{`${label || ""}${required && !readOnly && !emptyError ? "*" : ""}`}</label>
 
         {(emptyError || (validationError && validationMessage)) && (
           <div
-            className="absolute   w-full text-[10px] ml-[2px] mt-[-1px] text-[red] dark:text-[red]"
+            className='absolute   w-full text-[10px] ml-[2px] mt-[-1px] text-[red] dark:text-[red]'
             data-te-input-helper-ref
           >
-            {emptyError
-              ? `${label || "Input"}${emptyError ? " is required." : ""}*`
-              : validationError
-                ? validationMessage
-                : ""}
+            {emptyError ? `${label || "Input"}${emptyError ? " is required." : ""}*` : validationError ? validationMessage : ""}
           </div>
         )}
         {type === IInputType.Password && togglePassword && (
-          <div className="absolute right-0 top-0 h-full">
+          <div className='absolute right-0 top-0 h-full'>
             <TERipple
-              className="h-full w-7 flex justify-center items-center"
+              className='h-full w-7 flex justify-center items-center'
               onClick={() => togglePassword()}
             >
-              {showPassword ? (
-                <EyeSlashIcon className="h-4 w-4" />
-              ) : (
-                <EyeIcon className="h-4 w-4" />
-              )}
+              {showPassword ? <EyeSlashIcon className='h-4 w-4' /> : <EyeIcon className='h-4 w-4' />}
             </TERipple>
           </div>
         )}
