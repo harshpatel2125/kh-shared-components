@@ -206,7 +206,6 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
     }
   }
 
-
   const handleDeleteClick = (rowData: any) => {
     setSelectedRowData(rowData); // Save the selected row data
     setShowConfirmation(true); // Show the confirmation popup
@@ -236,7 +235,7 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
             // >
             <div
               key={i}
-              className=' tooltip tooltip-top '
+              className=' tooltip tooltip-right '
               data-tip={item?.icon}
             >
               <div
@@ -393,29 +392,28 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
         paginationPageSize={defaultPageSize || 10}
         paginationPageSizeSelector={pageSizeSelector || [10, 20, 50]}
       />
-        <CustomPopup
-        title="Are you sure to delete this data?"
+      <CustomPopup
+        title='Are you sure to delete this data?'
         showModal={showConfirmation}
         setShowModal={setShowConfirmation}
       >
-          <div className="flex justify-end mt-4">
-              {/* Cancel button */}
-              <button
-                className="px-4 py-2 mr-2 text-white bg-gray-500 rounded-md hover:bg-gray-600 focus:outline-none focus:shadow-outline-gray active:bg-gray-700"
-                onClick={handleCancel}
-              >
-                Cancel
-              </button>
-              {/* Submit button */}
-              <button
-                className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-700"
-                onClick={handleConfirm}
-              >
-                Submit
-              </button>
-            </div>
+        <div className='flex justify-end mt-4'>
+          {/* Cancel button */}
+          <button
+            className='px-4 py-2 mr-2 text-white bg-gray-500 rounded-md hover:bg-gray-600 focus:outline-none focus:shadow-outline-gray active:bg-gray-700'
+            onClick={handleCancel}
+          >
+            Cancel
+          </button>
+          {/* Submit button */}
+          <button
+            className='px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-700'
+            onClick={handleConfirm}
+          >
+            Submit
+          </button>
+        </div>
       </CustomPopup>
-
     </div>
   );
 };

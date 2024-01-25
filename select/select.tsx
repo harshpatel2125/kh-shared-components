@@ -21,11 +21,11 @@ interface SelectDropdownProps {
   onChange?: (newValue: any) => void;
   onCreateOption?: (inputValue: string) => void;
   mandatory?: boolean;
-  btnName?: string;
+  dropdownBtnLabel?: string;
   defaultValue?: Option;
 }
 
-const SelectDropdown: React.FC<SelectDropdownProps> = ({ defaultValue, btnName, mandatory, label, isSearchable, options, isLoading, value, onChange = () => {}, onCreateOption }) => {
+const SelectDropdown: React.FC<SelectDropdownProps> = ({ defaultValue, dropdownBtnLabel, mandatory, label, isSearchable, options, isLoading, value, onChange = () => {}, onCreateOption }) => {
   const [labelColor, setLabelColor] = useState<any>(false);
   const [addBtn, setAddBtn] = useState(true);
   return (
@@ -35,13 +35,13 @@ const SelectDropdown: React.FC<SelectDropdownProps> = ({ defaultValue, btnName, 
           MenuList: (props) => (
             <components.MenuList {...props}>
               {props.children}
-              {btnName && (
+              {dropdownBtnLabel && (
                 <div className='p-3'>
                   <button
                     className='rounded px-4 btn btn-xs w-fit btn-outline'
                     onClick={() => alert("hello buddy")}
                   >
-                    {btnName}
+                    {dropdownBtnLabel}
                   </button>
                 </div>
               )}
