@@ -12,6 +12,9 @@ import { TETooltip } from "tw-elements-react";
 import GridDropdown from "./GridDropdown";
 import { CellEditorComponent } from "ag-grid-community/dist/lib/components/framework/componentTypes";
 import ConfirmationPopup from "../DataForm/formInputPopup";
+import { getLocalStorage } from "@/utils/localStorage";
+import { FunctionPagesApis } from "@/constants/functionPagesApis";
+import { IApiRequestsType } from "@/constants/functionPagesApis/apiTypes";
 
 var checkboxSelection = function (params: CheckboxSelectionCallbackParams) {
   // we put checkbox on the name if we are not doing grouping
@@ -37,9 +40,11 @@ interface IDataGrid {
   enableSearch?: boolean;
   propertyForEdit?: string;
   enableEditBtn?: boolean;
+  functionType?: string;
+  pageType?: string;
 }
 
-const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEditPress, disablePagination, defaultPageSize, pageSizeSelector, gridHeight, enableCSVExport, enableSearch, propertyForEdit, enableEditBtn }) => {
+const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEditPress, disablePagination, defaultPageSize, pageSizeSelector, gridHeight, enableCSVExport, enableSearch, propertyForEdit, enableEditBtn, functionType, pageType }) => {
   const gridRef = useRef<AgGridReact>(null);
 
   const [quickFilterText, setQuickFilterText] = React.useState("");
@@ -141,10 +146,23 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
   const [selectedRowData, setSelectedRowData] = useState<any | null>(null);
 
   function getClickHandlerCallback(actionType: string) {
+    let pageApis = functionType && pageType && FunctionPagesApis.hasOwnProperty(functionType) && FunctionPagesApis[functionType][pageType];
+
     switch (actionType) {
       case TableCellActionTypes.Delete:
         // call detele record
-        return () => {
+        return async () => {
+          // @harsh
+          // const userId=1; //get id from datagrid
+          //  const res =
+          //    !!pageApis &&
+          //    (await pageApis[IApiRequestsType.deleteRecordById](userId)
+          //      .then((res: any) => {
+          //        return res?.data;
+          //      })
+          //      .catch((err: any) => {
+          //        console.log(err);
+          //      }));
           console.log("delete clicked");
         };
 
@@ -152,7 +170,9 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
         // call edit record
 
         return () => {
-          router.push(`${pathname}/create`);
+          const { UserID } = JSON.parse(getLocalStorage("UserInfo"));
+
+          router.push(`${pathname}/edit/${UserID}`);
         };
 
       case TableCellActionTypes.Rights:

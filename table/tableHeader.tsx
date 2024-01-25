@@ -22,7 +22,6 @@ export interface TableHeaderProps {
 }
 
 const TableHeader = ({ headerButtons, tableSitemap, title, handleCreateNew, handleFormSubmission, handleGoBack, drawerId, showFilterBtn, handleSort }: TableHeaderProps) => {
-  console.log(showFilterBtn, "showFilterBtn");
   const getClickHandler = (btn: any) => {
     const clickHandlerFunc = btn?.btnType === IButtonType.CreateNew ? handleCreateNew : btn?.btnType === IButtonType.FormSubmit ? handleFormSubmission : btn?.btnType === IButtonType.GoBack ? handleGoBack : btn?.btnType === IButtonType.sortAsc ? handleSort : btn?.btnType === IButtonType.sortAsc ? handleSort : btn?.onClick;
     return clickHandlerFunc;
@@ -46,15 +45,17 @@ const TableHeader = ({ headerButtons, tableSitemap, title, handleCreateNew, hand
               const clickHandlerFunc = getClickHandler(btn);
 
               if (btn?.btnType === IButtonType.Filter) {
-                return (
-                  <label
-                    htmlFor={drawerId}
-                    className='mr-2'
-                    key={i}
-                  >
-                    {btn.icon}
-                  </label>
-                );
+                if (showFilterBtn) {
+                  return (
+                    <label
+                      htmlFor={drawerId}
+                      className='mr-2 cursor-pointer'
+                      key={i}
+                    >
+                      {btn.icon}
+                    </label>
+                  );
+                }
               } else {
                 return (
                   <>
