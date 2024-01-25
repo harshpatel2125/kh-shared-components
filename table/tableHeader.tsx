@@ -21,31 +21,9 @@ export interface TableHeaderProps {
   handleSort?: (sortType: any) => any;
 }
 
-const TableHeader = ({
-  headerButtons,
-  tableSitemap,
-  title,
-  handleCreateNew,
-  handleFormSubmission,
-  handleGoBack,
-  drawerId,
-  showFilterBtn,
-  handleSort,
-}: TableHeaderProps) => {
-  console.log(showFilterBtn, "showFilterBtn");
+const TableHeader = ({ headerButtons, tableSitemap, title, handleCreateNew, handleFormSubmission, handleGoBack, drawerId, showFilterBtn, handleSort }: TableHeaderProps) => {
   const getClickHandler = (btn: any) => {
-    const clickHandlerFunc =
-      btn?.btnType === IButtonType.CreateNew
-        ? handleCreateNew
-        : btn?.btnType === IButtonType.FormSubmit
-        ? handleFormSubmission
-        : btn?.btnType === IButtonType.GoBack
-        ? handleGoBack
-        : btn?.btnType === IButtonType.sortAsc
-        ? handleSort
-        : btn?.btnType === IButtonType.sortAsc
-        ? handleSort
-        : btn?.onClick;
+    const clickHandlerFunc = btn?.btnType === IButtonType.CreateNew ? handleCreateNew : btn?.btnType === IButtonType.FormSubmit ? handleFormSubmission : btn?.btnType === IButtonType.GoBack ? handleGoBack : btn?.btnType === IButtonType.sortAsc ? handleSort : btn?.btnType === IButtonType.sortAsc ? handleSort : btn?.onClick;
     return clickHandlerFunc;
   };
 
@@ -57,23 +35,27 @@ const TableHeader = ({
         }
       `}</style>
 
-      <div
-        className={`table-header rounded mb-1 text-white flex justify-between items-center p-1  bg-gray-600  w-full`}
-      >
-        <h4 className="ml-1 text-sm font-semibold  ">{title}</h4>
-        <div className="flex items-center gap-2">
-          <div className="flex gap-2 ms-3 items-center">
+      <div className={` table-header rounded mb-1 text-white flex justify-between items-center p-1  bg-gray-600  w-full`}>
+        <h4 className='ml-1 text-sm font-semibold  '>{title}</h4>
+        <div className='flex items-center gap-2'>
+          <div className='flex gap-2 ms-3 items-center'>
             {/* Other Buttons */}
 
             {headerButtons?.map((btn, i) => {
               const clickHandlerFunc = getClickHandler(btn);
 
               if (btn?.btnType === IButtonType.Filter) {
-                return (
-                  <label htmlFor={drawerId} className="mr-2" key={i}>
-                    {btn.icon}
-                  </label>
-                );
+                if (showFilterBtn) {
+                  return (
+                    <label
+                      htmlFor={drawerId}
+                      className='mr-2 cursor-pointer'
+                      key={i}
+                    >
+                      {btn.icon}
+                    </label>
+                  );
+                }
               } else {
                 return (
                   <>
