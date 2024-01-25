@@ -23,6 +23,8 @@ const TEModalBody = dynamic(() =>
   import("tw-elements-react").then((res) => res.TEModalBody)
 );
 
+// ... (imports)
+
 export default function CustomPopup({
   title,
   showModal,
@@ -34,11 +36,11 @@ export default function CustomPopup({
       <TEModalDialog>
         <TEModalContent>
           <TEModalHeader>
-            {/* <!--Modal title--> */}
+            {/* Modal title */}
             <h5 className="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200">
               {title}
             </h5>
-            {/* <!--Close button--> */}
+            {/* Close button */}
             <button
               type="button"
               className="box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none"
@@ -61,8 +63,11 @@ export default function CustomPopup({
               </svg>
             </button>
           </TEModalHeader>
-          {/* <!--Modal body--> */}
-          <TEModalBody>{children}</TEModalBody>
+          {/* Modal body */}
+          <TEModalBody>
+            {children}
+          
+          </TEModalBody>
         </TEModalContent>
       </TEModalDialog>
     </TEModal>

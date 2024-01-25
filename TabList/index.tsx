@@ -20,7 +20,7 @@ const TabList: React.FC<TabListProps> = ({ tabs, activeTab, onTabChange }) => {
           key={index}
           role="tab"
     
-          className={`h-fit py-0.5 border leading-none border-slate-500 rounded mr-1 text-xs font-light px-2 tab ${
+          className={`h-fit py-0.5 border border-slate-500 rounded mr-1 text-xs font-light px-2 tab ${
             tab === activeTab ? "bg-slate-600" : ""
           }`}
           onClick={() => onTabChange(tab)}
@@ -42,11 +42,11 @@ const TabList: React.FC<TabListProps> = ({ tabs, activeTab, onTabChange }) => {
                 // Set styles dynamically based on the active state
                 color: tab === activeTab ? "#fff" : "",
               }}
-              className="text-black py-0.5"
+              className="text-black"
             >
               {tab}{" "}
             </span>
-            <span className="ml-3 mt-0.5">
+            <span className="ml-3 mt-1">
               <CloseIcon
                 stroke={tab === activeTab ? "#fff" : ""}
                 width="9"

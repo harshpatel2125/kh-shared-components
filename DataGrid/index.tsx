@@ -18,7 +18,7 @@ import ButtonBorder from "../ButtonGroup/ButtonBorder";
 import { TETooltip } from "tw-elements-react";
 import GridDropdown from "./GridDropdown";
 import { CellEditorComponent } from "ag-grid-community/dist/lib/components/framework/componentTypes";
-import ConfirmationPopup from "../DataForm/formInputPopup";
+import CustomPopup from "../popup/index";
 
 var checkboxSelection = function (params: CheckboxSelectionCallbackParams) {
   // we put checkbox on the name if we are not doing grouping
@@ -210,11 +210,11 @@ const DataGrid: FC<IDataGrid> = ({
   }
 
 
-  const handleDelete = useCallback(() => {
-    console.log("Deleting data:", selectedRowData);
-    // Perform delete logic here using selectedRowData
-    setShowConfirmation(false);
-  }, [selectedRowData]);
+  const handleDeleteClick = (rowData: any) => {
+    setSelectedRowData(rowData); // Save the selected row data
+    setShowConfirmation(true); // Show the confirmation popup
+  };
+  [selectedRowData];
 
   const cellRendererFunc = (cellIcons: any) => {
     return (
@@ -222,8 +222,7 @@ const DataGrid: FC<IDataGrid> = ({
         {cellIcons?.map((item: any, i: number) => {
           const clickHandler = (e: any) => {
             if (item?.actionType === TableCellActionTypes.Delete) {
-              setSelectedRowData(e.data);
-              setShowConfirmation(true);
+              handleDeleteClick(e.data);
             } else {
               const handler = getClickHandlerCallback(item?.actionType);
               handler();
@@ -231,13 +230,6 @@ const DataGrid: FC<IDataGrid> = ({
           };
 
           return (
-            // <TETooltip
-            //   key={i}
-            //   tag="a"
-            //   title={item?.icon}
-            //   wrapperProps={{ href: '#' }}
-            //   className="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600 pointer-events-auto cursor-pointer"
-            // >
             <div key={i} className=" tooltip tooltip-top " data-tip={item?.icon}>
               <div
                 className={`py-0.5 px-1 rounded-sm  hover:bg-slate-300 cursor-pointer`}
@@ -246,12 +238,12 @@ const DataGrid: FC<IDataGrid> = ({
                 {getIcon(item?.icon)}
               </div>
             </div>
-            // </TETooltip>
           );
         })}
       </div>
     );
   };
+
   const getUpdatedColumnDefs = () => {
     const actionColumn = columnDefs[0];
     const updatedColumn = {
@@ -285,7 +277,16 @@ const DataGrid: FC<IDataGrid> = ({
     gridRef.current!.api.setGridOption("quickFilterText", e?.target?.value);
     setQuickFilterText(e?.target?.value);
   };
+  const handleCancel = () => {
+    // Handle cancel logic
+    setShowConfirmation(false);
+  };
 
+  const handleConfirm = () => {
+    // Handle confirm logic, e.g., delete operation
+    console.log("Deleting data:", selectedRowData);
+    setShowConfirmation(false);
+  };
   const handleReset = () => {
     setQuickFilterText("");
     gridRef.current!.api.setFilterModel(null);
@@ -304,8 +305,8 @@ const DataGrid: FC<IDataGrid> = ({
         height: gridHeight
           ? gridHeight
           : enableSearch || enableCSVExport
-          ? "76vh"
-          : "76vh",
+            ? "76vh"
+            : "76vh",
       }}
     >
       {(enableSearch || enableCSVExport) && (
@@ -391,11 +392,29 @@ const DataGrid: FC<IDataGrid> = ({
         paginationPageSize={defaultPageSize || 10}
         paginationPageSizeSelector={pageSizeSelector || [10, 20, 50]}
       />
-      <ConfirmationPopup
+        <CustomPopup
         title="Are you sure to delete this data?"
         showModal={showConfirmation}
         setShowModal={setShowConfirmation}
-        onConfirm={handleDelete} />
+      >
+          <div className="flex justify-end mt-4">
+              {/* Cancel button */}
+              <button
+                className="px-4 py-2 mr-2 text-white bg-gray-500 rounded-md hover:bg-gray-600 focus:outline-none focus:shadow-outline-gray active:bg-gray-700"
+                onClick={handleCancel}
+              >
+                Cancel
+              </button>
+              {/* Submit button */}
+              <button
+                className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-700"
+                onClick={handleConfirm}
+              >
+                Submit
+              </button>
+            </div>
+      </CustomPopup>
+
     </div>
   );
 };
