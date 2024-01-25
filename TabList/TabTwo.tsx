@@ -41,18 +41,26 @@ const TabTwo: React.FC = () => {
   return (
     <div className="flex gap-3 mb-1">
       {existingPaths?.map((path: any, index: number) => (
-        <div key={index} className="flex gap-3">
-          <button
-            className="flex text-xs font-light text-white px-2 rounded py-0.5 bg-slate-600 "
-            onClick={() => handlePath(path.pathname)}
-          >
+        <div
+          key={index}
+          className={`flex gap-3  text-xs font-light ${
+            pathname === path.pathname
+              ? "text-white bg-slate-600"
+              : "text-slate-700"
+          } px-2 rounded py-0.5 border border-slate-700`}
+        >
+          <button className=" " onClick={() => handlePath(path.pathname)}>
             {path.title}
           </button>
           <span
             onClick={() => handleDelete(index)}
-            className="cursor-pointer ml-2 mt-1"
+            className="cursor-pointer  mt-1"
           >
-            <CloseIcon color="#000" width="10" height="10" />
+            <CloseIcon
+              color={`  ${pathname === path.pathname ? "#fff" : "#000"}`}
+              width="10"
+              height="10"
+            />
           </span>
         </div>
       ))}
