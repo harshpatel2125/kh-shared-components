@@ -70,7 +70,14 @@ interface DataFormProps {
    */
 }
 
-const FormUI: FC<DataFormProps> = ({ column, containerClassName, formError, formState, handleTogglePassword, setFieldsState }) => {
+const FormUI: FC<DataFormProps> = ({
+  column,
+  containerClassName,
+  formError,
+  formState,
+  handleTogglePassword,
+  setFieldsState,
+}) => {
   const getFileUri = (event: any, fieldIndex: any) => {
     const binaryFile = event?.target?.files?.[0];
     if (binaryFile) {
@@ -127,7 +134,11 @@ const FormUI: FC<DataFormProps> = ({ column, containerClassName, formError, form
     );
   };
 
-  const handleChange = (event: any, fieldIndex: number, fieldType: IInputType) => {
+  const handleChange = (
+    event: any,
+    fieldIndex: number,
+    fieldType: IInputType
+  ) => {
     switch (fieldType) {
       case IInputType.Image:
         getFileUri(event, fieldIndex);
@@ -150,7 +161,7 @@ const FormUI: FC<DataFormProps> = ({ column, containerClassName, formError, form
       case IInputType.AutoComplete:
         return (
           <TextInput
-            className='mb-2'
+            className="mb-2"
             inputReadOnlyBg={ele.inputReadOnlyBg}
             inputMandatoryBg={ele.inputMandatoryBg}
             readOnly={ele?.readOnly}
@@ -164,10 +175,10 @@ const FormUI: FC<DataFormProps> = ({ column, containerClassName, formError, form
       case IInputType.Number:
         return (
           <TextInput
-            className='mb-2'
+            className="mb-2"
             inputReadOnlyBg={ele.inputReadOnlyBg}
             inputMandatoryBg={ele.inputMandatoryBg}
-            type='number'
+            type="number"
             readOnly={ele?.readOnly}
             required={ele?.required}
             emptyError={ele?.emptyError}
@@ -179,10 +190,10 @@ const FormUI: FC<DataFormProps> = ({ column, containerClassName, formError, form
       case IInputType.Password:
         return (
           <TextInput
-            className='mb-2'
+            className="mb-2"
             inputReadOnlyBg={ele.inputReadOnlyBg}
             inputMandatoryBg={ele.inputMandatoryBg}
-            type='password'
+            type="password"
             readOnly={ele?.readOnly}
             required={ele?.required}
             label={ele?.label || ele?.key}
@@ -199,12 +210,14 @@ const FormUI: FC<DataFormProps> = ({ column, containerClassName, formError, form
       case IInputType.DropDown:
         return (
           <div className={`${ele.className} mb-2 flex w-100 gap-2`}>
-            <div className='flex-1'>
+            <div className="flex-1">
               <SelectDropdown
                 dropdownBtnLabel={ele.dropdownBtnLabel}
                 label={ele?.label || "label"}
                 onChange={(e) => handleChange(e, index, ele?.type)}
-                options={ele?.options ? ele.options : [{ label: "one", value: "one" }]}
+                options={
+                  ele?.options ? ele.options : [{ label: "one", value: "one" }]
+                }
                 mandatory={ele?.mandatory}
                 isSearchable={true}
                 value={ele?.selectedOption ? [ele?.selectedOption] : []}
@@ -212,7 +225,7 @@ const FormUI: FC<DataFormProps> = ({ column, containerClassName, formError, form
               />
             </div>
             {ele?.showPopup ? (
-              <div className='h-full'>
+              <div className="h-full">
                 <FormInputPopup title={ele?.popupTitle} />
               </div>
             ) : null}
@@ -222,10 +235,10 @@ const FormUI: FC<DataFormProps> = ({ column, containerClassName, formError, form
       case IInputType.Email:
         return (
           <TextInput
-            className='mb-2'
+            className="mb-2"
             inputReadOnlyBg={ele.inputReadOnlyBg}
             inputMandatoryBg={ele.inputMandatoryBg}
-            type='email'
+            type="email"
             readOnly={ele?.readOnly}
             required={ele?.required}
             label={ele?.label || ele?.key}
@@ -253,7 +266,9 @@ const FormUI: FC<DataFormProps> = ({ column, containerClassName, formError, form
       case IInputType.Image:
       case IInputType.File:
         return (
-          <div className={`row-span-4 flex justify-start mb-2 ${ele?.className}`}>
+          <div
+            className={`row-span-4 flex justify-start mb-2 ${ele?.className}`}
+          >
             <ImageInput
               selectedImageUri={ele?.value?.toString()}
               onChange={(e) => handleChange(e, index, ele?.type)}
@@ -263,17 +278,10 @@ const FormUI: FC<DataFormProps> = ({ column, containerClassName, formError, form
       case IInputType.Checkbox:
         return (
           <div className={`col-span-1 `}>
-            <div className='flex items-center gap-2 h-7'>
+            <div className="flex items-center gap-2 h-7">
               {/* need to be change later with actual component  */}
-              <input
-                type='checkbox'
-                name='mycheckbox'
-                id='mycheckbox'
-              />
-              <label
-                htmlFor='mycheckbox'
-                className='text-xs text-[#737373]'
-              >
+              <input type="checkbox" name="mycheckbox" id="mycheckbox" />
+              <label htmlFor="mycheckbox" className="text-xs text-[#737373]">
                 {ele.label}
               </label>
             </div>
@@ -284,17 +292,31 @@ const FormUI: FC<DataFormProps> = ({ column, containerClassName, formError, form
     }
   };
 
+  if (!formState || !formState?.length) return null;
+
   return (
     <>
       <div
-        className='table-wrapper  bg-white rounded'
+        className="table-wrapper  bg-white rounded"
         // style={{ height: "82vh" }}
       >
-        <div className='h-full p-3  '>
+        <div className="h-full p-3  ">
           <div className={containerClassName}>
             {/* using reusable table header for displaying form buttons */}
 
-            <div className={`grid grid-cols-${column || 3} ${formError ? "gap-y-6" : "gap-y-3"} gap-x-3 `}>{formState && formState?.length > 0 && formState?.map((ele: IFieldType, index: number) => <React.Fragment key={index}>{renderFields(ele, index)}</React.Fragment>)}</div>
+            <div
+              className={`grid grid-cols-${column || 3} ${
+                formError ? "gap-y-6" : "gap-y-3"
+              } gap-x-3 `}
+            >
+              {formState &&
+                formState?.length > 0 &&
+                formState?.map((ele: IFieldType, index: number) => (
+                  <React.Fragment key={index}>
+                    {renderFields(ele, index)}
+                  </React.Fragment>
+                ))}
+            </div>
           </div>
         </div>
       </div>

@@ -1,10 +1,17 @@
 import React, { useMemo, FC, useCallback, useRef, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
 import { useRouter, usePathname } from "next/navigation";
-import { CheckboxSelectionCallbackParams, HeaderCheckboxSelectionCallbackParams } from "@ag-grid-community/core";
+import {
+  CheckboxSelectionCallbackParams,
+  HeaderCheckboxSelectionCallbackParams,
+} from "@ag-grid-community/core";
 import TextInput from "../FormElements/TextInput";
 import Button from "../button";
-import { ArrowPathIcon, DocumentArrowDownIcon, PencilIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowPathIcon,
+  DocumentArrowDownIcon,
+  PencilIcon,
+} from "@heroicons/react/24/outline";
 import { getIcon } from "@/utils/getIcons";
 import { TableCellActionTypes } from "@/constants/tableCols";
 import ButtonBorder from "../ButtonGroup/ButtonBorder";
@@ -21,7 +28,9 @@ var checkboxSelection = function (params: CheckboxSelectionCallbackParams) {
   return params.api.getRowGroupColumns().length === 0;
 };
 
-var headerCheckboxSelection = function (params: HeaderCheckboxSelectionCallbackParams) {
+var headerCheckboxSelection = function (
+  params: HeaderCheckboxSelectionCallbackParams
+) {
   // we put checkbox on the name if we are not doing grouping
   return params.api.getRowGroupColumns().length === 0;
 };
@@ -44,7 +53,23 @@ interface IDataGrid {
   pageType?: string;
 }
 
-const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEditPress, disablePagination, defaultPageSize, pageSizeSelector, gridHeight, enableCSVExport, enableSearch, propertyForEdit, enableEditBtn, functionType, pageType }) => {
+const DataGrid: FC<IDataGrid> = ({
+  rowData,
+  filter,
+  columnDefs,
+  editable,
+  onEditPress,
+  disablePagination,
+  defaultPageSize,
+  pageSizeSelector,
+  gridHeight,
+  enableCSVExport,
+  enableSearch,
+  propertyForEdit,
+  enableEditBtn,
+  functionType,
+  pageType,
+}) => {
   const gridRef = useRef<AgGridReact>(null);
 
   const [quickFilterText, setQuickFilterText] = React.useState("");
@@ -146,12 +171,18 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
   const [selectedRowData, setSelectedRowData] = useState<any | null>(null);
 
   function getClickHandlerCallback(actionType: string) {
-    let pageApis = functionType && pageType && FunctionPagesApis.hasOwnProperty(functionType) && FunctionPagesApis[functionType][pageType];
+    let pageApis =
+      functionType &&
+      pageType &&
+      FunctionPagesApis.hasOwnProperty(functionType) &&
+      FunctionPagesApis[functionType][pageType];
 
     switch (actionType) {
       case TableCellActionTypes.Delete:
         // call detele record
         return async () => {
+          // invoke delet popup
+          //on submit{}
           // @harsh
           // const userId=1; //get id from datagrid
           //  const res =
@@ -214,7 +245,7 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
 
   const cellRendererFunc = (cellIcons: any) => {
     return (
-      <div className='flex h-full flex-row gap-0.5 items-center'>
+      <div className="flex h-full flex-row gap-0.5 items-center">
         {cellIcons?.map((item: any, i: number) => {
           const clickHandler = (e: any) => {
             if (item?.actionType === TableCellActionTypes.Delete) {
@@ -256,7 +287,8 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
     const updatedColumn = {
       headerName: actionColumn.headerName,
       field: actionColumn.field,
-      cellRenderer: (params: any) => cellRendererFunc(actionColumn?.cellActions),
+      cellRenderer: (params: any) =>
+        cellRendererFunc(actionColumn?.cellActions),
     };
     columnDefs[0] = updatedColumn;
     return columnDefs;
@@ -306,14 +338,18 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
 
   return (
     <div
-      className='ag-theme-balham h-full rounded'
+      className="ag-theme-balham h-full rounded"
       style={{
-        height: gridHeight ? gridHeight : enableSearch || enableCSVExport ? "76vh" : "76vh",
+        height: gridHeight
+          ? gridHeight
+          : enableSearch || enableCSVExport
+          ? "76vh"
+          : "76vh",
       }}
     >
       {(enableSearch || enableCSVExport) && (
         <div
-          className='w-full  py-1  px-1  mb-[-2px] rounded-t flex flex-row justify-between content-center border border-s border-gray-300 '
+          className="w-full  py-1  px-1  mb-[-2px] rounded-t flex flex-row justify-between content-center border border-s border-gray-300 "
           style={{
             alignItems: "center",
             justifyContent: !enableCSVExport ? "flex-end" : "between",
@@ -330,17 +366,17 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
             </Button> */}
               {/* ------ Reusable button added -------- */}
               <ButtonBorder
-                label='Export to CSV'
+                label="Export to CSV"
                 onClick={handleExport}
-                icon={<DocumentArrowDownIcon className='h-3 w-3' />}
+                icon={<DocumentArrowDownIcon className="h-3 w-3" />}
               />
             </>
           )}
           {enableSearch && (
-            <div className='flex content-center '>
-              <div className='w-60 mr-3   ms-auto'>
+            <div className="flex content-center ">
+              <div className="w-60 mr-3   ms-auto">
                 <TextInput
-                  className='h-7  '
+                  className="h-7  "
                   // label="Search . . ."
                   value={quickFilterText}
                   // formWhite={true}
@@ -350,7 +386,7 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
                 />
               </div>
               {enableCSVExport && (
-                <div className='mt-0'>
+                <div className="mt-0">
                   {/* <Button
                   color="tertiary"
                   onClick={handleReset}
@@ -361,9 +397,9 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
                   </Button> */}
                   {/* ------ Reusable button added -------- */}
                   <ButtonBorder
-                    label='Reset All'
+                    label="Reset All"
                     onClick={handleReset}
-                    icon={<ArrowPathIcon className='h-3 w-3 ' />}
+                    icon={<ArrowPathIcon className="h-3 w-3 " />}
                   />
                 </div>
               )}
@@ -375,7 +411,9 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
         autoSizeStrategy={autoSizeStrategy}
         ref={gridRef}
         rowData={rowData}
-        columnDefs={isCellRendererType ? getUpdatedColumnDefs() : getNewColumnDefs()}
+        columnDefs={
+          isCellRendererType ? getUpdatedColumnDefs() : getNewColumnDefs()
+        }
         defaultColDef={defaultColDef}
         pivotPanelShow={"always"}
         rowGroupPanelShow={"always"}
@@ -393,21 +431,21 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
         paginationPageSizeSelector={pageSizeSelector || [10, 20, 50]}
       />
       <CustomPopup
-        title='Are you sure to delete this data?'
+        title="Are you sure to delete this data?"
         showModal={showConfirmation}
         setShowModal={setShowConfirmation}
       >
-        <div className='flex justify-end mt-4'>
+        <div className="flex justify-end mt-4">
           {/* Cancel button */}
           <button
-            className='px-4 py-2 mr-2 text-white bg-gray-500 rounded-md hover:bg-gray-600 focus:outline-none focus:shadow-outline-gray active:bg-gray-700'
+            className="px-4 py-2 mr-2 text-white bg-gray-500 rounded-md hover:bg-gray-600 focus:outline-none focus:shadow-outline-gray active:bg-gray-700"
             onClick={handleCancel}
           >
             Cancel
           </button>
           {/* Submit button */}
           <button
-            className='px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-700'
+            className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-700"
             onClick={handleConfirm}
           >
             Submit

@@ -106,7 +106,9 @@ const DataFormWrapper = ({ data }: any) => {
     router.back();
   };
 
-  if (!data || !data?.formFields?.length) {
+  console.log(data, "data");
+
+  if (!data) {
     return (
       <div className="h-96 flex items-center justify-center">
         <p>No such route: 404</p>
