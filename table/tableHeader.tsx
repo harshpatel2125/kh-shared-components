@@ -8,7 +8,6 @@ import Image from "next/image";
 import Buttons from "../ButtonGroup/Button";
 import UpArrowIcon from "@/assets/icons/UpArrowIcon";
 import DownArrowIcon from "@/assets/icons/DownArrowIcon";
-
 export interface TableHeaderProps {
   headerButtons?: Array<IButton> | undefined;
   tableSitemap?: string[];
@@ -21,10 +20,38 @@ export interface TableHeaderProps {
   handleSort?: (sortType: any) => any;
 }
 
-const TableHeader = ({ headerButtons, tableSitemap, title, handleCreateNew, handleFormSubmission, handleGoBack, drawerId, showFilterBtn, handleSort }: TableHeaderProps) => {
+const TableHeader = ({
+  headerButtons,
+  tableSitemap,
+  title,
+  handleCreateNew,
+  handleFormSubmission,
+  handleGoBack,
+  drawerId,
+  showFilterBtn,
+  handleSort,
+}: TableHeaderProps) => {
   const getClickHandler = (btn: any) => {
-    const clickHandlerFunc = btn?.btnType === IButtonType.CreateNew ? handleCreateNew : btn?.btnType === IButtonType.FormSubmit ? handleFormSubmission : btn?.btnType === IButtonType.GoBack ? handleGoBack : btn?.btnType === IButtonType.sortAsc ? handleSort : btn?.btnType === IButtonType.sortAsc ? handleSort : btn?.onClick;
-    return clickHandlerFunc;
+    //button type will be from IButtontype enum only
+    switch (btn?.btnType) {
+      case IButtonType.CreateNew:
+        return handleCreateNew;
+      case IButtonType.FormSubmit:
+        return handleFormSubmission;
+      case IButtonType.GoBack:
+        return handleGoBack;
+      case IButtonType.sortAsc:
+        return handleSort;
+      case IButtonType.sortDesc:
+        return handleSort;
+      case IButtonType.approve:
+        return () => console.log("handle callback for approve");
+      case IButtonType.reject:
+        return () => console.log("handle callback for reject");
+
+      default:
+        return btn?.onClick;
+    }
   };
 
   return (
@@ -35,10 +62,12 @@ const TableHeader = ({ headerButtons, tableSitemap, title, handleCreateNew, hand
         }
       `}</style>
 
-      <div className={` table-header rounded mb-1 text-white flex justify-between items-center p-1  bg-gray-600  w-full`}>
-        <h4 className='ml-1 text-sm font-semibold  '>{title}</h4>
-        <div className='flex items-center gap-2'>
-          <div className='flex gap-2 ms-3 items-center'>
+      <div
+        className={` table-header rounded mb-1 text-white flex justify-between items-center p-1  bg-gray-600  w-full`}
+      >
+        <h4 className="ml-1 text-sm font-semibold  ">{title}</h4>
+        <div className="flex items-center gap-2">
+          <div className="flex gap-2 ms-3 items-center">
             {/* Other Buttons */}
 
             {headerButtons?.map((btn, i) => {
@@ -49,7 +78,7 @@ const TableHeader = ({ headerButtons, tableSitemap, title, handleCreateNew, hand
                   return (
                     <label
                       htmlFor={drawerId}
-                      className='mr-2 cursor-pointer'
+                      className="mr-2 cursor-pointer"
                       key={i}
                     >
                       {btn.icon}
@@ -62,7 +91,9 @@ const TableHeader = ({ headerButtons, tableSitemap, title, handleCreateNew, hand
                     <Button
                       key={i}
                       icon={btn.icon}
-                      onClick={() => clickHandlerFunc(btn.btnType)}
+                      onClick={() =>
+                        clickHandlerFunc ? clickHandlerFunc(btn.btnType) : null
+                      }
                       btnName={btn.btnName}
                       className={btn?.className}
                     />
