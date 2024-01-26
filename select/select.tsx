@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Select from "react-select";
+import Select, { CSSObjectWithLabel, ControlProps, GroupBase } from "react-select";
 import CreatableSelect from "react-select/creatable";
 const primaryColor = "#2C2C2C";
 const secondaryColor = "#eeeff1";
@@ -59,8 +59,9 @@ const SelectDropdown: React.FC<SelectDropdownProps> = ({ defaultValue, dropdownB
             zIndex: "9999",
             borderRadius: "3px",
           }),
-          control: (baseStyles, state) => ({
-            ...baseStyles,
+          control: (base: CSSObjectWithLabel, props: ControlProps<Option, false, GroupBase<Option>>) => ({
+            ...base,
+            backgroundColor: defaultValue ? "#00000012" : "transparent",
             fontSize: "14px",
             minHeight: "26px",
             margin: "0px",
@@ -69,9 +70,10 @@ const SelectDropdown: React.FC<SelectDropdownProps> = ({ defaultValue, dropdownB
             padding: "0px",
             paddingBottom: "0px",
             paddingTop: "0px",
-            borderColor: state.isFocused ? "#ccc" : "#ccc",
-            outlineColor: state.isFocused ? "ccc" : "#ccc",
+            borderColor: props.isFocused ? "#ccc" : "#ccc",
+            outlineColor: props.isFocused ? "#ccc" : "#ccc",
           }),
+
           valueContainer: (provided, state) => ({
             ...provided,
             height: "27px",

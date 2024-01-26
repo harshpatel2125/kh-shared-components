@@ -20,17 +20,7 @@ export interface TableHeaderProps {
   handleSort?: (sortType: any) => any;
 }
 
-const TableHeader = ({
-  headerButtons,
-  tableSitemap,
-  title,
-  handleCreateNew,
-  handleFormSubmission,
-  handleGoBack,
-  drawerId,
-  showFilterBtn,
-  handleSort,
-}: TableHeaderProps) => {
+const TableHeader = ({ headerButtons, tableSitemap, title, handleCreateNew, handleFormSubmission, handleGoBack, drawerId, showFilterBtn, handleSort }: TableHeaderProps) => {
   const getClickHandler = (btn: any) => {
     //button type will be from IButtontype enum only
     switch (btn?.btnType) {
@@ -62,12 +52,10 @@ const TableHeader = ({
         }
       `}</style>
 
-      <div
-        className={` table-header rounded mb-1 text-white flex justify-between items-center p-1  bg-gray-600  w-full`}
-      >
-        <h4 className="ml-1 text-sm font-semibold  ">{title}</h4>
-        <div className="flex items-center gap-2">
-          <div className="flex gap-2 ms-3 items-center">
+      <div className={` table-header rounded mb-1 text-white flex justify-between items-center p-1  bg-gray-600  w-full`}>
+        <h4 className='ml-1 text-[13px]  font-semibold  '>{title}</h4>
+        <div className='flex items-center gap-2'>
+          <div className='flex gap-2 ms-3 items-center'>
             {/* Other Buttons */}
 
             {headerButtons?.map((btn, i) => {
@@ -78,7 +66,7 @@ const TableHeader = ({
                   return (
                     <label
                       htmlFor={drawerId}
-                      className="mr-2 cursor-pointer"
+                      className='mr-2 cursor-pointer'
                       key={i}
                     >
                       {btn.icon}
@@ -91,9 +79,7 @@ const TableHeader = ({
                     <Button
                       key={i}
                       icon={btn.icon}
-                      onClick={() =>
-                        clickHandlerFunc ? clickHandlerFunc(btn.btnType) : null
-                      }
+                      onClick={() => (clickHandlerFunc ? clickHandlerFunc(btn.btnType) : null)}
                       btnName={btn.btnName}
                       className={btn?.className}
                     />

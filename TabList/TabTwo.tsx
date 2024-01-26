@@ -39,7 +39,7 @@ const TabTwo: React.FC = () => {
       {existingPaths?.map((path: any, index: number) => (
         <div
           key={index}
-          className={`flex gap-3  text-xs font-light ${pathname === path.pathname ? "text-white bg-slate-600" : "text-slate-700"} px-2 rounded py-0.5 border border-slate-700`}
+          className={`flex gap-3  text-[11px] font-light ${pathname === path.pathname ? "text-white bg-slate-600" : "text-slate-700"} px-2 rounded py-0.5 border border-slate-300`}
         >
           <button
             className=' '
@@ -53,8 +53,8 @@ const TabTwo: React.FC = () => {
           >
             <CloseIcon
               color={`  ${pathname === path.pathname ? "#fff" : "#000"}`}
-              width='10'
-              height='10'
+              width='8'
+              height='8'
             />
           </span>
         </div>

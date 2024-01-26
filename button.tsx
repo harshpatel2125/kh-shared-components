@@ -28,18 +28,7 @@ export enum IButtonType {
   reject = "reject",
 }
 
-type ButtonColorType =
-  | IButtonColor
-  | "primary"
-  | "secondary"
-  | "tertiary"
-  | "accent"
-  | "neutral"
-  | "info"
-  | "success"
-  | "warning"
-  | "error"
-  | "light";
+type ButtonColorType = IButtonColor | "primary" | "secondary" | "tertiary" | "accent" | "neutral" | "info" | "success" | "warning" | "error" | "light";
 
 export interface IButton {
   color?: ButtonColorType;
@@ -51,14 +40,7 @@ export interface IButton {
   btnType?: string;
 }
 
-const Button: React.FC<IButton> = ({
-  icon,
-  children,
-  color,
-  onClick,
-  className,
-  btnName,
-}) => {
+const Button: React.FC<IButton> = ({ icon, children, color, onClick, className, btnName }) => {
   const bgColorHandler = () => {
     switch (color) {
       case IButtonColor.Primary:
@@ -88,11 +70,7 @@ const Button: React.FC<IButton> = ({
   return (
     <button
       onClick={onClick}
-      className={clsx(
-        "btn p-0  py-1  text-center w-fit h-min min-h-min antialiased hover:text-black hover:bg-gray-200 text-xs font-normal gap-1 ",
-        bgColorHandler(),
-        className
-      )}
+      className={clsx("btn  p-[3px]  text-center  w-fit h-min min-h-min antialiased hover:text-black hover:bg-gray-200 text-[11px] text-slate-700 font-normal gap-1 ", bgColorHandler(), className)}
     >
       {icon || ""}
       {children || btnName}
