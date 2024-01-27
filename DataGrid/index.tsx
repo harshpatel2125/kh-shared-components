@@ -145,25 +145,15 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
   const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
   const [selectedRowData, setSelectedRowData] = useState<any | null>(null);
 
-  function getClickHandlerCallback(actionType: string) {
+  function getClickHandlerCallback(actionType: string, rowData: any) {
     let pageApis = functionType && pageType && FunctionPagesApis.hasOwnProperty(functionType) && FunctionPagesApis[functionType][pageType];
 
     switch (actionType) {
       case TableCellActionTypes.Delete:
         // call detele record
-        return async () => {
-          // @harsh
-          // const userId=1; //get id from datagrid
-          //  const res =
-          //    !!pageApis &&
-          //    (await pageApis[IApiRequestsType.deleteRecordById](userId)
-          //      .then((res: any) => {
-          //        return res?.data;
-          //      })
-          //      .catch((err: any) => {
-          //        console.log(err);
-          //      }));
-          console.log("delete clicked");
+        return () => {
+          setSelectedRowData(rowData); 
+          setShowConfirmation(true); 
         };
 
       case TableCellActionTypes.Edit:
@@ -217,31 +207,20 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
     return (
       <div className='flex h-full flex-row gap-0.5 items-center'>
         {cellIcons?.map((item: any, i: number) => {
-          const clickHandler = (e: any) => {
-            if (item?.actionType === TableCellActionTypes.Delete) {
-              handleDeleteClick(e.data);
-            } else {
-              const handler = getClickHandlerCallback(item?.actionType);
-              handler();
-            }
+          const clickHandler = () => {
+            const handler = getClickHandlerCallback(item?.actionType, rowData[i]);
+            handler();
           };
-
+  
           return (
-            // <TETooltip
-            //   key={i}
-            //   tag="a"
-            //   title={item?.icon}
-            //   wrapperProps={{ href: '#' }}
-            //   className="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600 pointer-events-auto cursor-pointer"
-            // >
             <div
               key={i}
-              className=' tooltip tooltip-top '
+              className='tooltip tooltip-top'
               data-tip={item?.icon}
             >
               <div
-                className={`py-0.5 px-1 rounded-sm  hover:bg-slate-300 cursor-pointer`}
-                onClick={() => clickHandler({ data: rowData[i] })}
+                className={`py-0.5 px-1 rounded-sm hover:bg-slate-300 cursor-pointer`}
+                onClick={clickHandler}
               >
                 {getIcon(item?.icon)}
               </div>
@@ -251,7 +230,6 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
       </div>
     );
   };
-
   const getUpdatedColumnDefs = () => {
     const actionColumn = columnDefs[0];
     const updatedColumn = {
@@ -393,27 +371,27 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
         paginationPageSize={defaultPageSize || 10}
         paginationPageSizeSelector={pageSizeSelector || [10, 20, 50]}
       />
-        <CustomPopup
+      <CustomPopup
         title="Are you sure to delete this data?"
         showModal={showConfirmation}
         setShowModal={setShowConfirmation}
       >
-          <div className="flex justify-end mt-4">
-              {/* Cancel button */}
-              <button
-                className="px-4 py-2 mr-2 text-white bg-gray-500 rounded-md hover:bg-gray-600 focus:outline-none focus:shadow-outline-gray active:bg-gray-700"
-                onClick={handleCancel}
-              >
-                Cancel
-              </button>
-              {/* Submit button */}
-              <button
-                className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-700"
-                onClick={handleConfirm}
-              >
-                Submit
-              </button>
-            </div>
+        <div className="flex justify-end mt-4">
+          {/* Cancel button */}
+          <button
+            className="px-4 py-2 mr-2 text-white bg-gray-500 rounded-md hover:bg-gray-600 focus:outline-none focus:shadow-outline-gray active:bg-gray-700"
+            onClick={handleCancel}
+          >
+            Cancel
+          </button>
+          {/* Submit button */}
+          <button
+            className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-700"
+            onClick={handleConfirm}
+          >
+            Submit
+          </button>
+        </div>
       </CustomPopup>
 
     </div>
