@@ -1,13 +1,9 @@
+"use client";
 import React from "react";
-import FilterIcon from "@/assets/icons/FilterIcon";
 import Button, { IButton, IButtonType } from "../button";
-import Drawer from "../drawer";
-import AscendingIcon from "@/assets/icons/ascending.svg";
-import DescendingIcon from "@/assets/icons/descending.svg";
-import Image from "next/image";
-import Buttons from "../ButtonGroup/Button";
-import UpArrowIcon from "@/assets/icons/UpArrowIcon";
-import DownArrowIcon from "@/assets/icons/DownArrowIcon";
+import { useRouter } from "next/navigation";
+import { ROUTES } from "@/constants/routes";
+
 export interface TableHeaderProps {
   headerButtons?: Array<IButton> | undefined;
   tableSitemap?: string[];
@@ -31,6 +27,7 @@ const TableHeader = ({
   showFilterBtn,
   handleSort,
 }: TableHeaderProps) => {
+  const router = useRouter();
   const getClickHandler = (btn: any) => {
     //button type will be from IButtontype enum only
     switch (btn?.btnType) {
@@ -48,6 +45,8 @@ const TableHeader = ({
         return () => console.log("handle callback for approve");
       case IButtonType.reject:
         return () => console.log("handle callback for reject");
+      case IButtonType.purchase_order_checklist:
+        return () => router.push(ROUTES.purchaseOrderChecklist);
 
       default:
         return btn?.onClick;
@@ -63,7 +62,7 @@ const TableHeader = ({
       `}</style>
 
       <div
-        className={` table-header rounded mb-1 text-white flex justify-between items-center p-1  bg-gray-600  w-full`}
+        className={` table-header  mb-1 text-white flex justify-between items-center p-1  bg-gray-600  w-full`}
       >
         <h4 className="ml-1 text-sm font-semibold  ">{title}</h4>
         <div className="flex items-center gap-2">

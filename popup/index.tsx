@@ -33,7 +33,7 @@ export default function CustomPopup({
 }: PopupProps): JSX.Element {
   return (
     <TEModal show={showModal} setShow={setShowModal}>
-      <TEModalDialog>
+      <TEModalDialog centered>
         <TEModalContent>
           <TEModalHeader>
             {/* Modal title */}

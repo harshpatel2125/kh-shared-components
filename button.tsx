@@ -26,6 +26,7 @@ export enum IButtonType {
   payment = "payment",
   approve = "approve",
   reject = "reject",
+  purchase_order_checklist = "purchase_order_checklist",
 }
 
 type ButtonColorType =
