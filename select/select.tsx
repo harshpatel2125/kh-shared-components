@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Select from "react-select";
+import Select, { CSSObjectWithLabel, ControlProps, GroupBase } from "react-select";
 import CreatableSelect from "react-select/creatable";
 const primaryColor = "#2C2C2C";
 const secondaryColor = "#eeeff1";
@@ -21,11 +21,11 @@ interface SelectDropdownProps {
   onChange?: (newValue: any) => void;
   onCreateOption?: (inputValue: string) => void;
   mandatory?: boolean;
-  btnName?: string;
+  dropdownBtnLabel?: string;
   defaultValue?: Option;
 }
 
-const SelectDropdown: React.FC<SelectDropdownProps> = ({ defaultValue, btnName, mandatory, label, isSearchable, options, isLoading, value, onChange = () => {}, onCreateOption }) => {
+const SelectDropdown: React.FC<SelectDropdownProps> = ({ defaultValue, dropdownBtnLabel, mandatory, label, isSearchable, options, isLoading, value, onChange = () => {}, onCreateOption }) => {
   const [labelColor, setLabelColor] = useState<any>(false);
   const [addBtn, setAddBtn] = useState(true);
   return (
@@ -35,16 +35,16 @@ const SelectDropdown: React.FC<SelectDropdownProps> = ({ defaultValue, btnName, 
           MenuList: (props) => (
             <components.MenuList {...props}>
               {props.children}
-              <div className='p-3'>
-                {btnName && (
+              {dropdownBtnLabel && (
+                <div className='p-3'>
                   <button
                     className='rounded px-4 btn btn-xs w-fit btn-outline'
                     onClick={() => alert("hello buddy")}
                   >
-                    {btnName}
+                    {dropdownBtnLabel}
                   </button>
-                )}
-              </div>
+                </div>
+              )}
             </components.MenuList>
           ),
         }}
@@ -59,8 +59,9 @@ const SelectDropdown: React.FC<SelectDropdownProps> = ({ defaultValue, btnName, 
             zIndex: "9999",
             borderRadius: "3px",
           }),
-          control: (baseStyles, state) => ({
-            ...baseStyles,
+          control: (base: CSSObjectWithLabel, props: ControlProps<Option, false, GroupBase<Option>>) => ({
+            ...base,
+            backgroundColor: defaultValue ? "#00000012" : "transparent",
             fontSize: "14px",
             minHeight: "26px",
             margin: "0px",
@@ -69,9 +70,10 @@ const SelectDropdown: React.FC<SelectDropdownProps> = ({ defaultValue, btnName, 
             padding: "0px",
             paddingBottom: "0px",
             paddingTop: "0px",
-            borderColor: state.isFocused ? "#ccc" : "#ccc",
-            outlineColor: state.isFocused ? "ccc" : "#ccc",
+            borderColor: props.isFocused ? "#ccc" : "#ccc",
+            outlineColor: props.isFocused ? "#ccc" : "#ccc",
           }),
+
           valueContainer: (provided, state) => ({
             ...provided,
             height: "27px",

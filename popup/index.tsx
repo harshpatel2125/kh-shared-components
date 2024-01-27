@@ -64,10 +64,7 @@ export default function CustomPopup({
             </button>
           </TEModalHeader>
           {/* Modal body */}
-          <TEModalBody>
-            {children}
-          
-          </TEModalBody>
+          <TEModalBody>{children}</TEModalBody>
         </TEModalContent>
       </TEModalDialog>
     </TEModal>
