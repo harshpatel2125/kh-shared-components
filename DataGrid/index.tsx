@@ -31,6 +31,8 @@ interface IDataGrid {
   columnDefs: Array<any>;
   filter?: boolean;
   onEditPress?: (e: any) => void;
+  onDropdownChange?: (rowIndex: number, value: any) => void; // Callback for dropdown
+  onTextFieldChange?: (rowIndex: number, value: any) => void; // Callback for text field
   editable?: boolean;
   disablePagination?: boolean;
   defaultPageSize?: number;
@@ -44,13 +46,14 @@ interface IDataGrid {
   pageType?: string;
 }
 
-const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEditPress, disablePagination, defaultPageSize, pageSizeSelector, gridHeight, enableCSVExport, enableSearch, propertyForEdit, enableEditBtn, functionType, pageType }) => {
+const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEditPress, disablePagination, defaultPageSize, pageSizeSelector, gridHeight, enableCSVExport, enableSearch, propertyForEdit, enableEditBtn, functionType, pageType, onDropdownChange, onTextFieldChange }) => {
   const gridRef = useRef<AgGridReact>(null);
 
   const [quickFilterText, setQuickFilterText] = React.useState("");
 
   const defaultColDef = useMemo<any>(() => {
     return {
+      headerClass: 'bg-red-500 text-white', // Add this line to set the default header class
       editable: editable || true,
       enableRowGroup: true,
       enablePivot: true,
@@ -65,6 +68,7 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
       },
     };
   }, [editable, filter]);
+  
 
   /** getTooltip utility has been deleted --  */
 
@@ -247,7 +251,28 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
         return {
           ...ele,
           cellEditor: GridDropdown,
-          // cellEditorPopup: true,
+          cellEditorParams: {
+            onDropdownChange: (value: any) => {
+              // Handle dropdown change
+              if (onDropdownChange) {
+                onDropdownChange(index, value);
+              }
+            },
+          },
+          editable: true,
+        };
+      } else if (ele?.textField) {
+        return {
+          ...ele,
+          cellEditor: TextInput,
+          cellEditorParams: {
+            onTextFieldChange: (value: any) => {
+              // Handle text field change
+              if (onTextFieldChange) {
+                onTextFieldChange(index, value);
+              }
+            },
+          },
           editable: true,
         };
       } else return ele;
@@ -300,13 +325,7 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
         >
           {enableCSVExport && (
             <>
-              {/* <Button
-              color="tertiary"
-              onClick={handleExport}
-              icon={<DocumentArrowDownIcon className="h-3 w-3" />}
-            >
-              Export to CSV
-            </Button> */}
+          
               {/* ------ Reusable button added -------- */}
               <ButtonBorder
                 label='Export to CSV'
@@ -330,14 +349,7 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
               </div>
               {enableCSVExport && (
                 <div className='mt-0'>
-                  {/* <Button
-                  color="tertiary"
-                  onClick={handleReset}
-                  icon={<ArrowPathIcon className="h-3 w-3" />}
-                  className="ms-8"
-                >
-                  Reset All
-                  </Button> */}
+                 
                   {/* ------ Reusable button added -------- */}
                   <ButtonBorder
                     label='Reset All'
@@ -370,6 +382,7 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
         pagination={disablePagination ? false : true}
         paginationPageSize={defaultPageSize || 10}
         paginationPageSizeSelector={pageSizeSelector || [10, 20, 50]}
+        
       />
       <CustomPopup
         title="Are you sure to delete this data?"

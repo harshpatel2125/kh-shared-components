@@ -1,49 +1,35 @@
 import React, { useState, useEffect, useRef } from "react";
-
-const GridDropdown = ({ value, rowIndex, colDef, colId, api }: any) => {
-  const [selectedValue, setSelectedValue] = useState(value);
-
+const GridDropdown = ({ value, rowIndex, colDef, colId, api, onDropdownChange }: any) => {
   const dropdownRef = useRef<any>(null);
-
-  //   useEffect(() => {
-  //     // Focus on the dropdown when the component mounts
-  //     dropdownRef.current.focus();
-  //   }, []);
 
   const onValueChanged = () => {
     // Save the selected value when the dropdown changes
-    // api.applyTransaction({
-    //   update: [{ rowIndex, data: { [colId]: selectedValue } }],
-    // });
-    console.log("api", api);
-    api.applyTransaction({
-      update: [{ rowIndex: 10, data: { [colDef.field]: selectedValue } }],
-    });
+    onDropdownChange(rowIndex, dropdownRef.current.value);
   };
 
-  const onDropdownChange = (e: any) => {
+  const onDropdownChangeLocal = (e: any) => {
     dropdownRef.current.blur();
-    // Update the state when the dropdown changes
-    setSelectedValue(e.target.value);
+    // Update the selected value in the parent component
+    onDropdownChange(rowIndex, e.target.value);
   };
   return (
     <div className="ag-input-wrapper">
-      <select
-        style={{
-          width: "100%",
-          height: 27,
-        }}
-        ref={dropdownRef}
-        value={selectedValue}
-        onChange={onDropdownChange}
-        onBlurCapture={onValueChanged}
-        onKeyDown={(e) => {
-          // Save the value when Enter is pressed
-          if (e.key === "Enter") {
-            onValueChanged();
-          }
-        }}
-      >
+    <select
+      style={{
+        width: "100%",
+        height: 27,
+      }}
+      ref={dropdownRef}
+      value={value}
+      onChange={onDropdownChangeLocal}
+      onBlurCapture={onValueChanged}
+      onKeyDown={(e) => {
+        // Save the value when Enter is pressed
+        if (e.key === "Enter") {
+          onValueChanged();
+        }
+      }}
+    >
         <option
           value="newUser-8"
           style={{
