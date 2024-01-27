@@ -22,6 +22,7 @@ import CustomPopup from "../popup/index";
 import { getLocalStorage } from "@/utils/localStorage";
 import { FunctionPagesApis } from "@/constants/functionPagesApis";
 import { IApiRequestsType } from "@/constants/functionPagesApis/apiTypes";
+import TaxPatternPopup from "../popup/TaxPatternPopup";
 
 var checkboxSelection = function (params: CheckboxSelectionCallbackParams) {
   // we put checkbox on the name if we are not doing grouping
@@ -49,8 +50,8 @@ interface IDataGrid {
   enableSearch?: boolean;
   propertyForEdit?: string;
   enableEditBtn?: boolean;
-  functionType?: string;
-  pageType?: string;
+  functionType?: string | null;
+  pageType?: string | null;
 }
 
 const DataGrid: FC<IDataGrid> = ({
@@ -169,6 +170,7 @@ const DataGrid: FC<IDataGrid> = ({
   const isCellRendererType = columnDefs[0]?.hasOwnProperty("isCellrenderer");
   const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
   const [selectedRowData, setSelectedRowData] = useState<any | null>(null);
+  const [showTaxPopup, setShowTaxPopup] = useState<boolean>(false);
 
   function getClickHandlerCallback(actionType: string) {
     let pageApis =
@@ -226,8 +228,9 @@ const DataGrid: FC<IDataGrid> = ({
 
       case TableCellActionTypes.showTaxPopup:
         // call suspend record
+
         return () => {
-          console.log("show Tax Popup");
+          setShowTaxPopup((prev) => !prev);
         };
 
       default:
@@ -315,16 +318,7 @@ const DataGrid: FC<IDataGrid> = ({
     gridRef.current!.api.setGridOption("quickFilterText", e?.target?.value);
     setQuickFilterText(e?.target?.value);
   };
-  const handleCancel = () => {
-    // Handle cancel logic
-    setShowConfirmation(false);
-  };
 
-  const handleConfirm = () => {
-    // Handle confirm logic, e.g., delete operation
-    console.log("Deleting data:", selectedRowData);
-    setShowConfirmation(false);
-  };
   const handleReset = () => {
     setQuickFilterText("");
     gridRef.current!.api.setFilterModel(null);
@@ -430,20 +424,25 @@ const DataGrid: FC<IDataGrid> = ({
         paginationPageSize={defaultPageSize || 10}
         paginationPageSizeSelector={pageSizeSelector || [10, 20, 50]}
       />
-      <CustomPopup
+      {/* <TaxPatternPopup
+        showPopup={showTaxPopup}
+        setShowPopup={setShowTaxPopup}
+        amount="25"
+        taxPattern="pattern"
+        taxPercentage="percentage"
+      /> */}
+      {/* <CustomPopup
         title="Are you sure to delete this data?"
         showModal={showConfirmation}
         setShowModal={setShowConfirmation}
       >
         <div className="flex justify-end mt-4">
-          {/* Cancel button */}
           <button
             className="px-4 py-2 mr-2 text-white bg-gray-500 rounded-md hover:bg-gray-600 focus:outline-none focus:shadow-outline-gray active:bg-gray-700"
             onClick={handleCancel}
           >
             Cancel
           </button>
-          {/* Submit button */}
           <button
             className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-700"
             onClick={handleConfirm}
@@ -451,7 +450,7 @@ const DataGrid: FC<IDataGrid> = ({
             Submit
           </button>
         </div>
-      </CustomPopup>
+      </CustomPopup> */}
     </div>
   );
 };

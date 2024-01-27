@@ -1,6 +1,6 @@
 "use client";
 import CloseIcon from "@/assets/icons/CloseIcon";
-import { getLocalStorage } from "@/utils/localStorage";
+import { getLocalStorage, setLocalStorage } from "@/utils/localStorage";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -8,19 +8,19 @@ const TabTwo: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const existingPathsString = typeof window !== "undefined" && localStorage.getItem("clickedPaths");
+  const existingPathsString = getLocalStorage("clickedPaths");
   const [existingPaths, setExistingPaths] = useState(existingPathsString ? JSON.parse(existingPathsString) : []);
 
   useEffect(() => {
     // ----- Function to fetch existing paths from local storage
     const fetchExistingPaths = () => {
-      const existingPathsString = typeof window !== "undefined" && localStorage.getItem("clickedPaths");
+      const existingPathsString = getLocalStorage("clickedPaths");
       setExistingPaths(existingPathsString ? JSON.parse(existingPathsString) : []);
     };
 
     // -------- Fetch existing paths whenever pathname changes
     fetchExistingPaths();
-  }, [pathname]); // -------- This useEffect will run whenever pathname changes
+  }, [pathname]);
 
   const handlePath = (path: string) => {
     router.push(path);
@@ -31,7 +31,7 @@ const TabTwo: React.FC = () => {
     updatedPaths.splice(index, 1);
 
     setExistingPaths(updatedPaths);
-    localStorage.setItem("clickedPaths", JSON.stringify(updatedPaths));
+    setLocalStorage("clickedPaths", JSON.stringify(updatedPaths));
   };
 
   return (
