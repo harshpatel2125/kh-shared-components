@@ -424,13 +424,13 @@ const DataGrid: FC<IDataGrid> = ({
         paginationPageSize={defaultPageSize || 10}
         paginationPageSizeSelector={pageSizeSelector || [10, 20, 50]}
       />
-      <TaxPatternPopup
+      {/* <TaxPatternPopup
         showPopup={showTaxPopup}
         setShowPopup={setShowTaxPopup}
         amount="25"
         taxPattern="pattern"
         taxPercentage="percentage"
-      />
+      /> */}
       {/* <CustomPopup
         title="Are you sure to delete this data?"
         showModal={showConfirmation}
