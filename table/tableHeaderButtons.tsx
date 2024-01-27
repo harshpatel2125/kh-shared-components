@@ -43,7 +43,7 @@ export const HEADER_BUTTONS: headerButtonTypes = {
     btnName: "Pay",
     color: "tertiary",
     // icon: <FilterIcon height={12} width={12} color="#fff" />,
-    className: buttonClass,
+    className: `${buttonClass} px-3`,
     btnType: IButtonType.payment,
   },
 
