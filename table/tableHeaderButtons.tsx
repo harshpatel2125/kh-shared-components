@@ -22,6 +22,7 @@ export interface headerButtonTypes {
   approve: IButton;
   reject: IButton;
   purchase_order_checklist: IButton;
+  add: IButton;
 }
 
 export const HEADER_BUTTONS: headerButtonTypes = {
@@ -96,5 +97,12 @@ export const HEADER_BUTTONS: headerButtonTypes = {
     // icon: <BackIcon height="14" width="10" color="#000" />,
     className: `${buttonClass} px-3`,
     btnType: IButtonType.purchase_order_checklist,
+  },
+  add: {
+    btnName: "Add",
+    color: "tertiary",
+    // icon: <BackIcon height="14" width="10" color="#000" />,
+    className: `${buttonClass} px-3`,
+    btnType: IButtonType.add,
   },
 };
