@@ -54,7 +54,7 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
 
   const defaultColDef = useMemo<any>(() => {
     return {
-      headerClass: "bg-red-500 text-white", // Add this line to set the default header class
+      // headerClass: "bg-red-500 text-white", // Add this line to set the default header class
       editable: editable || true,
       enableRowGroup: true,
       enablePivot: true,
