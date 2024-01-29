@@ -28,7 +28,7 @@ interface InputTextProps {
 const TextInput: React.FC<InputTextProps> = ({ label, type, value, readOnly = false, required = false, emptyError = false, onChange, togglePassword, className = "", formWhite, validationError, validationMessage, showPassword, inputMandatoryBg, inputReadOnlyBg }) => {
   // Define the style object based on the 'mandatory' state
   const dynamicStyle = {
-    backgroundColor: readOnly ? "#00000012" : required ? "#f9ed2f1f" : "transparent",
+    backgroundColor: readOnly ? "#bbbbbb12" : required ? "#ebc60003" : "transparent",
   };
 
   return (

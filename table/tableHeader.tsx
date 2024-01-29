@@ -54,7 +54,7 @@ const TableHeader = ({ headerButtons, tableSitemap, title, handleCreateNew, hand
       <div className={`rounded table-header  mb-1 text-white flex justify-between items-center p-1  bg-gray-600  w-full`}>
         <h4 className='ml-1 text-sm font-semibold  '>{title}</h4>
         <div className='flex items-center gap-2'>
-          <div className='flex gap-2 ms-3 items-center'>
+          <div className='flex gap-1  items-center'>
             {/* Other Buttons */}
 
             {headerButtons?.map((btn, i) => {

@@ -220,7 +220,7 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
           return (
             <div
               key={i}
-              className='tooltip tooltip-top'
+              className='tooltip tooltip-right'
               data-tip={item?.icon}
             >
               <div
@@ -304,7 +304,7 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
     <div
       className='ag-theme-balham h-full rounded'
       style={{
-        height: gridHeight ? gridHeight : enableSearch || enableCSVExport ? "76vh" : "76vh",
+        height: gridHeight ? gridHeight : enableSearch || enableCSVExport ? "70vh" : "70vh",
       }}
     >
       {(enableSearch || enableCSVExport) && (

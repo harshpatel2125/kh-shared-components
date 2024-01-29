@@ -24,7 +24,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ children, hideDivider }) => {
         </div>
         <div className=' mt-1 '>
           <Subtitle styleClass={"text-[#48a4f9] pl-3"}>
-            <div className='text-sm breadcrumbs pt-1 pb-0'>
+            <div className='text-sm breadcrumbs pt-1 pb-1'>
               <ul>
                 {breads &&
                   breads?.length > 0 &&
@@ -40,7 +40,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ children, hideDivider }) => {
                               router.back();
                             }
                           }}
-                          className=' capitalize text-slate-700 font-[300]  text-xs '
+                          className=' capitalize text-slate-700 font-[300]  text-[10px] '
                         >
                           {index === breads?.length - 1 ? ele?.split("-")?.join(" ") : <a>{ele?.split("-")?.join(" ")}</a>}
                         </li>

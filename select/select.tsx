@@ -61,7 +61,7 @@ const SelectDropdown: React.FC<SelectDropdownProps> = ({ defaultValue, dropdownB
           }),
           control: (base: CSSObjectWithLabel, props: ControlProps<Option, false, GroupBase<Option>>) => ({
             ...base,
-            backgroundColor: defaultValue ? "#00000012" : "transparent",
+            backgroundColor: defaultValue ? "#bbbbbb12" : "transparent",
             fontSize: "14px",
             minHeight: "26px",
             margin: "0px",
