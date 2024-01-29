@@ -27,6 +27,7 @@ export enum IButtonType {
   approve = "approve",
   reject = "reject",
   purchase_order_checklist = "purchase_order_checklist",
+  add = "add",
 }
 
 type ButtonColorType = IButtonColor | "primary" | "secondary" | "tertiary" | "accent" | "neutral" | "info" | "success" | "warning" | "error" | "light";

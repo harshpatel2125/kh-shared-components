@@ -27,13 +27,6 @@ const DynamicPopup = dynamic(() => import("../popup"), {
   ssr: false,
 });
 
-const DynamicTableForm = dynamic(
-  () => import("../../containers/forms/tableForm"),
-  {
-    ssr: false,
-  }
-);
-
 // ------------------------------tw-inputs wrappers---------------------------------------
 
 export const TextInputWrapper = (props: TextInputProps) => {
@@ -65,8 +58,4 @@ export const CustomPopupWrapper = ({
       {children}
     </DynamicPopup>
   );
-};
-
-export const TableFormWrapper = ({ data }: any) => {
-  return <DynamicTableForm data={data} />;
 };
