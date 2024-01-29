@@ -77,7 +77,7 @@ const TableHeader = ({
                   return (
                     <label
                       htmlFor={drawerId}
-                      className="mr-2 cursor-pointer"
+                      className='mr-2 cursor-pointer'
                       key={i}
                     >
                       {btn.icon}
@@ -90,9 +90,7 @@ const TableHeader = ({
                     <Button
                       key={i}
                       icon={btn.icon}
-                      onClick={() =>
-                        clickHandlerFunc ? clickHandlerFunc(btn.btnType) : null
-                      }
+                      onClick={() => (clickHandlerFunc ? clickHandlerFunc(btn.btnType) : null)}
                       btnName={btn.btnName}
                       className={btn?.className}
                     />

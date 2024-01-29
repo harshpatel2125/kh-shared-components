@@ -44,7 +44,7 @@ export interface IFieldType {
   inputReadOnlyBg?: boolean;
   inputMandatoryBg?: boolean;
   mandatory?: boolean;
-  btnName: string;
+  dropdownBtnLabel: string;
   defaultValue?: optionsType;
 }
 
@@ -212,7 +212,7 @@ const FormUI: FC<DataFormProps> = ({
           <div className={`${ele.className} mb-2 flex w-100 gap-2`}>
             <div className="flex-1">
               <SelectDropdown
-                btnName={ele.btnName}
+                dropdownBtnLabel={ele.dropdownBtnLabel}
                 label={ele?.label || "label"}
                 onChange={(e) => handleChange(e, index, ele?.type)}
                 options={

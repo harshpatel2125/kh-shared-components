@@ -1,17 +1,10 @@
 import React, { useMemo, FC, useCallback, useRef, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
 import { useRouter, usePathname } from "next/navigation";
-import {
-  CheckboxSelectionCallbackParams,
-  HeaderCheckboxSelectionCallbackParams,
-} from "@ag-grid-community/core";
+import { CheckboxSelectionCallbackParams, HeaderCheckboxSelectionCallbackParams } from "@ag-grid-community/core";
 import TextInput from "../FormElements/TextInput";
 import Button from "../button";
-import {
-  ArrowPathIcon,
-  DocumentArrowDownIcon,
-  PencilIcon,
-} from "@heroicons/react/24/outline";
+import { ArrowPathIcon, DocumentArrowDownIcon, PencilIcon } from "@heroicons/react/24/outline";
 import { getIcon } from "@/utils/getIcons";
 import { TableCellActionTypes } from "@/constants/tableCols";
 import ButtonBorder from "../ButtonGroup/ButtonBorder";
@@ -29,9 +22,7 @@ var checkboxSelection = function (params: CheckboxSelectionCallbackParams) {
   return params.api.getRowGroupColumns().length === 0;
 };
 
-var headerCheckboxSelection = function (
-  params: HeaderCheckboxSelectionCallbackParams
-) {
+var headerCheckboxSelection = function (params: HeaderCheckboxSelectionCallbackParams) {
   // we put checkbox on the name if we are not doing grouping
   return params.api.getRowGroupColumns().length === 0;
 };
@@ -41,6 +32,8 @@ interface IDataGrid {
   columnDefs: Array<any>;
   filter?: boolean;
   onEditPress?: (e: any) => void;
+  onDropdownChange?: (rowIndex: number, value: any) => void; // Callback for dropdown
+  onTextFieldChange?: (rowIndex: number, value: any) => void; // Callback for text field
   editable?: boolean;
   disablePagination?: boolean;
   defaultPageSize?: number;
@@ -54,29 +47,14 @@ interface IDataGrid {
   pageType?: string | null;
 }
 
-const DataGrid: FC<IDataGrid> = ({
-  rowData,
-  filter,
-  columnDefs,
-  editable,
-  onEditPress,
-  disablePagination,
-  defaultPageSize,
-  pageSizeSelector,
-  gridHeight,
-  enableCSVExport,
-  enableSearch,
-  propertyForEdit,
-  enableEditBtn,
-  functionType,
-  pageType,
-}) => {
+const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEditPress, disablePagination, defaultPageSize, pageSizeSelector, gridHeight, enableCSVExport, enableSearch, propertyForEdit, enableEditBtn, functionType, pageType, onDropdownChange, onTextFieldChange }) => {
   const gridRef = useRef<AgGridReact>(null);
 
   const [quickFilterText, setQuickFilterText] = React.useState("");
 
   const defaultColDef = useMemo<any>(() => {
     return {
+      // headerClass: "bg-red-500 text-white", // Add this line to set the default header class
       editable: editable || true,
       enableRowGroup: true,
       enablePivot: true,
@@ -172,31 +150,15 @@ const DataGrid: FC<IDataGrid> = ({
   const [selectedRowData, setSelectedRowData] = useState<any | null>(null);
   const [showTaxPopup, setShowTaxPopup] = useState<boolean>(false);
 
-  function getClickHandlerCallback(actionType: string) {
-    let pageApis =
-      functionType &&
-      pageType &&
-      FunctionPagesApis.hasOwnProperty(functionType) &&
-      FunctionPagesApis[functionType][pageType];
+  function getClickHandlerCallback(actionType: string, rowData: any) {
+    let pageApis = functionType && pageType && FunctionPagesApis.hasOwnProperty(functionType) && FunctionPagesApis[functionType][pageType];
 
     switch (actionType) {
       case TableCellActionTypes.Delete:
         // call detele record
-        return async () => {
-          // invoke delet popup
-          //on submit{}
-          // @harsh
-          // const userId=1; //get id from datagrid
-          //  const res =
-          //    !!pageApis &&
-          //    (await pageApis[IApiRequestsType.deleteRecordById](userId)
-          //      .then((res: any) => {
-          //        return res?.data;
-          //      })
-          //      .catch((err: any) => {
-          //        console.log(err);
-          //      }));
-          console.log("delete clicked");
+        return () => {
+          setSelectedRowData(rowData);
+          setShowConfirmation(true);
         };
 
       case TableCellActionTypes.Edit:
@@ -248,33 +210,22 @@ const DataGrid: FC<IDataGrid> = ({
 
   const cellRendererFunc = (cellIcons: any) => {
     return (
-      <div className="flex h-full flex-row gap-0.5 items-center">
+      <div className='flex h-full flex-row gap-0.5 items-center'>
         {cellIcons?.map((item: any, i: number) => {
-          const clickHandler = (e: any) => {
-            if (item?.actionType === TableCellActionTypes.Delete) {
-              handleDeleteClick(e.data);
-            } else {
-              const handler = getClickHandlerCallback(item?.actionType);
-              handler();
-            }
+          const clickHandler = () => {
+            const handler = getClickHandlerCallback(item?.actionType, rowData[i]);
+            handler();
           };
 
           return (
-            // <TETooltip
-            //   key={i}
-            //   tag="a"
-            //   title={item?.icon}
-            //   wrapperProps={{ href: '#' }}
-            //   className="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600 pointer-events-auto cursor-pointer"
-            // >
             <div
               key={i}
-              className=" tooltip tooltip-top "
+              className='tooltip tooltip-top'
               data-tip={item?.icon}
             >
               <div
-                className={`py-0.5 px-1 rounded-sm  hover:bg-slate-300 cursor-pointer`}
-                onClick={() => clickHandler({ data: rowData[i] })}
+                className={`py-0.5 px-1 rounded-sm hover:bg-slate-300 cursor-pointer`}
+                onClick={clickHandler}
               >
                 {getIcon(item?.icon)}
               </div>
@@ -284,14 +235,12 @@ const DataGrid: FC<IDataGrid> = ({
       </div>
     );
   };
-
   const getUpdatedColumnDefs = () => {
     const actionColumn = columnDefs[0];
     const updatedColumn = {
       headerName: actionColumn.headerName,
       field: actionColumn.field,
-      cellRenderer: (params: any) =>
-        cellRendererFunc(actionColumn?.cellActions),
+      cellRenderer: (params: any) => cellRendererFunc(actionColumn?.cellActions),
     };
     columnDefs[0] = updatedColumn;
     return columnDefs;
@@ -303,7 +252,28 @@ const DataGrid: FC<IDataGrid> = ({
         return {
           ...ele,
           cellEditor: GridDropdown,
-          // cellEditorPopup: true,
+          cellEditorParams: {
+            onDropdownChange: (value: any) => {
+              // Handle dropdown change
+              if (onDropdownChange) {
+                onDropdownChange(index, value);
+              }
+            },
+          },
+          editable: true,
+        };
+      } else if (ele?.textField) {
+        return {
+          ...ele,
+          cellEditor: TextInput,
+          cellEditorParams: {
+            onTextFieldChange: (value: any) => {
+              // Handle text field change
+              if (onTextFieldChange) {
+                onTextFieldChange(index, value);
+              }
+            },
+          },
           editable: true,
         };
       } else return ele;
@@ -332,18 +302,14 @@ const DataGrid: FC<IDataGrid> = ({
 
   return (
     <div
-      className="ag-theme-balham h-full rounded"
+      className='ag-theme-balham h-full rounded'
       style={{
-        height: gridHeight
-          ? gridHeight
-          : enableSearch || enableCSVExport
-          ? "76vh"
-          : "76vh",
+        height: gridHeight ? gridHeight : enableSearch || enableCSVExport ? "76vh" : "76vh",
       }}
     >
       {(enableSearch || enableCSVExport) && (
         <div
-          className="w-full  py-1  px-1  mb-[-2px] rounded-t flex flex-row justify-between content-center border border-s border-gray-300 "
+          className='w-full  py-1  px-1  mb-[-2px] rounded-t flex flex-row justify-between content-center border border-s border-gray-300 '
           style={{
             alignItems: "center",
             justifyContent: !enableCSVExport ? "flex-end" : "between",
@@ -351,26 +317,19 @@ const DataGrid: FC<IDataGrid> = ({
         >
           {enableCSVExport && (
             <>
-              {/* <Button
-              color="tertiary"
-              onClick={handleExport}
-              icon={<DocumentArrowDownIcon className="h-3 w-3" />}
-            >
-              Export to CSV
-            </Button> */}
               {/* ------ Reusable button added -------- */}
               <ButtonBorder
-                label="Export to CSV"
+                label='Export to CSV'
                 onClick={handleExport}
-                icon={<DocumentArrowDownIcon className="h-3 w-3" />}
+                icon={<DocumentArrowDownIcon className='h-3 w-3' />}
               />
             </>
           )}
           {enableSearch && (
-            <div className="flex content-center ">
-              <div className="w-60 mr-3   ms-auto">
+            <div className='flex content-center '>
+              <div className='w-60 mr-3   ms-auto'>
                 <TextInput
-                  className="h-7  "
+                  className='h-7  '
                   // label="Search . . ."
                   value={quickFilterText}
                   // formWhite={true}
@@ -380,20 +339,12 @@ const DataGrid: FC<IDataGrid> = ({
                 />
               </div>
               {enableCSVExport && (
-                <div className="mt-0">
-                  {/* <Button
-                  color="tertiary"
-                  onClick={handleReset}
-                  icon={<ArrowPathIcon className="h-3 w-3" />}
-                  className="ms-8"
-                >
-                  Reset All
-                  </Button> */}
+                <div className='mt-0'>
                   {/* ------ Reusable button added -------- */}
                   <ButtonBorder
-                    label="Reset All"
+                    label='Reset All'
                     onClick={handleReset}
-                    icon={<ArrowPathIcon className="h-3 w-3 " />}
+                    icon={<ArrowPathIcon className='h-3 w-3 ' />}
                   />
                 </div>
               )}
@@ -405,9 +356,7 @@ const DataGrid: FC<IDataGrid> = ({
         autoSizeStrategy={autoSizeStrategy}
         ref={gridRef}
         rowData={rowData}
-        columnDefs={
-          isCellRendererType ? getUpdatedColumnDefs() : getNewColumnDefs()
-        }
+        columnDefs={isCellRendererType ? getUpdatedColumnDefs() : getNewColumnDefs()}
         defaultColDef={defaultColDef}
         pivotPanelShow={"always"}
         rowGroupPanelShow={"always"}
