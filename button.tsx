@@ -72,7 +72,8 @@ const Button: React.FC<IButton> = ({ icon, children, color, onClick, className, 
   return (
     <button
       onClick={onClick}
-      className={clsx("btn  p-[3px]  text-center  w-fit h-min min-h-min antialiased hover:text-black hover:bg-gray-200 text-[11px] text-slate-700 font-normal gap-1 ", bgColorHandler(), className)}
+      style={{ minHeight: "23px", height: "23px" }}
+      className={clsx("btn flex align-middle justify-center    text-center  w-fit   antialiased hover:text-black hover:bg-gray-200 text-[11px] text-slate-700 font-normal gap-1 ", bgColorHandler(), className)}
     >
       {icon || ""}
       {children || btnName}

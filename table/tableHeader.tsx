@@ -37,7 +37,6 @@ const TableHeader = ({ headerButtons, tableSitemap, title, handleCreateNew, hand
         return () => console.log("handle callback for reject");
       case IButtonType.purchase_order_checklist:
         return () => router.push(ROUTES.purchaseOrderChecklist);
-
       default:
         return btn?.onClick;
     }

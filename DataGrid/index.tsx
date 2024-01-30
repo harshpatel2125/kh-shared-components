@@ -16,6 +16,7 @@ import { getLocalStorage } from "@/utils/localStorage";
 import { FunctionPagesApis } from "@/constants/functionPagesApis";
 import { IApiRequestsType } from "@/constants/functionPagesApis/apiTypes";
 import TaxPatternPopup from "../popup/TaxPatternPopup";
+import NotificationIcon from "@/assets/icons/NotificationIcon";
 
 var checkboxSelection = function (params: CheckboxSelectionCallbackParams) {
   // we put checkbox on the name if we are not doing grouping
@@ -304,7 +305,7 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
     <div
       className='ag-theme-balham h-full rounded'
       style={{
-        height: gridHeight ? gridHeight : enableSearch || enableCSVExport ? "70vh" : "70vh",
+        height: gridHeight ? gridHeight : enableSearch || enableCSVExport ? "73vh" : "70vh",
       }}
     >
       {(enableSearch || enableCSVExport) && (
@@ -315,20 +316,22 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
             justifyContent: !enableCSVExport ? "flex-end" : "between",
           }}
         >
-          {enableCSVExport && (
-            <>
-              {/* ------ Reusable button added -------- */}
-              <ButtonBorder
-                label='Export to CSV'
-                onClick={handleExport}
-                icon={<DocumentArrowDownIcon className='h-3 w-3' />}
-              />
-            </>
-          )}
+          <div className='flex gap-2'>
+            {enableCSVExport && (
+              <>
+                {/* ------ Reusable button added -------- */}
+                <Button
+                  className='btn-outline py-1.5  text-stone-700 bg-white px-2   rounded'
+                  onClick={handleExport}
+                  btnName='Export to CSV'
+                />
+              </>
+            )}
+          </div>
           {enableSearch && (
-            <div className='flex content-center '>
-              <div className='w-60 mr-3   ms-auto'>
-                <TextInput
+            <div className='flex gap-2 content-center '>
+              <div className='w-full'>
+                {/* <TextInput
                   className='h-7  '
                   // label="Search . . ."
                   value={quickFilterText}
@@ -336,17 +339,23 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
                   onChange={(e) => {
                     handleSearch(e);
                   }}
-                />
+                /> */}
+                <input
+                  className='border border-slate-300 focus:outline-none focus:border-slate-900 rounded py-1 w-52 px-3'
+                  placeholder='search . . . '
+                  value={quickFilterText}
+                  onChange={(e) => {
+                    handleSearch(e);
+                  }}
+                ></input>
               </div>
               {enableCSVExport && (
-                <div className='mt-0'>
-                  {/* ------ Reusable button added -------- */}
-                  <ButtonBorder
-                    label='Reset All'
-                    onClick={handleReset}
-                    icon={<ArrowPathIcon className='h-3 w-3 ' />}
-                  />
-                </div>
+                <Button
+                  btnName='Reset All'
+                  className='btn-outline py-1.5  text-stone-700 bg-white px-2   rounded'
+                  onClick={handleReset}
+                  icon={<ArrowPathIcon className='h-3 w-3 ' />}
+                />
               )}
             </div>
           )}
