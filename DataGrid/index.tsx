@@ -305,12 +305,12 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
     <div
       className='ag-theme-balham h-full rounded'
       style={{
-        height: gridHeight ? gridHeight : enableSearch || enableCSVExport ? "73vh" : "70vh",
+        height: gridHeight ? gridHeight : enableSearch || enableCSVExport ? "75vh" : "78vh",
       }}
     >
       {(enableSearch || enableCSVExport) && (
         <div
-          className='w-full  py-1  px-1  mb-[-2px] rounded-t flex flex-row justify-between content-center border border-s border-gray-300 '
+          className='w-full  pb-1   mb-[-2px] rounded-t flex flex-row justify-between content-center '
           style={{
             alignItems: "center",
             justifyContent: !enableCSVExport ? "flex-end" : "between",
@@ -341,7 +341,7 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
                   }}
                 /> */}
                 <input
-                  className='border border-slate-300 focus:outline-none focus:border-slate-900 rounded py-1 w-52 px-3'
+                  className='border border-slate-300 focus:outline-none focus:border-slate-900 rounded py-[4px] w-52 px-3'
                   placeholder='search . . . '
                   value={quickFilterText}
                   onChange={(e) => {

@@ -36,7 +36,7 @@ const FormInputPopup = ({ title }: { title: string | undefined }) => {
       <Button
         icon={<AddIcon />}
         onClick={handleClick}
-        className='bg-tertiary text-white hover:text-white hover:bg-tertiary-dark h-full rounded-sm px-1'
+        className=' btn-outline border-stone-400  h-full rounded-sm px-1'
       />
 
       <CustomPopupWrapper

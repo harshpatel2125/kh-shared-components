@@ -10,7 +10,7 @@ import BackIcon from "@/assets/icons/back-icon";
 const buttonClass: string = "border-0";
 const filterButtonClass: string = " p-0.5";
 const btnPadding: string = "px-2";
-
+const btnBg: string = "bg-white";
 export interface headerButtonTypes {
   save: IButton;
   new: IButton;
@@ -37,21 +37,21 @@ export const HEADER_BUTTONS: headerButtonTypes = {
         color='#000'
       />
     ),
-    className: `${buttonClass} ${btnPadding}`,
+    className: `${buttonClass} ${btnPadding} ${btnBg}`,
     btnType: IButtonType.FormSubmit,
   },
   new: {
     btnName: "New",
     color: "tertiary",
-    icon: <PlusIcon className='h-3 w-3' />,
-    className: `${buttonClass} ${btnPadding}`,
+    icon: <PlusIcon className='h-3 w-3 ' />,
+    className: `${buttonClass} ${btnPadding} ${btnBg} `,
     btnType: IButtonType.CreateNew,
   },
   pay: {
     btnName: "Pay",
     color: "tertiary",
     // icon: <FilterIcon height={12} width={12} color="#fff" />,
-    className: `${buttonClass} px-3`,
+    className: `${buttonClass} px-3 ${btnBg}`,
     btnType: IButtonType.payment,
   },
 
@@ -78,7 +78,7 @@ export const HEADER_BUTTONS: headerButtonTypes = {
         color='#000'
       />
     ),
-    className: `${buttonClass} ${btnPadding}`,
+    className: `${buttonClass} ${btnPadding} ${btnBg}`,
     btnType: IButtonType.GoBack,
   },
 
@@ -112,14 +112,14 @@ export const HEADER_BUTTONS: headerButtonTypes = {
     btnName: "Approved",
     color: "tertiary",
     // icon: <BackIcon height="14" width="10" color="#000" />,
-    className: `${buttonClass} ${btnPadding}`,
+    className: `${buttonClass} ${btnPadding} ${btnBg}`,
     btnType: IButtonType.approve,
   },
   reject: {
     btnName: "Reject",
     color: "tertiary",
     // icon: <BackIcon height="14" width="10" color="#000" />,
-    className: `${buttonClass} px-3`,
+    className: `${buttonClass} px-3 ${btnBg}`,
     btnType: IButtonType.reject,
   },
   purchase_order_checklist: {
@@ -133,14 +133,14 @@ export const HEADER_BUTTONS: headerButtonTypes = {
     btnName: "Add",
     color: "tertiary",
     // icon: <BackIcon height="14" width="10" color="#000" />,
-    className: `${buttonClass} px-3`,
+    className: `${buttonClass} px-3 ${btnBg}`,
     btnType: IButtonType.add,
   },
   exportCv: {
     btnName: "Export CV",
     color: "tertiary",
     // icon: <BackIcon height="14" width="10" color="#000" />,
-    className: `${buttonClass} px-3`,
+    className: `${buttonClass} px-3 `,
     btnType: IButtonType.add,
   },
 };
