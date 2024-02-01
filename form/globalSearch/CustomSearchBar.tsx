@@ -33,44 +33,31 @@ const CustomSearchBar = (props: Props<any>) => {
   const router = useRouter();
   const [matchedPages, setMatchedPages] = React.useState<string[]>([]);
 
-  const [data, setData] = useState<any>({});
+  const [data, setData] = useState<any>([]);
 
   React.useEffect(() => {
-    // Retrieve data from local storage
-    const activeRight = getLocalStorage("activeRight") || null;
-    const SignInUserRightsSidebar = JSON.parse(getLocalStorage("SignInUserRightsSidebar") || "[]");
+    const activeRight = getLocalStorage("signInUserRightsSidebar") || null;
+    console.log(activeRight);
 
-    // Initialize an empty array to store the transformed data
+    const SignInUserRightsSidebar = JSON.parse(getLocalStorage("signInUserRightsSidebar") || "[]");
+
     const transformedData: { value: string; label: string }[] = [];
 
-    // Filter data based on the activeRight
-    const data = activeRight
-      ? SignInUserRightsSidebar &&
-        SignInUserRightsSidebar.length > 0 &&
-        SignInUserRightsSidebar.map((ele: any) => {
-          if (parseInt(ele?.ModuleID) === parseInt(activeRight)) {
-            return ele?.Functions;
-          } else return null;
-        }).filter((e: any) => e !== null)?.[0]
-      : SignInUserRightsSidebar?.[0]?.Functions;
-
-    // Extract function name and page name
-    data.forEach((func: any) => {
-      func.Pages.forEach((page: any) => {
-        transformedData.push({ value: func.FunctionName, label: page.PageName });
+    SignInUserRightsSidebar.forEach((item: any) => {
+      item.Functions.forEach((func: any) => {
+        func.Pages.forEach((page: any) => {
+          transformedData.push({ value: func.FunctionName, label: page.PageName });
+        });
       });
     });
-
-    // Set the data state with the filtered result
     setData(transformedData);
+    console.log(transformedData);
   }, []);
 
   const onChange = (selectedOption: any) => {
     console.log("Selected option:", selectedOption);
 
-    // Check if selectedOption has a value defined
     if (selectedOption?.value !== undefined) {
-      // Convert value and label to lowercase and replace spaces with hyphens
       const value = selectedOption.value.toLowerCase().replace(/\s/g, "-");
       const label = selectedOption.label.toLowerCase().replace(/\s/g, "-");
 
@@ -79,7 +66,6 @@ const CustomSearchBar = (props: Props<any>) => {
       const path = `/${value}/${label}`;
       console.log("Constructed path:", path);
 
-      // Construct the path using both value and label and push the user to that path
       router.push(path);
     } else {
       console.log("Value is undefined, navigation aborted.");
