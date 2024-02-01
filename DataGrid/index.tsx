@@ -17,6 +17,9 @@ import { FunctionPagesApis } from "@/constants/functionPagesApis";
 import { IApiRequestsType } from "@/constants/functionPagesApis/apiTypes";
 import TaxPatternPopup from "../popup/TaxPatternPopup";
 import NotificationIcon from "@/assets/icons/NotificationIcon";
+// import jsPDF from 'jspdf';
+// import 'jspdf-autotable';
+
 
 var checkboxSelection = function (params: CheckboxSelectionCallbackParams) {
   // we put checkbox on the name if we are not doing grouping
@@ -41,6 +44,7 @@ interface IDataGrid {
   pageSizeSelector?: Array<number>;
   gridHeight?: number | string | undefined | null;
   enableCSVExport?: boolean;
+  enablePDFExport?: boolean;
   enableSearch?: boolean;
   propertyForEdit?: string;
   enableEditBtn?: boolean;
@@ -48,8 +52,18 @@ interface IDataGrid {
   pageType?: string | null;
 }
 
-const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEditPress, disablePagination, defaultPageSize, pageSizeSelector, gridHeight, enableCSVExport, enableSearch, propertyForEdit, enableEditBtn, functionType, pageType, onDropdownChange, onTextFieldChange }) => {
+const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEditPress, disablePagination, defaultPageSize, pageSizeSelector, gridHeight, enableCSVExport,enablePDFExport, enableSearch, propertyForEdit, enableEditBtn, functionType, pageType, onDropdownChange, onTextFieldChange }) => {
   const gridRef = useRef<AgGridReact>(null);
+  const navigateToEditPage = (editId: string, data: any) => {
+    if (data && data.id) {
+      // Assuming 'edit' is the route for editing, and 'id' is the parameter for the edit page
+      router.push(`/edit/${editId}?data=${encodeURIComponent(JSON.stringify(data))}`);
+      console.log("Edit ID:", editId); // Log the ID to the console
+    } else {
+      console.error("Invalid rowData:", data);
+    }
+  };
+  
 
   const [quickFilterText, setQuickFilterText] = React.useState("");
 
@@ -162,14 +176,32 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
           setShowConfirmation(true);
         };
 
-      case TableCellActionTypes.Edit:
-        // call edit record
+        case TableCellActionTypes.Edit:
+  // call edit record
+  return () => {
+    if (rowData && rowData.length > 0) {
+      const firstRowData = rowData[0]; // Assuming you want the id from the first row
+      if (firstRowData && firstRowData.id) {
+        // Define the router instance
+        const router = useRouter();
 
-        return () => {
-          const { UserID } = JSON.parse(getLocalStorage("UserInfo"));
+        // Fetch data for editing (Replace 'YourAPIEndpoint' with the actual API endpoint)
+        fetch(`https://kh-pos-backend-api.onrender.com/api/User/${firstRowData.id}`)
+          .then(response => response.json())
+          .then(data => {
+            // Assuming you have a function to navigate to the edit page
+            router.push(`/edit/${firstRowData.id}?data=${encodeURIComponent(JSON.stringify(data))}`);
+          })
+          .catch(error => console.error('Error fetching data:', error));
 
-          router.push(`${pathname}/edit/${UserID}`);
-        };
+        console.log("Edit ID:", firstRowData.id);
+      } else {
+        console.error("Invalid row data:", firstRowData);
+      }
+    } else {
+      console.error("No row data available");
+    }
+  };
 
       case TableCellActionTypes.Rights:
         // call rights record
@@ -285,6 +317,36 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
     gridRef.current!.api.exportDataAsCsv();
   }, []);
 
+  // const handleExportPDF = useCallback(() => {
+  //   const gridApi = gridRef.current?.api;
+  
+  //   if (gridApi) {
+  //     const params = {
+  //       fileName: "exported-data.pdf",
+  //       onlySelected: false,
+  //       exportMode: undefined,
+  //     };
+  
+  //     gridApi.exportDataAsCsv(params).then((data) => {
+  //       const jsonData = gridApi.api.getDataAsCsv(params);
+  //       const rows = jsonData.split("\n");
+  //       const header = rows[0].split(",");
+  //       const tableData = rows.slice(1).map((row) => row.split(","));
+  
+  //       const pdfDoc = new jsPDF();
+        
+  //       // Add data to the PDF document using autotable
+  //       pdfDoc.autoTable({
+  //         head: [header],
+  //         body: tableData,
+  //       });
+  
+  //       pdfDoc.save(params.fileName);
+  //     });
+  //   }
+  // }, []);
+
+
   const handleSearch = (e: any) => {
     gridRef.current!.api.setGridOption("quickFilterText", e?.target?.value);
     setQuickFilterText(e?.target?.value);
@@ -303,31 +365,41 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
 
   return (
     <div
-      className='ag-theme-balham h-full rounded'
-      style={{
-        height: gridHeight ? gridHeight : enableSearch || enableCSVExport ? "73vh" : "70vh",
-      }}
-    >
-      {(enableSearch || enableCSVExport) && (
-        <div
-          className='w-full  py-1  px-1  mb-[-2px] rounded-t flex flex-row justify-between content-center border border-s border-gray-300 '
-          style={{
-            alignItems: "center",
-            justifyContent: !enableCSVExport ? "flex-end" : "between",
-          }}
-        >
-          <div className='flex gap-2'>
-            {enableCSVExport && (
-              <>
-                {/* ------ Reusable button added -------- */}
-                <Button
-                  className='btn-outline py-1.5  text-stone-700 bg-white px-2   rounded'
-                  onClick={handleExport}
-                  btnName='Export to CSV'
-                />
-              </>
-            )}
-          </div>
+    className='ag-theme-balham h-full rounded'
+    style={{
+      height: gridHeight ? gridHeight : enableSearch || enableCSVExport ? "73vh" : "70vh",
+    }}
+  >
+    {(enableSearch || enableCSVExport || enablePDFExport) && (
+      <div
+        className='w-full  py-1  px-1  mb-[-2px] rounded-t flex flex-row justify-between content-center border border-s border-gray-300 '
+        style={{
+          alignItems: "center",
+          justifyContent: !enableCSVExport ? "flex-end" : "space-between",
+        }}
+      >
+        <div className='flex gap-2'>
+          {enableCSVExport && (
+            <>
+              {/* ------ Reusable button added -------- */}
+              <Button
+                className='btn-outline py-1.5  text-stone-700 bg-white px-2   rounded'
+                onClick={handleExport}
+                btnName='Export to CSV'
+              />
+            </>
+          )}
+          {enablePDFExport && (
+            <>
+              {/* ------ Reusable button added -------- */}
+              <Button
+                className='btn-outline py-1.5  text-stone-700 bg-white px-2   rounded'
+                // onClick={handleExportPDF}
+                btnName='Export to PDF'
+              />
+            </>
+          )}
+        </div>
           {enableSearch && (
             <div className='flex gap-2 content-center '>
               <div className='w-full'>
