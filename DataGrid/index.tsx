@@ -27,6 +27,7 @@ var headerCheckboxSelection = function (params: HeaderCheckboxSelectionCallbackP
   // we put checkbox on the name if we are not doing grouping
   return params.api.getRowGroupColumns().length === 0;
 };
+const borderBtnStyle: string = "border border-black px-2";
 
 interface IDataGrid {
   rowData: Array<any>;
@@ -305,7 +306,7 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
     <div
       className='ag-theme-balham h-full rounded'
       style={{
-        height: gridHeight ? gridHeight : enableSearch || enableCSVExport ? "75vh" : "78vh",
+        height: gridHeight ? gridHeight : enableSearch || enableCSVExport ? "76vh" : "78vh",
       }}
     >
       {(enableSearch || enableCSVExport) && (
@@ -321,11 +322,23 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
               <>
                 {/* ------ Reusable button added -------- */}
                 <Button
-                  className='btn-outline py-1.5  text-stone-700 bg-white px-2   rounded'
+                  className={` ${borderBtnStyle}`}
                   onClick={handleExport}
                   btnName='Export to CSV'
                 />
               </>
+            )}
+            {enableCSVExport && (
+              // <Button
+              //   btnName='Reset All'
+              //   className={` ${borderBtnStyle}`}
+              // />
+              <Button
+                btnName='Reset All'
+                className={` ${borderBtnStyle}`}
+                onClick={handleReset}
+                icon={<ArrowPathIcon className='h-3 w-3 ' />}
+              />
             )}
           </div>
           {enableSearch && (
@@ -349,14 +362,6 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
                   }}
                 ></input>
               </div>
-              {enableCSVExport && (
-                <Button
-                  btnName='Reset All'
-                  className='btn-outline py-1.5  text-stone-700 bg-white px-2   rounded'
-                  onClick={handleReset}
-                  icon={<ArrowPathIcon className='h-3 w-3 ' />}
-                />
-              )}
             </div>
           )}
         </div>

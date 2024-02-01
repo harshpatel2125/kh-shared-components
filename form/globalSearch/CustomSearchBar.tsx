@@ -1,30 +1,14 @@
-import React, { MouseEventHandler, useState } from "react";
+"use client";
+
+import React, { ChangeEvent, MouseEventHandler, useEffect, useState } from "react";
 import Select, { ActionMeta, components, ControlProps, Props, StylesConfig } from "react-select";
 import SearchIcon from "@/assets/icons/SearchIcon";
+import { getLocalStorage } from "@/utils/localStorage";
+import { usePathname, useRouter } from "next/navigation";
 const primaryColor = "#2C2C2C";
 const secondaryColor = "#eeeff1";
 
-interface ColourOption {
-  readonly value: string;
-  readonly label: string;
-  readonly color: string;
-  readonly isFixed?: boolean;
-  readonly isDisabled?: boolean;
-}
-const colourOptions: readonly ColourOption[] = [
-  { value: "ocean", label: "Ocean", color: "#00B8D9", isFixed: true },
-  { value: "blue", label: "Blue", color: "#666666", isDisabled: true },
-  { value: "purple", label: "Purple", color: "#5243AA" },
-  { value: "purple", label: "Purple", color: "#5243AA" },
-  { value: "red", label: "Red", color: "#FF5630", isFixed: true },
-  { value: "orange", label: "Orange", color: "#FF8B00" },
-  { value: "yellow", label: "Yellow", color: "#FFC400" },
-  { value: "green", label: "Green", color: "#36B37E" },
-  { value: "forest", label: "Forest", color: "#00875A" },
-  { value: "slate", label: "Slate", color: "#253858" },
-  { value: "silver", label: "Silver", color: "#666666" },
-];
-const Control = ({ children, ...props }: ControlProps<ColourOption, false>) => {
+const Control = ({ children, ...props }: ControlProps<any, false>) => {
   // @ts-ignore
   const { emoji, onEmojiClick } = props.selectProps;
   const style = { cursor: "pointer" };
@@ -43,18 +27,63 @@ const Control = ({ children, ...props }: ControlProps<ColourOption, false>) => {
   );
 };
 
-const CustomSearchBar = (props: Props<ColourOption>) => {
-  // const [clickCount, setClickCount] = useState(0);
+const CustomSearchBar = (props: Props<any>) => {
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const pathname = usePathname();
+  const router = useRouter();
+  const [matchedPages, setMatchedPages] = React.useState<string[]>([]);
 
-  // const onClick: MouseEventHandler<HTMLSpanElement> = (e) => {
-  //     setClickCount(clickCount + 1);
-  //     e.preventDefault();
-  //     e.stopPropagation();
-  // };
+  const [data, setData] = useState<any>({});
 
-  const onChange = (newValue: ColourOption | ColourOption[] | null, actionMeta: ActionMeta<ColourOption>) => {
-    // Handle your change logic here
-    console.log("Selected Value:", newValue);
+  React.useEffect(() => {
+    // Retrieve data from local storage
+    const activeRight = getLocalStorage("activeRight") || null;
+    const SignInUserRightsSidebar = JSON.parse(getLocalStorage("SignInUserRightsSidebar") || "[]");
+
+    // Initialize an empty array to store the transformed data
+    const transformedData: { value: string; label: string }[] = [];
+
+    // Filter data based on the activeRight
+    const data = activeRight
+      ? SignInUserRightsSidebar &&
+        SignInUserRightsSidebar.length > 0 &&
+        SignInUserRightsSidebar.map((ele: any) => {
+          if (parseInt(ele?.ModuleID) === parseInt(activeRight)) {
+            return ele?.Functions;
+          } else return null;
+        }).filter((e: any) => e !== null)?.[0]
+      : SignInUserRightsSidebar?.[0]?.Functions;
+
+    // Extract function name and page name
+    data.forEach((func: any) => {
+      func.Pages.forEach((page: any) => {
+        transformedData.push({ value: func.FunctionName, label: page.PageName });
+      });
+    });
+
+    // Set the data state with the filtered result
+    setData(transformedData);
+  }, []);
+
+  const onChange = (selectedOption: any) => {
+    console.log("Selected option:", selectedOption);
+
+    // Check if selectedOption has a value defined
+    if (selectedOption?.value !== undefined) {
+      // Convert value and label to lowercase and replace spaces with hyphens
+      const value = selectedOption.value.toLowerCase().replace(/\s/g, "-");
+      const label = selectedOption.label.toLowerCase().replace(/\s/g, "-");
+
+      setSearchQuery(`${value}/${label}`);
+
+      const path = `/${value}/${label}`;
+      console.log("Constructed path:", path);
+
+      // Construct the path using both value and label and push the user to that path
+      router.push(path);
+    } else {
+      console.log("Value is undefined, navigation aborted.");
+    }
   };
 
   const emoji = <SearchIcon />;
@@ -137,7 +166,7 @@ const CustomSearchBar = (props: Props<ColourOption>) => {
       isSearchable
       isClearable
       name='emoji'
-      options={colourOptions}
+      options={data}
       onChange={onChange}
 
       // styles={styles}
