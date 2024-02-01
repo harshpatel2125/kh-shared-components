@@ -417,7 +417,16 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
               />
             </>
           )}
-        </div>
+           {enableCSVExport && (
+                <Button
+                  btnName='Reset All'
+                  className={borderBtnStyle}
+                  onClick={handleReset}
+                  icon={<ArrowPathIcon className='h-3 w-3 ' />}
+                />
+              )}
+             </div>
+             
           {enableSearch && (
             <div className="flex gap-2 content-center ">
               <div className="w-full">
