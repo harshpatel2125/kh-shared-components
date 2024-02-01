@@ -401,7 +401,7 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
             <>
               {/* ------ Reusable button added -------- */}
               <Button
-                className='btn-outline py-1.5  text-stone-700 bg-white px-2   rounded'
+                className={borderBtnStyle}
                 onClick={handleExport}
                 btnName='Export to CSV'
               />
@@ -411,7 +411,7 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
             <>
               {/* ------ Reusable button added -------- */}
               <Button
-                className='btn-outline py-1.5  text-stone-700 bg-white px-2   rounded'
+                className={borderBtnStyle}
                 // onClick={handleExportPDF}
                 btnName='Export to PDF'
               />
