@@ -39,7 +39,7 @@ const TabTwo: React.FC = () => {
       {existingPaths?.map((path: any, index: number) => (
         <div
           key={index}
-          className={`flex gap-3  text-[10px] font-light ${pathname === path.pathname ? "text-white bg-slate-600" : "text-slate-700"} px-2 rounded py-0.5 border border-slate-300`}
+          className={`flex gap-3  text-[10px] font-light ${pathname === path.pathname ? "text-white bg-slate-600" : "text-slate-700  border border-slate-300"} px-2 rounded py-0.5 `}
         >
           <button
             className=' '

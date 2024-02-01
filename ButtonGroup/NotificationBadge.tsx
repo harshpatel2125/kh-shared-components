@@ -5,7 +5,7 @@ import NotificationIcon from "@/assets/icons/NotificationIcon";
 
 interface NotificationBadgeProps {
   notificationCount?: number;
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
   badgeComponent?: React.ReactNode;
   tooltip?: string;
 }

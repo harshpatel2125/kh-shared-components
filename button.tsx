@@ -40,9 +40,10 @@ export interface IButton {
   onClick?: (e?: any) => void;
   className?: string;
   btnType?: string;
+  iconClassName?: string;
 }
 
-const Button: React.FC<IButton> = ({ icon, children, color, onClick, className, btnName }) => {
+const Button: React.FC<IButton> = ({ iconClassName, icon, children, color, onClick, className, btnName }) => {
   const bgColorHandler = () => {
     switch (color) {
       case IButtonColor.Primary:
@@ -70,14 +71,21 @@ const Button: React.FC<IButton> = ({ icon, children, color, onClick, className, 
     }
   };
   return (
-    <button
-      onClick={onClick}
-      style={{ minHeight: "23px", height: "23px" }}
-      className={clsx("btn flex align-middle justify-center    text-center  w-fit   antialiased hover:text-black hover:bg-gray-200 text-[11px] text-slate-700 font-normal gap-1 ", bgColorHandler(), className)}
-    >
-      {icon || ""}
-      {children || btnName}
-    </button>
+    <>
+      {/* <button
+        onClick={onClick}
+        className={clsx("btn btn-xs btn-style flex align-middle justify-center    text-center     hover:text-black hover:bg-gray-200 text-[11px] text-slate-700 font-normal gap-1 ", bgColorHandler(), className)}
+      >
+        <span className=''> {icon || ""}</span>
+        {children || btnName}
+      </button> */}
+      <button
+        onClick={onClick}
+        className={clsx("flex text-[10px]  h-5 w-fit items-center justify-center  py-[3px] rounded-sm", bgColorHandler(), className)}
+      >
+        <p className={` ${icon ? "mr-0.5" : ""} `}> {icon || ""}</p> {children || btnName}
+      </button>
+    </>
   );
 };
 

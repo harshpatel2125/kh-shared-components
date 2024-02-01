@@ -24,9 +24,9 @@ export default function CustomPopup({ title, showModal, setShowModal, children }
     >
       <TEModalDialog centered>
         <TEModalContent>
-          <TEModalHeader>
+          <TEModalHeader className='h-7'>
             {/* Modal title */}
-            <h5 className='text-xs font-medium leading-normal text-neutral-800 dark:text-neutral-200'>{title}</h5>
+            <p className='text-xs  font-medium leading-normal text-neutral-800 dark:text-neutral-200'>{title}</p>
             {/* Close button */}
             <button
               type='button'

@@ -1,40 +1,32 @@
-import React, { MouseEventHandler, useState } from "react";
-import Select, { ActionMeta, components, ControlProps, Props, StylesConfig } from "react-select";
+"use client";
+
+import React, {
+  ChangeEvent,
+  MouseEventHandler,
+  useEffect,
+  useState,
+} from "react";
+import Select, {
+  ActionMeta,
+  components,
+  ControlProps,
+  Props,
+  StylesConfig,
+} from "react-select";
 import SearchIcon from "@/assets/icons/SearchIcon";
+import { LocalStorageUtils, getLocalStorage } from "@/utils/localStorage";
+import { usePathname, useRouter } from "next/navigation";
 const primaryColor = "#2C2C2C";
 const secondaryColor = "#eeeff1";
 
-interface ColourOption {
-  readonly value: string;
-  readonly label: string;
-  readonly color: string;
-  readonly isFixed?: boolean;
-  readonly isDisabled?: boolean;
-}
-const colourOptions: readonly ColourOption[] = [
-  { value: "ocean", label: "Ocean", color: "#00B8D9", isFixed: true },
-  { value: "blue", label: "Blue", color: "#666666", isDisabled: true },
-  { value: "purple", label: "Purple", color: "#5243AA" },
-  { value: "purple", label: "Purple", color: "#5243AA" },
-  { value: "red", label: "Red", color: "#FF5630", isFixed: true },
-  { value: "orange", label: "Orange", color: "#FF8B00" },
-  { value: "yellow", label: "Yellow", color: "#FFC400" },
-  { value: "green", label: "Green", color: "#36B37E" },
-  { value: "forest", label: "Forest", color: "#00875A" },
-  { value: "slate", label: "Slate", color: "#253858" },
-  { value: "silver", label: "Silver", color: "#666666" },
-];
-const Control = ({ children, ...props }: ControlProps<ColourOption, false>) => {
+const Control = ({ children, ...props }: ControlProps<any, false>) => {
   // @ts-ignore
   const { emoji, onEmojiClick } = props.selectProps;
   const style = { cursor: "pointer" };
 
   return (
     <components.Control {...props}>
-      <span
-        onMouseDown={onEmojiClick}
-        style={style}
-      >
+      <span onMouseDown={onEmojiClick} style={style}>
         {emoji}
       </span>
 
@@ -43,18 +35,49 @@ const Control = ({ children, ...props }: ControlProps<ColourOption, false>) => {
   );
 };
 
-const CustomSearchBar = (props: Props<ColourOption>) => {
-  // const [clickCount, setClickCount] = useState(0);
+const CustomSearchBar = (props: Props<any>) => {
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const pathname = usePathname();
+  const router = useRouter();
+  const [matchedPages, setMatchedPages] = React.useState<string[]>([]);
 
-  // const onClick: MouseEventHandler<HTMLSpanElement> = (e) => {
-  //     setClickCount(clickCount + 1);
-  //     e.preventDefault();
-  //     e.stopPropagation();
-  // };
+  const [data, setData] = useState<any>([]);
 
-  const onChange = (newValue: ColourOption | ColourOption[] | null, actionMeta: ActionMeta<ColourOption>) => {
-    // Handle your change logic here
-    console.log("Selected Value:", newValue);
+  React.useEffect(() => {
+    const activeRight =
+      getLocalStorage(LocalStorageUtils.signInUserRightsSidebar) || null;
+
+    const SignInUserRightsSidebar = JSON.parse(
+      getLocalStorage(LocalStorageUtils.signInUserRightsSidebar) || "[]"
+    );
+
+    const transformedData: { value: string; label: string }[] = [];
+
+    SignInUserRightsSidebar.forEach((item: any) => {
+      item.Functions.forEach((func: any) => {
+        func.Pages.forEach((page: any) => {
+          transformedData.push({
+            value: func.FunctionName,
+            label: page.PageName,
+          });
+        });
+      });
+    });
+    setData(transformedData);
+  }, []);
+
+  const onChange = (selectedOption: any) => {
+    if (selectedOption?.value !== undefined) {
+      const value = selectedOption.value.toLowerCase().replace(/\s/g, "-");
+      const label = selectedOption.label.toLowerCase().replace(/\s/g, "-");
+
+      setSearchQuery(`${value}/${label}`);
+
+      const path = `/${value}/${label}`;
+
+      router.push(path);
+    } else {
+    }
   };
 
   const emoji = <SearchIcon />;
@@ -136,8 +159,8 @@ const CustomSearchBar = (props: Props<ColourOption>) => {
       components={{ Control, DropdownIndicator: null }}
       isSearchable
       isClearable
-      name='emoji'
-      options={colourOptions}
+      name="emoji"
+      options={data}
       onChange={onChange}
 
       // styles={styles}

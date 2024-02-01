@@ -6,11 +6,13 @@ import DownArrowIcon from "@/assets/icons/DownArrowIcon";
 import SaveIcon from "@/assets/icons/SaveIcon";
 import BackIconTwo from "@/assets/icons/BackIconTwo";
 import BackIcon from "@/assets/icons/back-icon";
+import AddIcon from "@/assets/icons/AddIcon";
 
+const solidBtnStyle: string = "bg-white text-black px-2";
+const borderBtnStyle: string = "border border-black px-2";
 const buttonClass: string = "border-0";
-const filterButtonClass: string = " p-0.5";
-const btnPadding: string = "px-2";
-
+const filterButtonClass: string = "";
+const btnBg: string = "bg-white";
 export interface headerButtonTypes {
   save: IButton;
   new: IButton;
@@ -37,21 +39,29 @@ export const HEADER_BUTTONS: headerButtonTypes = {
         color='#000'
       />
     ),
-    className: `${buttonClass} ${btnPadding}`,
+
+    className: `${solidBtnStyle}`,
     btnType: IButtonType.FormSubmit,
   },
   new: {
     btnName: "New",
     color: "tertiary",
-    icon: <PlusIcon className='h-3 w-3' />,
-    className: `${buttonClass} ${btnPadding}`,
+    icon: (
+      <AddIcon
+        width='13'
+        height='13'
+        color='#000'
+      />
+    ),
+
+    className: `${solidBtnStyle}`,
     btnType: IButtonType.CreateNew,
   },
   pay: {
     btnName: "Pay",
     color: "tertiary",
     // icon: <FilterIcon height={12} width={12} color="#fff" />,
-    className: `${buttonClass} px-3`,
+    className: `${solidBtnStyle}`,
     btnType: IButtonType.payment,
   },
 
@@ -78,7 +88,7 @@ export const HEADER_BUTTONS: headerButtonTypes = {
         color='#000'
       />
     ),
-    className: `${buttonClass} ${btnPadding}`,
+    className: `${solidBtnStyle}`,
     btnType: IButtonType.GoBack,
   },
 
@@ -112,14 +122,14 @@ export const HEADER_BUTTONS: headerButtonTypes = {
     btnName: "Approved",
     color: "tertiary",
     // icon: <BackIcon height="14" width="10" color="#000" />,
-    className: `${buttonClass} ${btnPadding}`,
+    className: `${solidBtnStyle}`,
     btnType: IButtonType.approve,
   },
   reject: {
     btnName: "Reject",
     color: "tertiary",
     // icon: <BackIcon height="14" width="10" color="#000" />,
-    className: `${buttonClass} px-3`,
+    className: `${solidBtnStyle}`,
     btnType: IButtonType.reject,
   },
   purchase_order_checklist: {
@@ -133,14 +143,14 @@ export const HEADER_BUTTONS: headerButtonTypes = {
     btnName: "Add",
     color: "tertiary",
     // icon: <BackIcon height="14" width="10" color="#000" />,
-    className: `${buttonClass} px-3`,
+    className: `${solidBtnStyle}`,
     btnType: IButtonType.add,
   },
   exportCv: {
     btnName: "Export CV",
     color: "tertiary",
     // icon: <BackIcon height="14" width="10" color="#000" />,
-    className: `${buttonClass} px-3`,
+    className: `${borderBtnStyle}`,
     btnType: IButtonType.add,
   },
 };

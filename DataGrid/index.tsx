@@ -1,10 +1,17 @@
 import React, { useMemo, FC, useCallback, useRef, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
 import { useRouter, usePathname } from "next/navigation";
-import { CheckboxSelectionCallbackParams, HeaderCheckboxSelectionCallbackParams } from "@ag-grid-community/core";
+import {
+  CheckboxSelectionCallbackParams,
+  HeaderCheckboxSelectionCallbackParams,
+} from "@ag-grid-community/core";
 import TextInput from "../FormElements/TextInput";
 import Button from "../button";
-import { ArrowPathIcon, DocumentArrowDownIcon, PencilIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowPathIcon,
+  DocumentArrowDownIcon,
+  PencilIcon,
+} from "@heroicons/react/24/outline";
 import { getIcon } from "@/utils/getIcons";
 import { TableCellActionTypes } from "@/constants/tableCols";
 import ButtonBorder from "../ButtonGroup/ButtonBorder";
@@ -12,7 +19,7 @@ import { TETooltip } from "tw-elements-react";
 import GridDropdown from "./GridDropdown";
 import { CellEditorComponent } from "ag-grid-community/dist/lib/components/framework/componentTypes";
 import CustomPopup from "../popup/index";
-import { getLocalStorage } from "@/utils/localStorage";
+import { LocalStorageUtils, getLocalStorage } from "@/utils/localStorage";
 import { FunctionPagesApis } from "@/constants/functionPagesApis";
 import { IApiRequestsType } from "@/constants/functionPagesApis/apiTypes";
 import TaxPatternPopup from "../popup/TaxPatternPopup";
@@ -26,10 +33,13 @@ var checkboxSelection = function (params: CheckboxSelectionCallbackParams) {
   return params.api.getRowGroupColumns().length === 0;
 };
 
-var headerCheckboxSelection = function (params: HeaderCheckboxSelectionCallbackParams) {
+var headerCheckboxSelection = function (
+  params: HeaderCheckboxSelectionCallbackParams
+) {
   // we put checkbox on the name if we are not doing grouping
   return params.api.getRowGroupColumns().length === 0;
 };
+const borderBtnStyle: string = "border border-black px-2";
 
 interface IDataGrid {
   rowData: Array<any>;
@@ -166,7 +176,11 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
   const [showTaxPopup, setShowTaxPopup] = useState<boolean>(false);
 
   function getClickHandlerCallback(actionType: string, rowData: any) {
-    let pageApis = functionType && pageType && FunctionPagesApis.hasOwnProperty(functionType) && FunctionPagesApis[functionType][pageType];
+    let pageApis =
+      functionType &&
+      pageType &&
+      FunctionPagesApis.hasOwnProperty(functionType) &&
+      FunctionPagesApis[functionType][pageType];
 
     switch (actionType) {
       case TableCellActionTypes.Delete:
@@ -243,17 +257,20 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
 
   const cellRendererFunc = (cellIcons: any) => {
     return (
-      <div className='flex h-full flex-row gap-0.5 items-center'>
+      <div className="flex h-full flex-row gap-0.5 items-center">
         {cellIcons?.map((item: any, i: number) => {
           const clickHandler = () => {
-            const handler = getClickHandlerCallback(item?.actionType, rowData[i]);
+            const handler = getClickHandlerCallback(
+              item?.actionType,
+              rowData[i]
+            );
             handler();
           };
 
           return (
             <div
               key={i}
-              className='tooltip tooltip-right'
+              className="tooltip tooltip-right"
               data-tip={item?.icon}
             >
               <div
@@ -273,7 +290,8 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
     const updatedColumn = {
       headerName: actionColumn.headerName,
       field: actionColumn.field,
-      cellRenderer: (params: any) => cellRendererFunc(actionColumn?.cellActions),
+      cellRenderer: (params: any) =>
+        cellRendererFunc(actionColumn?.cellActions),
     };
     columnDefs[0] = updatedColumn;
     return columnDefs;
@@ -401,8 +419,8 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
           )}
         </div>
           {enableSearch && (
-            <div className='flex gap-2 content-center '>
-              <div className='w-full'>
+            <div className="flex gap-2 content-center ">
+              <div className="w-full">
                 {/* <TextInput
                   className='h-7  '
                   // label="Search . . ."
@@ -413,22 +431,14 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
                   }}
                 /> */}
                 <input
-                  className='border border-slate-300 focus:outline-none focus:border-slate-900 rounded py-1 w-52 px-3'
-                  placeholder='search . . . '
+                  className="border border-slate-300 focus:outline-none focus:border-slate-900 rounded py-[4px] w-52 px-3"
+                  placeholder="search . . . "
                   value={quickFilterText}
                   onChange={(e) => {
                     handleSearch(e);
                   }}
                 ></input>
               </div>
-              {enableCSVExport && (
-                <Button
-                  btnName='Reset All'
-                  className='btn-outline py-1.5  text-stone-700 bg-white px-2   rounded'
-                  onClick={handleReset}
-                  icon={<ArrowPathIcon className='h-3 w-3 ' />}
-                />
-              )}
             </div>
           )}
         </div>
@@ -437,7 +447,9 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
         autoSizeStrategy={autoSizeStrategy}
         ref={gridRef}
         rowData={rowData}
-        columnDefs={isCellRendererType ? getUpdatedColumnDefs() : getNewColumnDefs()}
+        columnDefs={
+          isCellRendererType ? getUpdatedColumnDefs() : getNewColumnDefs()
+        }
         defaultColDef={defaultColDef}
         pivotPanelShow={"always"}
         rowGroupPanelShow={"always"}
