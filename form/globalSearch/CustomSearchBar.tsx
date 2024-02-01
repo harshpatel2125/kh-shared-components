@@ -37,7 +37,6 @@ const CustomSearchBar = (props: Props<any>) => {
 
   React.useEffect(() => {
     const activeRight = getLocalStorage("signInUserRightsSidebar") || null;
-    console.log(activeRight);
 
     const SignInUserRightsSidebar = JSON.parse(getLocalStorage("signInUserRightsSidebar") || "[]");
 
@@ -51,12 +50,9 @@ const CustomSearchBar = (props: Props<any>) => {
       });
     });
     setData(transformedData);
-    console.log(transformedData);
   }, []);
 
   const onChange = (selectedOption: any) => {
-    console.log("Selected option:", selectedOption);
-
     if (selectedOption?.value !== undefined) {
       const value = selectedOption.value.toLowerCase().replace(/\s/g, "-");
       const label = selectedOption.label.toLowerCase().replace(/\s/g, "-");
@@ -64,11 +60,9 @@ const CustomSearchBar = (props: Props<any>) => {
       setSearchQuery(`${value}/${label}`);
 
       const path = `/${value}/${label}`;
-      console.log("Constructed path:", path);
 
       router.push(path);
     } else {
-      console.log("Value is undefined, navigation aborted.");
     }
   };
 
