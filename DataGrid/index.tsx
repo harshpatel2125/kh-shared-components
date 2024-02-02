@@ -179,7 +179,11 @@ const DataGrid: FC<IDataGrid> = ({
   const [selectedRowData, setSelectedRowData] = useState<any | null>(null);
   const [showTaxPopup, setShowTaxPopup] = useState<boolean>(false);
 
-  function getClickHandlerCallback(actionType: string, rowData: any) {
+  function getClickHandlerCallback(
+    data: any,
+    actionType: string,
+    rowData: any
+  ) {
     let pageApis =
       functionType &&
       pageType &&
@@ -198,11 +202,9 @@ const DataGrid: FC<IDataGrid> = ({
         // call edit record
 
         return () => {
-          const { UserID } = JSON.parse(
-            getLocalStorage(LocalStorageUtils.userInfo)
-          );
+          console.log({ rowData, data, actionType }, "aniket");
 
-          router.push(`${pathname}/edit/${UserID}`);
+          // router.push(`${pathname}/edit/${data?.userId}`);
         };
 
       case TableCellActionTypes.Rights:
@@ -243,14 +245,15 @@ const DataGrid: FC<IDataGrid> = ({
   };
   [selectedRowData];
 
-  const cellRendererFunc = (cellIcons: any) => {
+  const cellRendererFunc = (data: any, cellIcons: any) => {
     return (
       <div className="flex h-full flex-row gap-0.5 items-center">
         {cellIcons?.map((item: any, i: number) => {
           const clickHandler = () => {
             const handler = getClickHandlerCallback(
+              data,
               item?.actionType,
-              rowData[i]
+              rowData
             );
             handler();
           };
@@ -279,7 +282,7 @@ const DataGrid: FC<IDataGrid> = ({
       headerName: actionColumn.headerName,
       field: actionColumn.field,
       cellRenderer: (params: any) =>
-        cellRendererFunc(actionColumn?.cellActions),
+        cellRendererFunc(params, actionColumn?.cellActions),
     };
     columnDefs[0] = updatedColumn;
     return columnDefs;
