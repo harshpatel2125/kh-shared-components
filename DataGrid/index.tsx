@@ -12,7 +12,7 @@ import { TETooltip } from "tw-elements-react";
 import GridDropdown from "./GridDropdown";
 import { CellEditorComponent } from "ag-grid-community/dist/lib/components/framework/componentTypes";
 import CustomPopup from "../popup/index";
-import { getLocalStorage } from "@/utils/localStorage";
+import { LocalStorageUtils, getLocalStorage } from "@/utils/localStorage";
 import { FunctionPagesApis } from "@/constants/functionPagesApis";
 import { IApiRequestsType } from "@/constants/functionPagesApis/apiTypes";
 import TaxPatternPopup from "../popup/TaxPatternPopup";
@@ -152,7 +152,7 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
   const [selectedRowData, setSelectedRowData] = useState<any | null>(null);
   const [showTaxPopup, setShowTaxPopup] = useState<boolean>(false);
 
-  function getClickHandlerCallback(actionType: string, rowData: any) {
+  function getClickHandlerCallback(data: any, actionType: string, rowData: any) {
     let pageApis = functionType && pageType && FunctionPagesApis.hasOwnProperty(functionType) && FunctionPagesApis[functionType][pageType];
 
     switch (actionType) {
@@ -167,9 +167,9 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
         // call edit record
 
         return () => {
-          const { UserID } = JSON.parse(getLocalStorage("UserInfo"));
+          console.log({ rowData, data, actionType }, "aniket");
 
-          router.push(`${pathname}/edit/${UserID}`);
+          // router.push(`${pathname}/edit/${data?.userId}`);
         };
 
       case TableCellActionTypes.Rights:
@@ -210,12 +210,12 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
   };
   [selectedRowData];
 
-  const cellRendererFunc = (cellIcons: any) => {
+  const cellRendererFunc = (data: any, cellIcons: any) => {
     return (
       <div className='flex h-full flex-row gap-0.5 items-center'>
         {cellIcons?.map((item: any, i: number) => {
           const clickHandler = () => {
-            const handler = getClickHandlerCallback(item?.actionType, rowData[i]);
+            const handler = getClickHandlerCallback(data, item?.actionType, rowData);
             handler();
           };
 
@@ -242,7 +242,7 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
     const updatedColumn = {
       headerName: actionColumn.headerName,
       field: actionColumn.field,
-      cellRenderer: (params: any) => cellRendererFunc(actionColumn?.cellActions),
+      cellRenderer: (params: any) => cellRendererFunc(params, actionColumn?.cellActions),
     };
     columnDefs[0] = updatedColumn;
     return columnDefs;

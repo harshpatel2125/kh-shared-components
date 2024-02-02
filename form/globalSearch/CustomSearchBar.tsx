@@ -1,9 +1,20 @@
 "use client";
 
-import React, { ChangeEvent, MouseEventHandler, useEffect, useState } from "react";
-import Select, { ActionMeta, components, ControlProps, Props, StylesConfig } from "react-select";
+import React, {
+  ChangeEvent,
+  MouseEventHandler,
+  useEffect,
+  useState,
+} from "react";
+import Select, {
+  ActionMeta,
+  components,
+  ControlProps,
+  Props,
+  StylesConfig,
+} from "react-select";
 import SearchIcon from "@/assets/icons/SearchIcon";
-import { getLocalStorage } from "@/utils/localStorage";
+import { LocalStorageUtils, getLocalStorage } from "@/utils/localStorage";
 import { usePathname, useRouter } from "next/navigation";
 const primaryColor = "#2C2C2C";
 const secondaryColor = "#eeeff1";
@@ -15,10 +26,7 @@ const Control = ({ children, ...props }: ControlProps<any, false>) => {
 
   return (
     <components.Control {...props}>
-      <span
-        onMouseDown={onEmojiClick}
-        style={style}
-      >
+      <span onMouseDown={onEmojiClick} style={style}>
         {emoji}
       </span>
 
@@ -36,16 +44,22 @@ const CustomSearchBar = (props: Props<any>) => {
   const [data, setData] = useState<any>([]);
 
   React.useEffect(() => {
-    const activeRight = getLocalStorage("signInUserRightsSidebar") || null;
+    const activeRight =
+      getLocalStorage(LocalStorageUtils.signInUserRightsSidebar) || null;
 
-    const SignInUserRightsSidebar = JSON.parse(getLocalStorage("signInUserRightsSidebar") || "[]");
+    const SignInUserRightsSidebar = JSON.parse(
+      getLocalStorage(LocalStorageUtils.signInUserRightsSidebar) || "[]"
+    );
 
     const transformedData: { value: string; label: string }[] = [];
 
     SignInUserRightsSidebar.forEach((item: any) => {
       item.Functions.forEach((func: any) => {
         func.Pages.forEach((page: any) => {
-          transformedData.push({ value: func.FunctionName, label: page.PageName });
+          transformedData.push({
+            value: func.FunctionName,
+            label: page.PageName,
+          });
         });
       });
     });
@@ -145,7 +159,7 @@ const CustomSearchBar = (props: Props<any>) => {
       components={{ Control, DropdownIndicator: null }}
       isSearchable
       isClearable
-      name='emoji'
+      name="emoji"
       options={data}
       onChange={onChange}
 
