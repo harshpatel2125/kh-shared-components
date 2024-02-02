@@ -23,7 +23,7 @@ const DatePickerReact: React.FC<DatePickerReactProps> = ({ onChange, placeholder
 
   return (
     <DatePicker
-      className='border py-1 px-2 text-xs rounded'
+      className='border py-1.5 px-2 text-xs rounded w-[300px]'
       selected={date}
       isClearable
       placeholderText={placeholder || "Please pick the date"}
