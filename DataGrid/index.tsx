@@ -343,7 +343,7 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
           </div>
           {enableSearch && (
             <div className='flex gap-2 content-center '>
-              <div className='w-full'>
+              <div className='w-full py-0.5'>
                 {/* <TextInput
                   className='h-7  '
                   // label="Search . . ."
@@ -354,7 +354,7 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
                   }}
                 /> */}
                 <input
-                  className='border border-slate-300 focus:outline-none focus:border-slate-900 rounded py-[4px] w-52 px-3'
+                  className='border border-slate-300 focus:outline-none focus:border-slate-900 rounded py-[2px] w-52 px-3'
                   placeholder='search . . . '
                   value={quickFilterText}
                   onChange={(e) => {
