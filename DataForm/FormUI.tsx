@@ -5,6 +5,8 @@ import SelectDropdown from "../select/select";
 import AddButton from "./formInputPopup";
 import { CustomPopupWrapper } from "../tw-elements";
 import FormInputPopup from "./formInputPopup";
+import DatePickerReact from "../FormElements/DateTimePicker";
+import DateTimePicker from "../form/dateTimePicker";
 
 const TextInput = dynamic(() => import("../FormElements/TextInput"), {
   ssr: false,
@@ -145,8 +147,10 @@ const FormUI: FC<DataFormProps> = ({ column, containerClassName, formError, form
 
   const renderFields = (ele: IFieldType, index: number) => {
     switch (ele?.type) {
-      case IInputType.Text:
       case IInputType.DateTimePicker:
+        return <DateTimePicker />;
+
+      case IInputType.Text:
       case IInputType.AutoComplete:
         return (
           <TextInput

@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState, ChangeEvent, useRef } from "react";
 
 const DateTimePicker: React.FC = () => {
@@ -20,22 +18,28 @@ const DateTimePicker: React.FC = () => {
     }
   };
 
+  const handleDivClick = () => {
+    // Focus on the date input when the surrounding div is clicked
+    dateInputRef.current?.focus();
+  };
+
   return (
     <>
       <div
-        style={{ width: "175px", gap: "10px" }}
-        className="flex items-center border border-solid border-base-300 px-2 py-1 rounded-md focus:border-blue-500 focus:outline-none "
+        style={{ width: "100%", gap: "10px" }}
+        className='h-[30px] flex items-center border border-solid border-stone-300 px-2 py-0 rounded focus:border-stone-200 focus:outline-none '
+        onClick={handleDivClick} // Attach onClick event handler to the div
       >
         <input
-          type="checkbox"
+          type='checkbox'
           checked={!!dateTime}
           onClick={handleCheckboxClick}
-          className="hover:bg-sky-700"
+          className='hover:bg-sky-700'
         />
 
         <input
-          type="date"
-          className="prevent-select text-sm outline-0"
+          type='date'
+          className='prevent-select text-xs outline-0 p-0 py-0 '
           onChange={handleDateTimeChange}
           value={dateTime}
           ref={dateInputRef}

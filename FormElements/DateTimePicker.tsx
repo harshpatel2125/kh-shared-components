@@ -6,7 +6,7 @@ interface DatePickerReactProps {
   placeholder?: string;
   initialDate?: Date;
   onChange?: ((date: Date | null) => void) | undefined;
-  value?: Date | null;
+  value?: any;
 }
 
 const DatePickerReact: React.FC<DatePickerReactProps> = ({ onChange, placeholder, initialDate, value }) => {
