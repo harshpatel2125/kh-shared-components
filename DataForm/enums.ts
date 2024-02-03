@@ -14,3 +14,8 @@ export enum IInputType {
   File = "File",
   Checkbox="checkbox",
 }
+
+export enum IApiType{
+  get='get',
+  post='post',
+}
