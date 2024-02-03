@@ -50,7 +50,7 @@ const TableHeader = ({ headerButtons, tableSitemap, title, handleCreateNew, hand
         }
       `}</style>
 
-      <div className={`rounded   mb-0.5 text-white flex justify-between items-center p-1  bg-gray-600  w-full`}>
+      <div className={`rounded  mb-0.5 text-white flex justify-between items-center p-1  bg-gray-600  w-full`}>
         <h4 className='ml-1 text-sm font-semibold  '>{title}</h4>
         <div className='flex items-center gap-2'>
           <div className='flex gap-1  items-center'>
