@@ -5,6 +5,7 @@ import SelectDropdown from "../select/select";
 import AddButton from "./formInputPopup";
 import { CustomPopupWrapper } from "../tw-elements";
 import FormInputPopup from "./formInputPopup";
+import DatePickerReact from "../FormElements/DateTimePicker";
 
 const TextInput = dynamic(() => import("../FormElements/TextInput"), {
   ssr: false,
@@ -43,6 +44,9 @@ export interface IFieldType {
   popupTitle?: string;
   inputReadOnlyBg?: boolean;
   inputMandatoryBg?: boolean;
+  mandatory?: boolean;
+  dropdownBtnLabel: string;
+  defaultValue?: optionsType;
 }
 
 export interface IDataFormReturnType {
@@ -153,11 +157,26 @@ const FormUI: FC<DataFormProps> = ({
 
   const renderFields = (ele: IFieldType, index: number) => {
     switch (ele?.type) {
-      case IInputType.Text:
       case IInputType.DateTimePicker:
+        return (
+          <TextInput
+            className="mb-2"
+            inputReadOnlyBg={ele.inputReadOnlyBg}
+            inputMandatoryBg={ele.inputMandatoryBg}
+            readOnly={ele?.readOnly}
+            required={ele?.required}
+            emptyError={ele?.emptyError}
+            label={ele?.label || ele?.key}
+            value={ele?.value}
+            onChange={(e) => handleChange(e, index, ele?.type)}
+          />
+        );
+
+      case IInputType.Text:
       case IInputType.AutoComplete:
         return (
           <TextInput
+            className="mb-2"
             inputReadOnlyBg={ele.inputReadOnlyBg}
             inputMandatoryBg={ele.inputMandatoryBg}
             readOnly={ele?.readOnly}
@@ -171,6 +190,7 @@ const FormUI: FC<DataFormProps> = ({
       case IInputType.Number:
         return (
           <TextInput
+            className="mb-2"
             inputReadOnlyBg={ele.inputReadOnlyBg}
             inputMandatoryBg={ele.inputMandatoryBg}
             type="number"
@@ -185,6 +205,7 @@ const FormUI: FC<DataFormProps> = ({
       case IInputType.Password:
         return (
           <TextInput
+            className="mb-2"
             inputReadOnlyBg={ele.inputReadOnlyBg}
             inputMandatoryBg={ele.inputMandatoryBg}
             type="password"
@@ -203,20 +224,23 @@ const FormUI: FC<DataFormProps> = ({
 
       case IInputType.DropDown:
         return (
-          <div className={`${ele.className} flex w-100 gap-2`}>
+          <div className={`${ele.className} mb-2 flex w-100 gap-2`}>
             <div className="flex-1">
               <SelectDropdown
+                dropdownBtnLabel={ele.dropdownBtnLabel}
                 label={ele?.label || "label"}
                 onChange={(e) => handleChange(e, index, ele?.type)}
                 options={
                   ele?.options ? ele.options : [{ label: "one", value: "one" }]
                 }
+                mandatory={ele?.mandatory}
                 isSearchable={true}
                 value={ele?.selectedOption ? [ele?.selectedOption] : []}
+                defaultValue={ele?.defaultValue}
               />
             </div>
             {ele?.showPopup ? (
-              <div>
+              <div className="h-full">
                 <FormInputPopup title={ele?.popupTitle} />
               </div>
             ) : null}
@@ -226,6 +250,7 @@ const FormUI: FC<DataFormProps> = ({
       case IInputType.Email:
         return (
           <TextInput
+            className="mb-2"
             inputReadOnlyBg={ele.inputReadOnlyBg}
             inputMandatoryBg={ele.inputMandatoryBg}
             type="email"
@@ -256,7 +281,9 @@ const FormUI: FC<DataFormProps> = ({
       case IInputType.Image:
       case IInputType.File:
         return (
-          <div className={`row-span-4 flex justify-start ${ele?.className}`}>
+          <div
+            className={`row-span-4 flex justify-start mb-2 ${ele?.className}`}
+          >
             <ImageInput
               selectedImageUri={ele?.value?.toString()}
               onChange={(e) => handleChange(e, index, ele?.type)}
@@ -280,20 +307,23 @@ const FormUI: FC<DataFormProps> = ({
     }
   };
 
+  if (!formState || !formState?.length) return null;
+
   return (
     <>
+      {/* ------ table-wrapper this class is only for box shadow ------ */}
       <div
-        className="table-wrapper  bg-white rounded"
-        style={{ height: "82vh" }}
+        className="border bg-white rounded"
+        // style={{ height: "82vh" }}
       >
-        <div className="h-full p-3 ">
+        <div className="h-full p-3  ">
           <div className={containerClassName}>
             {/* using reusable table header for displaying form buttons */}
 
             <div
               className={`grid grid-cols-${column || 3} ${
                 formError ? "gap-y-6" : "gap-y-3"
-              } gap-x-3`}
+              } gap-x-3 `}
             >
               {formState &&
                 formState?.length > 0 &&

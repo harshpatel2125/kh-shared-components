@@ -1,13 +1,8 @@
+"use client";
 import React from "react";
-import FilterIcon from "@/assets/icons/FilterIcon";
 import Button, { IButton, IButtonType } from "../button";
-import Drawer from "../drawer";
-import AscendingIcon from "@/assets/icons/ascending.svg";
-import DescendingIcon from "@/assets/icons/descending.svg";
-import Image from "next/image";
-import Buttons from "../ButtonGroup/Button";
-import UpArrowIcon from "@/assets/icons/UpArrowIcon";
-import DownArrowIcon from "@/assets/icons/DownArrowIcon";
+import { useRouter } from "next/navigation";
+import { ROUTES } from "@/constants/routes";
 
 export interface TableHeaderProps {
   headerButtons?: Array<IButton> | undefined;
@@ -18,36 +13,33 @@ export interface TableHeaderProps {
   handleGoBack?: () => any;
   drawerId?: string;
   showFilterBtn?: boolean;
-  showSortButtons?: boolean; // Controls visibility in table header
   handleSort?: (sortType: any) => any;
 }
 
-const TableHeader = ({
-  headerButtons,
-  tableSitemap,
-  title,
-  handleCreateNew,
-  handleFormSubmission,
-  handleGoBack,
-  drawerId,
-  showFilterBtn,
-  showSortButtons, // Default to true if not provided
-  handleSort,
-}: TableHeaderProps) => {
+const TableHeader = ({ headerButtons, tableSitemap, title, handleCreateNew, handleFormSubmission, handleGoBack, drawerId, showFilterBtn, handleSort }: TableHeaderProps) => {
+  const router = useRouter();
   const getClickHandler = (btn: any) => {
-    const clickHandlerFunc =
-      btn?.btnType === IButtonType.CreateNew
-        ? handleCreateNew
-        : btn?.btnType === IButtonType.FormSubmit
-        ? handleFormSubmission
-        : btn?.btnType === IButtonType.GoBack
-        ? handleGoBack
-        : btn?.btnType === IButtonType.sortAsc
-        ? handleSort
-        : btn?.btnType === IButtonType.sortAsc
-        ? handleSort
-        : btn?.onClick;
-    return clickHandlerFunc;
+    //button type will be from IButtontype enum only
+    switch (btn?.btnType) {
+      case IButtonType.CreateNew:
+        return handleCreateNew;
+      case IButtonType.FormSubmit:
+        return handleFormSubmission;
+      case IButtonType.GoBack:
+        return handleGoBack;
+      case IButtonType.sortAsc:
+        return handleSort;
+      case IButtonType.sortDesc:
+        return handleSort;
+      case IButtonType.approve:
+        return () => console.log("handle callback for approve");
+      case IButtonType.reject:
+        return () => console.log("handle callback for reject");
+      case IButtonType.purchase_order_checklist:
+        return () => router.push(ROUTES.purchaseOrderChecklist);
+      default:
+        return btn?.onClick;
+    }
   };
 
   return (
@@ -58,60 +50,38 @@ const TableHeader = ({
         }
       `}</style>
 
-      <div
-        className={`table-header rounded mb-1 text-white flex justify-between items-center p-1  bg-gray-600  w-full`}
-      >
-        <h4 className="font-normal text-sm ">{title}</h4>
-        <div className="flex items-center gap-2">
-          <div className="flex gap-3 ms-3 items-center">
+      <div className={`rounded   mb-0.5 text-white flex justify-between items-center p-1  bg-gray-600  w-full`}>
+        <h4 className='ml-1 text-sm font-semibold  '>{title}</h4>
+        <div className='flex items-center gap-2'>
+          <div className='flex gap-1  items-center'>
             {/* Other Buttons */}
 
             {headerButtons?.map((btn, i) => {
               const clickHandlerFunc = getClickHandler(btn);
-              console.log(
-                btn.btnType == IButtonType.sortAsc ||
-                  btn.btnType == IButtonType.sortDesc
-                  ? clickHandlerFunc
-                  : "no"
-              );
 
-              if (btn?.btnType === IButtonType.Filter && showFilterBtn) {
-                return (
-                  <label
-                    htmlFor={drawerId}
-                    className="font-light text-xs pt-1 pb-1 min-h-5 h-5 leading-none btn btn-xs btn-outine"
-                    key={i}
-                  >
-                    <FilterIcon height="14" width="14" color="#000" />
-                  </label>
-                );
-              } else if (
-                (btn?.btnType === IButtonType.sortAsc ||
-                  btn?.btnType === IButtonType.sortDesc) &&
-                showSortButtons
-              ) {
-                return (
-                  <Buttons
-                    key={i}
-                    onClick={() => clickHandlerFunc(btn.btnType)}
-                    btnSize=""
-                    icon={btn.icon}
-                    label={btn.btnName}
-                    btnVariant="btn  btn-xs "
-                  />
-                );
+              if (btn?.btnType === IButtonType.Filter) {
+                if (showFilterBtn) {
+                  return (
+                    <label
+                      htmlFor={drawerId}
+                      className='mr-2 cursor-pointer'
+                      key={i}
+                    >
+                      {btn.icon}
+                    </label>
+                  );
+                }
               } else {
                 return (
-                  <Buttons
-                    key={i}
-                    onClick={clickHandlerFunc}
-                    btnSize=""
-                    // color={btn.color}
-                    icon={btn.icon}
-                    // btnName={btn.btnName}
-                    label={btn.btnName}
-                    btnVariant="btn  btn-xs "
-                  />
+                  <>
+                    <Button
+                      key={i}
+                      icon={btn.icon}
+                      onClick={() => (clickHandlerFunc ? clickHandlerFunc(btn.btnType) : null)}
+                      btnName={btn.btnName}
+                      className={btn?.className}
+                    />
+                  </>
                 );
               }
             })}

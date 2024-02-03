@@ -23,20 +23,14 @@ export enum IButtonType {
   Reset = "reset",
   sortAsc = "sortasc",
   sortDesc = "sortdesc",
+  payment = "payment",
+  approve = "approve",
+  reject = "reject",
+  purchase_order_checklist = "purchase_order_checklist",
+  add = "add",
 }
 
-type ButtonColorType =
-  | IButtonColor
-  | "primary"
-  | "secondary"
-  | "tertiary"
-  | "accent"
-  | "neutral"
-  | "info"
-  | "success"
-  | "warning"
-  | "error"
-  | "light";
+type ButtonColorType = IButtonColor | "primary" | "secondary" | "tertiary" | "accent" | "neutral" | "info" | "success" | "warning" | "error" | "light";
 
 export interface IButton {
   color?: ButtonColorType;
@@ -46,16 +40,10 @@ export interface IButton {
   onClick?: (e?: any) => void;
   className?: string;
   btnType?: string;
+  iconClassName?: string;
 }
 
-const Button: React.FC<IButton> = ({
-  icon,
-  children,
-  color,
-  onClick,
-  className,
-  btnName,
-}) => {
+const Button: React.FC<IButton> = ({ iconClassName, icon, children, color, onClick, className, btnName }) => {
   const bgColorHandler = () => {
     switch (color) {
       case IButtonColor.Primary:
@@ -83,17 +71,21 @@ const Button: React.FC<IButton> = ({
     }
   };
   return (
-    <button
-      onClick={onClick}
-      className={clsx(
-        "btn border-0 py-[6px] px-[5px] pe-[6px]  h-min min-h-min antialiased hover:text-white hover:bg-tertiary-dark text-xs font-normal gap-1 ",
-        bgColorHandler(),
-        className
-      )}
-    >
-      {icon || ""}
-      {children || btnName}
-    </button>
+    <>
+      {/* <button
+        onClick={onClick}
+        className={clsx("btn btn-xs btn-style flex align-middle justify-center    text-center     hover:text-black hover:bg-gray-200 text-[11px] text-slate-700 font-normal gap-1 ", bgColorHandler(), className)}
+      >
+        <span className=''> {icon || ""}</span>
+        {children || btnName}
+      </button> */}
+      <button
+        onClick={onClick}
+        className={clsx("flex text-[10px]  h-5 w-fit items-center justify-center  py-[3px] rounded-sm", bgColorHandler(), className)}
+      >
+        <p className={` ${icon ? "mr-0.5" : ""} `}> {icon || ""}</p> {children || btnName}
+      </button>
+    </>
   );
 };
 

@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import Subtitle from "./Subtitle";
 import { usePathname, useRouter } from "next/navigation";
 import TabList from "./TabList";
+import TabTwo from "./TabList/TabTwo";
 
 interface BreadcrumbsProps {
   children: any;
@@ -15,13 +17,14 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ children, hideDivider }) => {
 
   return (
     <div className={"card w-full "}>
-      <div className="flex justify-between align-middle h-fit ">
-      <div className="">
-          <Tabs />
+      <div className='px-3 flex justify-between align-middle h-fit '>
+        <div className=' mt-2'>
+          {/* <Tabs /> */}
+          <TabTwo />
         </div>
-        <div className=" mt-1">
+        <div className=' mt-1 '>
           <Subtitle styleClass={"text-[#48a4f9] pl-3"}>
-            <div className="text-sm breadcrumbs pt-1 pb-0">
+            <div className='text-sm breadcrumbs pt-1 pb-1'>
               <ul>
                 {breads &&
                   breads?.length > 0 &&
@@ -37,13 +40,9 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ children, hideDivider }) => {
                               router.back();
                             }
                           }}
-                          className=" ml-1 capitalize text-slate-700 font-[300]  text-xs "
+                          className=' capitalize text-slate-700 font-[300]  text-[10px] '
                         >
-                          {index === breads?.length - 1 ? (
-                            ele?.split("-")?.join(" ")
-                          ) : (
-                            <a>{ele?.split("-")?.join(" ")}</a>
-                          )}
+                          {index === breads?.length - 1 ? ele?.split("-")?.join(" ") : <a>{ele?.split("-")?.join(" ")}</a>}
                         </li>
                       );
                     } else return null;
@@ -52,7 +51,6 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ children, hideDivider }) => {
             </div>
           </Subtitle>
         </div>
-       
       </div>
       {/* ----- commented bottom divider line ------ */}
       {/* {!hideDivider ? (
@@ -62,20 +60,23 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ children, hideDivider }) => {
       ) : (
         <div className="mt-5"></div>
       )} */}
-      <div>
-      </div>
-      <div className="h-full w-full  ">{children}</div>
+      <div></div>
+      <div className='px-3 h-full w-full  '>{children}</div>
     </div>
   );
 };
 
-
-
 const Tabs: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('Tab1'); // Set the initial active tab
+  const [activeTab, setActiveTab] = useState("Tab1");
+  const [tabs, setTabs] = useState<string[]>([]);
 
-  // Define your tabs
-  const tabs = ['user', 'Tab2', 'Tab3'];
+  // Fetch tabs from localStorage when component mounts
+  useEffect(() => {
+    const storedTabsString = localStorage.getItem("");
+    const storedTabs = storedTabsString ? JSON.parse(storedTabsString) : [];
+    setTabs(storedTabs);
+    console.log("tabssss", storedTabs);
+  }, []);
 
   // Handle tab change
   const handleTabChange = (tab: string) => {
@@ -85,15 +86,13 @@ const Tabs: React.FC = () => {
   return (
     <div>
       {/* Render other content as needed */}
-      <TabList tabs={tabs} activeTab={activeTab} onTabChange={handleTabChange} />
-
-      {/* Render content for the active tab */}
-      {/* {activeTab === 'Tab1' && <div>Content for Tab 1</div>}
-      {activeTab === 'Tab2' && <div>Content for Tab 2</div>}
-      {activeTab === 'Tab3' && <div>Content for Tab 3</div>} */}
+      <TabList
+        tabs={tabs}
+        activeTab={activeTab}
+        onTabChange={handleTabChange}
+      />
     </div>
   );
 };
-
 
 export default Breadcrumbs;
