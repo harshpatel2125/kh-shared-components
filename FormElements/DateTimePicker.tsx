@@ -9,12 +9,7 @@ interface DatePickerReactProps {
   value?: any;
 }
 
-const DatePickerReact: React.FC<DatePickerReactProps> = ({
-  onChange,
-  placeholder,
-  initialDate,
-  value,
-}) => {
+const DatePickerReact: React.FC<DatePickerReactProps> = ({ onChange, placeholder, initialDate, value }) => {
   const [date, setDate] = useState<Date | null>(initialDate || null);
 
   useEffect(() => {
@@ -28,7 +23,7 @@ const DatePickerReact: React.FC<DatePickerReactProps> = ({
 
   return (
     <DatePicker
-      className="border py-1 px-2 text-xs rounded cursor-pointer"
+      className='border py-1.5 px-2 text-xs rounded w-[300px]'
       selected={date}
       isClearable
       placeholderText={placeholder || "Please pick the date"}

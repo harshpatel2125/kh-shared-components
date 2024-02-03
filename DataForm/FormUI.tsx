@@ -6,6 +6,7 @@ import AddButton from "./formInputPopup";
 import { CustomPopupWrapper } from "../tw-elements";
 import FormInputPopup from "./formInputPopup";
 import DatePickerReact from "../FormElements/DateTimePicker";
+import DateTimePicker from "../form/dateTimePicker";
 
 const TextInput = dynamic(() => import("../FormElements/TextInput"), {
   ssr: false,
@@ -71,14 +72,7 @@ interface DataFormProps {
    */
 }
 
-const FormUI: FC<DataFormProps> = ({
-  column,
-  containerClassName,
-  formError,
-  formState,
-  handleTogglePassword,
-  setFieldsState,
-}) => {
+const FormUI: FC<DataFormProps> = ({ column, containerClassName, formError, formState, handleTogglePassword, setFieldsState }) => {
   const getFileUri = (event: any, fieldIndex: any) => {
     const binaryFile = event?.target?.files?.[0];
     if (binaryFile) {
@@ -135,11 +129,7 @@ const FormUI: FC<DataFormProps> = ({
     );
   };
 
-  const handleChange = (
-    event: any,
-    fieldIndex: number,
-    fieldType: IInputType
-  ) => {
+  const handleChange = (event: any, fieldIndex: number, fieldType: IInputType) => {
     switch (fieldType) {
       case IInputType.Image:
         getFileUri(event, fieldIndex);
@@ -159,16 +149,9 @@ const FormUI: FC<DataFormProps> = ({
     switch (ele?.type) {
       case IInputType.DateTimePicker:
         return (
-          <TextInput
-            className="mb-2"
-            inputReadOnlyBg={ele.inputReadOnlyBg}
-            inputMandatoryBg={ele.inputMandatoryBg}
+          <DateTimePicker
             readOnly={ele?.readOnly}
             required={ele?.required}
-            emptyError={ele?.emptyError}
-            label={ele?.label || ele?.key}
-            value={ele?.value}
-            onChange={(e) => handleChange(e, index, ele?.type)}
           />
         );
 
@@ -176,9 +159,7 @@ const FormUI: FC<DataFormProps> = ({
       case IInputType.AutoComplete:
         return (
           <TextInput
-            className="mb-2"
-            inputReadOnlyBg={ele.inputReadOnlyBg}
-            inputMandatoryBg={ele.inputMandatoryBg}
+            className='mb-2'
             readOnly={ele?.readOnly}
             required={ele?.required}
             emptyError={ele?.emptyError}
@@ -190,10 +171,8 @@ const FormUI: FC<DataFormProps> = ({
       case IInputType.Number:
         return (
           <TextInput
-            className="mb-2"
-            inputReadOnlyBg={ele.inputReadOnlyBg}
-            inputMandatoryBg={ele.inputMandatoryBg}
-            type="number"
+            className='mb-2'
+            type='number'
             readOnly={ele?.readOnly}
             required={ele?.required}
             emptyError={ele?.emptyError}
@@ -205,10 +184,8 @@ const FormUI: FC<DataFormProps> = ({
       case IInputType.Password:
         return (
           <TextInput
-            className="mb-2"
-            inputReadOnlyBg={ele.inputReadOnlyBg}
-            inputMandatoryBg={ele.inputMandatoryBg}
-            type="password"
+            className='mb-2'
+            type='password'
             readOnly={ele?.readOnly}
             required={ele?.required}
             label={ele?.label || ele?.key}
@@ -225,22 +202,21 @@ const FormUI: FC<DataFormProps> = ({
       case IInputType.DropDown:
         return (
           <div className={`${ele.className} mb-2 flex w-100 gap-2`}>
-            <div className="flex-1">
+            <div className='flex-1'>
               <SelectDropdown
+                required={ele?.required}
                 dropdownBtnLabel={ele.dropdownBtnLabel}
                 label={ele?.label || "label"}
                 onChange={(e) => handleChange(e, index, ele?.type)}
-                options={
-                  ele?.options ? ele.options : [{ label: "one", value: "one" }]
-                }
-                mandatory={ele?.mandatory}
+                options={ele?.options ? ele.options : [{ label: "one", value: "one" }]}
+                readOnly={ele?.readOnly}
                 isSearchable={true}
                 value={ele?.selectedOption ? [ele?.selectedOption] : []}
                 defaultValue={ele?.defaultValue}
               />
             </div>
             {ele?.showPopup ? (
-              <div className="h-full">
+              <div className='h-full'>
                 <FormInputPopup title={ele?.popupTitle} />
               </div>
             ) : null}
@@ -250,10 +226,8 @@ const FormUI: FC<DataFormProps> = ({
       case IInputType.Email:
         return (
           <TextInput
-            className="mb-2"
-            inputReadOnlyBg={ele.inputReadOnlyBg}
-            inputMandatoryBg={ele.inputMandatoryBg}
-            type="email"
+            className='mb-2'
+            type='email'
             readOnly={ele?.readOnly}
             required={ele?.required}
             label={ele?.label || ele?.key}
@@ -281,10 +255,10 @@ const FormUI: FC<DataFormProps> = ({
       case IInputType.Image:
       case IInputType.File:
         return (
-          <div
-            className={`row-span-4 flex justify-start mb-2 ${ele?.className}`}
-          >
+          <div className={`row-span-4 flex justify-start mb-2 ${ele?.className}`}>
             <ImageInput
+              required={ele?.required}
+              label={ele?.label}
               selectedImageUri={ele?.value?.toString()}
               onChange={(e) => handleChange(e, index, ele?.type)}
             />
@@ -293,10 +267,17 @@ const FormUI: FC<DataFormProps> = ({
       case IInputType.Checkbox:
         return (
           <div className={`col-span-1 `}>
-            <div className="flex items-center gap-2 h-7">
+            <div className='flex items-center gap-2 h-7'>
               {/* need to be change later with actual component  */}
-              <input type="checkbox" name="mycheckbox" id="mycheckbox" />
-              <label htmlFor="mycheckbox" className="text-xs text-[#737373]">
+              <input
+                type='checkbox'
+                name='mycheckbox'
+                id='mycheckbox'
+              />
+              <label
+                htmlFor='mycheckbox'
+                className='text-xs text-[#737373]'
+              >
                 {ele.label}
               </label>
             </div>
@@ -313,26 +294,14 @@ const FormUI: FC<DataFormProps> = ({
     <>
       {/* ------ table-wrapper this class is only for box shadow ------ */}
       <div
-        className="border bg-white rounded"
+        className='border bg-white rounded'
         // style={{ height: "82vh" }}
       >
-        <div className="h-full p-3  ">
+        <div className='h-full p-3  '>
           <div className={containerClassName}>
             {/* using reusable table header for displaying form buttons */}
 
-            <div
-              className={`grid grid-cols-${column || 3} ${
-                formError ? "gap-y-6" : "gap-y-3"
-              } gap-x-3 `}
-            >
-              {formState &&
-                formState?.length > 0 &&
-                formState?.map((ele: IFieldType, index: number) => (
-                  <React.Fragment key={index}>
-                    {renderFields(ele, index)}
-                  </React.Fragment>
-                ))}
-            </div>
+            <div className={`grid grid-cols-${column || 3} ${formError ? "gap-y-6" : "gap-y-3"} gap-x-3 `}>{formState && formState?.length > 0 && formState?.map((ele: IFieldType, index: number) => <React.Fragment key={index}>{renderFields(ele, index)}</React.Fragment>)}</div>
           </div>
         </div>
       </div>

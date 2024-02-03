@@ -17,6 +17,8 @@ import { FunctionPagesApis } from "@/constants/functionPagesApis";
 import { IApiRequestsType } from "@/constants/functionPagesApis/apiTypes";
 import TaxPatternPopup from "../popup/TaxPatternPopup";
 import NotificationIcon from "@/assets/icons/NotificationIcon";
+// import jsPDF from 'jspdf';
+// import 'jspdf-autotable';
 
 var checkboxSelection = function (params: CheckboxSelectionCallbackParams) {
   // we put checkbox on the name if we are not doing grouping
@@ -50,8 +52,17 @@ interface IDataGrid {
   enablePDFExport?: any;
 }
 
-const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, enablePDFExport, onEditPress, disablePagination, defaultPageSize, pageSizeSelector, gridHeight, enableCSVExport, enableSearch, propertyForEdit, enableEditBtn, functionType, pageType, onDropdownChange, onTextFieldChange }) => {
+const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEditPress, disablePagination, defaultPageSize, pageSizeSelector, gridHeight, enableCSVExport, enablePDFExport, enableSearch, propertyForEdit, enableEditBtn, functionType, pageType, onDropdownChange, onTextFieldChange }) => {
   const gridRef = useRef<AgGridReact>(null);
+  const navigateToEditPage = (editId: string, data: any) => {
+    if (data && data.id) {
+      // Assuming 'edit' is the route for editing, and 'id' is the parameter for the edit page
+      router.push(`/edit/${editId}?data=${encodeURIComponent(JSON.stringify(data))}`);
+      console.log("Edit ID:", editId); // Log the ID to the console
+    } else {
+      console.error("Invalid rowData:", data);
+    }
+  };
 
   const [quickFilterText, setQuickFilterText] = React.useState("");
 
@@ -166,11 +177,28 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, enable
 
       case TableCellActionTypes.Edit:
         // call edit record
-
         return () => {
-          console.log({ rowData, data, actionType }, "aniket");
+          if (rowData && rowData.length > 0) {
+            const firstRowData = rowData[0]; // Assuming you want the id from the first row
+            if (firstRowData && firstRowData.id) {
+              // Define the router instance
 
-          // router.push(`${pathname}/edit/${data?.userId}`);
+              // Fetch data for editing (Replace 'YourAPIEndpoint' with the actual API endpoint)
+              fetch(`https://kh-pos-backend-api.onrender.com/api/User/${firstRowData.id}`)
+                .then((response) => response.json())
+                .then((data) => {
+                  // Assuming you have a function to navigate to the edit page
+                  router.push(`/edit/${firstRowData.id}?data=${encodeURIComponent(JSON.stringify(data))}`);
+                })
+                .catch((error) => console.error("Error fetching data:", error));
+
+              console.log("Edit ID:", firstRowData.id);
+            } else {
+              console.error("Invalid row data:", firstRowData);
+            }
+          } else {
+            console.error("No row data available");
+          }
         };
 
       case TableCellActionTypes.Rights:
@@ -287,6 +315,35 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, enable
     gridRef.current!.api.exportDataAsCsv();
   }, []);
 
+  // const handleExportPDF = useCallback(() => {
+  //   const gridApi = gridRef.current?.api;
+
+  //   if (gridApi) {
+  //     const params = {
+  //       fileName: "exported-data.pdf",
+  //       onlySelected: false,
+  //       exportMode: undefined,
+  //     };
+
+  //     gridApi.exportDataAsCsv(params).then((data) => {
+  //       const jsonData = gridApi.api.getDataAsCsv(params);
+  //       const rows = jsonData.split("\n");
+  //       const header = rows[0].split(",");
+  //       const tableData = rows.slice(1).map((row) => row.split(","));
+
+  //       const pdfDoc = new jsPDF();
+
+  //       // Add data to the PDF document using autotable
+  //       pdfDoc.autoTable({
+  //         head: [header],
+  //         body: tableData,
+  //       });
+
+  //       pdfDoc.save(params.fileName);
+  //     });
+  //   }
+  // }, []);
+
   const handleSearch = (e: any) => {
     gridRef.current!.api.setGridOption("quickFilterText", e?.target?.value);
     setQuickFilterText(e?.target?.value);
@@ -310,12 +367,12 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, enable
         height: gridHeight ? gridHeight : enableSearch || enableCSVExport ? "76vh" : "78vh",
       }}
     >
-      {(enableSearch || enableCSVExport) && (
+      {(enableSearch || enableCSVExport || enablePDFExport) && (
         <div
           className='w-full  pb-1   mb-[-2px] rounded-t flex flex-row justify-between content-center '
           style={{
             alignItems: "center",
-            justifyContent: !enableCSVExport ? "flex-end" : "between",
+            justifyContent: !enableCSVExport ? "flex-end" : "space-between",
           }}
         >
           <div className='flex gap-2'>
@@ -323,25 +380,32 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, enable
               <>
                 {/* ------ Reusable button added -------- */}
                 <Button
-                  className={` ${borderBtnStyle}`}
+                  className={borderBtnStyle}
                   onClick={handleExport}
                   btnName='Export to CSV'
                 />
               </>
             )}
+            {enablePDFExport && (
+              <>
+                {/* ------ Reusable button added -------- */}
+                <Button
+                  className={borderBtnStyle}
+                  // onClick={handleExportPDF}
+                  btnName='Export to PDF'
+                />
+              </>
+            )}
             {enableCSVExport && (
-              // <Button
-              //   btnName='Reset All'
-              //   className={` ${borderBtnStyle}`}
-              // />
               <Button
                 btnName='Reset All'
-                className={` ${borderBtnStyle}`}
+                className={borderBtnStyle}
                 onClick={handleReset}
                 icon={<ArrowPathIcon className='h-3 w-3 ' />}
               />
             )}
           </div>
+
           {enableSearch && (
             <div className='flex gap-2 content-center '>
               <div className='w-full'>

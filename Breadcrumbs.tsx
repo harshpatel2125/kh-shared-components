@@ -14,9 +14,9 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ children, hideDivider }) => {
   const pathname = usePathname();
   const router = useRouter();
   const breads = pathname && pathname?.split("/");
-
+  // fixed w-[96%]
   return (
-    <div className={"card w-full "}>
+    <div className=' '>
       <div className='px-3 flex justify-between align-middle h-fit '>
         <div className=' mt-2'>
           {/* <Tabs /> */}
@@ -52,16 +52,9 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ children, hideDivider }) => {
           </Subtitle>
         </div>
       </div>
-      {/* ----- commented bottom divider line ------ */}
-      {/* {!hideDivider ? (
-        <>
-          <div className="my-2 h-0.5 border-t-0 bg-neutral-100 opacity-100 dark:opacity-50"></div>
-        </>
-      ) : (
-        <div className="mt-5"></div>
-      )} */}
+
       <div></div>
-      <div className='px-3 h-full w-full  '>{children}</div>
+      <div className='px-3   '>{children}</div>
     </div>
   );
 };
