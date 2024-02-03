@@ -6,7 +6,7 @@ import AddButton from "./formInputPopup";
 import { CustomPopupWrapper } from "../tw-elements";
 import FormInputPopup from "./formInputPopup";
 import DatePickerReact from "../FormElements/DateTimePicker";
-import DateTimePicker from "../form/dateTimePicker";
+import DateTimePicker from "../form/DateTimePicker";
 
 const TextInput = dynamic(() => import("../FormElements/TextInput"), {
   ssr: false,
@@ -148,15 +148,18 @@ const FormUI: FC<DataFormProps> = ({ column, containerClassName, formError, form
   const renderFields = (ele: IFieldType, index: number) => {
     switch (ele?.type) {
       case IInputType.DateTimePicker:
-        return <DateTimePicker />;
+        return (
+          <DateTimePicker
+            readOnly={ele?.readOnly}
+            required={ele?.required}
+          />
+        );
 
       case IInputType.Text:
       case IInputType.AutoComplete:
         return (
           <TextInput
             className='mb-2'
-            inputReadOnlyBg={ele.inputReadOnlyBg}
-            inputMandatoryBg={ele.inputMandatoryBg}
             readOnly={ele?.readOnly}
             required={ele?.required}
             emptyError={ele?.emptyError}
@@ -169,8 +172,6 @@ const FormUI: FC<DataFormProps> = ({ column, containerClassName, formError, form
         return (
           <TextInput
             className='mb-2'
-            inputReadOnlyBg={ele.inputReadOnlyBg}
-            inputMandatoryBg={ele.inputMandatoryBg}
             type='number'
             readOnly={ele?.readOnly}
             required={ele?.required}
@@ -184,8 +185,6 @@ const FormUI: FC<DataFormProps> = ({ column, containerClassName, formError, form
         return (
           <TextInput
             className='mb-2'
-            inputReadOnlyBg={ele.inputReadOnlyBg}
-            inputMandatoryBg={ele.inputMandatoryBg}
             type='password'
             readOnly={ele?.readOnly}
             required={ele?.required}
@@ -205,11 +204,12 @@ const FormUI: FC<DataFormProps> = ({ column, containerClassName, formError, form
           <div className={`${ele.className} mb-2 flex w-100 gap-2`}>
             <div className='flex-1'>
               <SelectDropdown
+                required={ele?.required}
                 dropdownBtnLabel={ele.dropdownBtnLabel}
                 label={ele?.label || "label"}
                 onChange={(e) => handleChange(e, index, ele?.type)}
                 options={ele?.options ? ele.options : [{ label: "one", value: "one" }]}
-                mandatory={ele?.mandatory}
+                readOnly={ele?.readOnly}
                 isSearchable={true}
                 value={ele?.selectedOption ? [ele?.selectedOption] : []}
                 defaultValue={ele?.defaultValue}
@@ -227,8 +227,6 @@ const FormUI: FC<DataFormProps> = ({ column, containerClassName, formError, form
         return (
           <TextInput
             className='mb-2'
-            inputReadOnlyBg={ele.inputReadOnlyBg}
-            inputMandatoryBg={ele.inputMandatoryBg}
             type='email'
             readOnly={ele?.readOnly}
             required={ele?.required}
@@ -259,6 +257,8 @@ const FormUI: FC<DataFormProps> = ({ column, containerClassName, formError, form
         return (
           <div className={`row-span-4 flex justify-start mb-2 ${ele?.className}`}>
             <ImageInput
+              required={ele?.required}
+              label={ele?.label}
               selectedImageUri={ele?.value?.toString()}
               onChange={(e) => handleChange(e, index, ele?.type)}
             />
