@@ -1,32 +1,43 @@
 import { COLORS } from "@/constants/colors";
-import React, { useState, ChangeEvent, useRef } from "react";
+import React, { useState, ChangeEvent, useRef, useEffect } from "react";
+import ErrorMessage from "../errorMessage";
 
 interface DateTimePickerProps {
+  id: string;
+  label: string;
+  value: string;
+  errorMsg: string;
+  onChange: (key: string, stateValue: string) => void;
   readOnly?: boolean;
   required?: boolean;
-  onChange?: (value: string | undefined) => void;
 }
 
-const DateTimePicker: React.FC<DateTimePickerProps> = ({ readOnly, required, onChange }) => {
-  const [dateTime, setDateTime] = useState<string | undefined>();
+const DateTimePicker: React.FC<DateTimePickerProps> = ({
+  id,
+  label,
+  value,
+  errorMsg,
+  readOnly,
+  required,
+  onChange,
+}) => {
+  // const [dateTime, setDateTime] = useState<string | undefined>(value);
 
   const dateInputRef = useRef<HTMLInputElement>(null);
 
   const handleDateTimeChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (!readOnly) {
-      const value = event.target.value;
-      setDateTime(value);
-      onChange && onChange(value);
+      const date: string = event.target.value;
+      // console.log(date, "date");
+      onChange(id, date);
     }
   };
 
   const handleCheckboxClick = () => {
     if (!readOnly) {
-      if (dateTime) {
-        setDateTime("");
-        onChange && onChange("");
+      if (value) {
+        onChange(id, "");
       } else {
-        // Open date input by focusing on it
         dateInputRef.current?.focus();
       }
     }
@@ -39,33 +50,57 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({ readOnly, required, onC
     }
   };
 
-  const dynamicBgClass = readOnly ? COLORS.READ_ONLY : required ? COLORS.REQUIRED : "";
+  const dynamicBgClass = readOnly
+    ? COLORS.READ_ONLY
+    : required
+    ? COLORS.REQUIRED
+    : "";
+
+  useEffect(() => {
+    if (readOnly) {
+      const today = new Date();
+      const dd = String(today.getDate()).padStart(2, "0");
+      const mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+      const yyyy = today.getFullYear();
+
+      let currDate = yyyy + "-" + mm + "-" + dd;
+      onChange(id, currDate);
+    }
+  }, [readOnly]);
 
   return (
-    <>
+    <div className="flex flex-col">
       <div
         style={{ width: "100%", gap: "10px" }}
         className={`${dynamicBgClass}  h-[30px] flex items-center border border-solid border-stone-300 px-2 py-0 rounded focus:border-stone-200 focus:outline-none`}
         onClick={handleDivClick} // Attach onClick event handler to the div
       >
         <input
-          type='checkbox'
-          checked={!!dateTime}
+          type="checkbox"
+          checked={!!value}
           onClick={handleCheckboxClick}
-          className='hover:bg-sky-700'
+          className="hover:bg-sky-700"
           readOnly={readOnly} // Add readOnly attribute to prevent checkbox changes
+          disabled={readOnly}
         />
 
         <input
-          type='date'
-          className={`'prevent-select text-xs outline-0 p-0 py-0   ${dateTime ? " text-stone-800" : "text-stone-400"} '`}
+          id={id}
+          type="date"
+          className={`'prevent-select text-xs outline-0 p-0 py-0   ${
+            value ? " text-stone-800" : "text-stone-400"
+          } '`}
           onChange={handleDateTimeChange}
-          value={dateTime || ''}
+          value={value}
           ref={dateInputRef}
           readOnly={readOnly} // Add readOnly attribute to prevent date input changes
+          disabled={readOnly}
         />
       </div>
-    </>
+
+      {/* @arun write style for error msg : create reusable component with all styles and pass dynamic error msg  */}
+      <ErrorMessage errorMessage={errorMsg} />
+    </div>
   );
 };
 

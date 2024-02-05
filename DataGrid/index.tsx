@@ -1,10 +1,17 @@
 import React, { useMemo, FC, useCallback, useRef, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
 import { useRouter, usePathname } from "next/navigation";
-import { CheckboxSelectionCallbackParams, HeaderCheckboxSelectionCallbackParams } from "@ag-grid-community/core";
+import {
+  CheckboxSelectionCallbackParams,
+  HeaderCheckboxSelectionCallbackParams,
+} from "@ag-grid-community/core";
 import TextInput from "../FormElements/TextInput";
 import Button from "../button";
-import { ArrowPathIcon, DocumentArrowDownIcon, PencilIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowPathIcon,
+  DocumentArrowDownIcon,
+  PencilIcon,
+} from "@heroicons/react/24/outline";
 import { getIcon } from "@/utils/getIcons";
 import { TableCellActionTypes } from "@/constants/tableCols";
 import ButtonBorder from "../ButtonGroup/ButtonBorder";
@@ -25,7 +32,9 @@ var checkboxSelection = function (params: CheckboxSelectionCallbackParams) {
   return params.api.getRowGroupColumns().length === 0;
 };
 
-var headerCheckboxSelection = function (params: HeaderCheckboxSelectionCallbackParams) {
+var headerCheckboxSelection = function (
+  params: HeaderCheckboxSelectionCallbackParams
+) {
   // we put checkbox on the name if we are not doing grouping
   return params.api.getRowGroupColumns().length === 0;
 };
@@ -52,12 +61,33 @@ interface IDataGrid {
   enablePDFExport?: any;
 }
 
-const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEditPress, disablePagination, defaultPageSize, pageSizeSelector, gridHeight, enableCSVExport, enablePDFExport, enableSearch, propertyForEdit, enableEditBtn, functionType, pageType, onDropdownChange, onTextFieldChange }) => {
+const DataGrid: FC<IDataGrid> = ({
+  rowData,
+  filter,
+  columnDefs,
+  editable,
+  onEditPress,
+  disablePagination,
+  defaultPageSize,
+  pageSizeSelector,
+  gridHeight,
+  enableCSVExport,
+  enablePDFExport,
+  enableSearch,
+  propertyForEdit,
+  enableEditBtn,
+  functionType,
+  pageType,
+  onDropdownChange,
+  onTextFieldChange,
+}) => {
   const gridRef = useRef<AgGridReact>(null);
   const navigateToEditPage = (editId: string, data: any) => {
     if (data && data.id) {
       // Assuming 'edit' is the route for editing, and 'id' is the parameter for the edit page
-      router.push(`/edit/${editId}?data=${encodeURIComponent(JSON.stringify(data))}`);
+      router.push(
+        `/edit/${editId}?data=${encodeURIComponent(JSON.stringify(data))}`
+      );
       console.log("Edit ID:", editId); // Log the ID to the console
     } else {
       console.error("Invalid rowData:", data);
@@ -164,8 +194,16 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
   const [selectedRowData, setSelectedRowData] = useState<any | null>(null);
   const [showTaxPopup, setShowTaxPopup] = useState<boolean>(false);
 
-  function getClickHandlerCallback(data: any, actionType: string, rowData: any) {
-    let pageApis = functionType && pageType && FunctionPagesApis.hasOwnProperty(functionType) && FunctionPagesApis[functionType][pageType];
+  function getClickHandlerCallback(
+    data: any,
+    actionType: string,
+    rowData: any
+  ) {
+    let pageApis =
+      functionType &&
+      pageType &&
+      FunctionPagesApis.hasOwnProperty(functionType) &&
+      FunctionPagesApis[functionType][pageType];
 
     switch (actionType) {
       case TableCellActionTypes.Delete:
@@ -182,17 +220,15 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
             const firstRowData = rowData[0]; // Assuming you want the id from the first row
             if (firstRowData && firstRowData.id) {
               // Define the router instance
-
               // Fetch data for editing (Replace 'YourAPIEndpoint' with the actual API endpoint)
-              fetch(`https://kh-pos-backend-api.onrender.com/api/User/${firstRowData.id}`)
-                .then((response) => response.json())
-                .then((data) => {
-                  // Assuming you have a function to navigate to the edit page
-                  router.push(`/edit/${firstRowData.id}?data=${encodeURIComponent(JSON.stringify(data))}`);
-                })
-                .catch((error) => console.error("Error fetching data:", error));
-
-              console.log("Edit ID:", firstRowData.id);
+              // fetch(`https://kh-pos-backend-api.onrender.com/api/User/${firstRowData.id}`)
+              //   .then((response) => response.json())
+              //   .then((data) => {
+              //     // Assuming you have a function to navigate to the edit page
+              //     router.push(`/edit/${firstRowData.id}?data=${encodeURIComponent(JSON.stringify(data))}`);
+              //   })
+              //   .catch((error) => console.error("Error fetching data:", error));
+              // console.log("Edit ID:", firstRowData.id);
             } else {
               console.error("Invalid row data:", firstRowData);
             }
@@ -241,17 +277,21 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
 
   const cellRendererFunc = (data: any, cellIcons: any) => {
     return (
-      <div className='flex h-full flex-row gap-0.5 items-center'>
+      <div className="flex h-full flex-row gap-0.5 items-center">
         {cellIcons?.map((item: any, i: number) => {
           const clickHandler = () => {
-            const handler = getClickHandlerCallback(data, item?.actionType, rowData);
+            const handler = getClickHandlerCallback(
+              data,
+              item?.actionType,
+              rowData
+            );
             handler();
           };
 
           return (
             <div
               key={i}
-              className='tooltip tooltip-right'
+              className="tooltip tooltip-right"
               data-tip={item?.icon}
             >
               <div
@@ -271,7 +311,8 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
     const updatedColumn = {
       headerName: actionColumn.headerName,
       field: actionColumn.field,
-      cellRenderer: (params: any) => cellRendererFunc(params, actionColumn?.cellActions),
+      cellRenderer: (params: any) =>
+        cellRendererFunc(params, actionColumn?.cellActions),
     };
     columnDefs[0] = updatedColumn;
     return columnDefs;
@@ -362,27 +403,31 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
 
   return (
     <div
-      className='ag-theme-balham h-full rounded'
+      className="ag-theme-balham h-full rounded"
       style={{
-        height: gridHeight ? gridHeight : enableSearch || enableCSVExport ? "76vh" : "78vh",
+        height: gridHeight
+          ? gridHeight
+          : enableSearch || enableCSVExport
+          ? "76vh"
+          : "78vh",
       }}
     >
       {(enableSearch || enableCSVExport || enablePDFExport) && (
         <div
-          className='w-full  pb-1   mb-[-2px] rounded-t flex flex-row justify-between content-center '
+          className="w-full  pb-1   mb-[-2px] rounded-t flex flex-row justify-between content-center "
           style={{
             alignItems: "center",
             justifyContent: !enableCSVExport ? "flex-end" : "space-between",
           }}
         >
-          <div className='flex gap-2'>
+          <div className="flex gap-2">
             {enableCSVExport && (
               <>
                 {/* ------ Reusable button added -------- */}
                 <Button
                   className={borderBtnStyle}
                   onClick={handleExport}
-                  btnName='Export to CSV'
+                  btnName="Export to CSV"
                 />
               </>
             )}
@@ -392,23 +437,23 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
                 <Button
                   className={borderBtnStyle}
                   // onClick={handleExportPDF}
-                  btnName='Export to PDF'
+                  btnName="Export to PDF"
                 />
               </>
             )}
             {enableCSVExport && (
               <Button
-                btnName='Reset All'
+                btnName="Reset All"
                 className={borderBtnStyle}
                 onClick={handleReset}
-                icon={<ArrowPathIcon className='h-3 w-3 ' />}
+                icon={<ArrowPathIcon className="h-3 w-3 " />}
               />
             )}
           </div>
 
           {enableSearch && (
-            <div className='flex gap-2 content-center '>
-              <div className='w-full'>
+            <div className="flex gap-2 content-center ">
+              <div className="w-full">
                 {/* <TextInput
                   className='h-7  '
                   // label="Search . . ."
@@ -419,8 +464,8 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
                   }}
                 /> */}
                 <input
-                  className='border border-slate-300 focus:outline-none focus:border-slate-900 rounded py-[4px] w-52 px-3'
-                  placeholder='search . . . '
+                  className="border border-slate-300 focus:outline-none focus:border-slate-900 rounded py-[4px] w-52 px-3"
+                  placeholder="search . . . "
                   value={quickFilterText}
                   onChange={(e) => {
                     handleSearch(e);
@@ -435,7 +480,9 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
         autoSizeStrategy={autoSizeStrategy}
         ref={gridRef}
         rowData={rowData}
-        columnDefs={isCellRendererType ? getUpdatedColumnDefs() : getNewColumnDefs()}
+        columnDefs={
+          isCellRendererType ? getUpdatedColumnDefs() : getNewColumnDefs()
+        }
         defaultColDef={defaultColDef}
         pivotPanelShow={"always"}
         rowGroupPanelShow={"always"}

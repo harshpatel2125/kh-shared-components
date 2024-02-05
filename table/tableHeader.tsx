@@ -6,7 +6,6 @@ import { ROUTES } from "@/constants/routes";
 
 export interface TableHeaderProps {
   headerButtons?: Array<IButton> | undefined;
-  tableSitemap?: string[];
   title?: string;
   handleCreateNew?: () => any;
   handleFormSubmission?: (data: any) => any;
@@ -16,7 +15,16 @@ export interface TableHeaderProps {
   handleSort?: (sortType: any) => any;
 }
 
-const TableHeader = ({ headerButtons, tableSitemap, title, handleCreateNew, handleFormSubmission, handleGoBack, drawerId, showFilterBtn, handleSort }: TableHeaderProps) => {
+const TableHeader = ({
+  headerButtons,
+  title,
+  handleCreateNew,
+  handleFormSubmission,
+  handleGoBack,
+  drawerId,
+  showFilterBtn,
+  handleSort,
+}: TableHeaderProps) => {
   const router = useRouter();
   const getClickHandler = (btn: any) => {
     //button type will be from IButtontype enum only
@@ -50,10 +58,12 @@ const TableHeader = ({ headerButtons, tableSitemap, title, handleCreateNew, hand
         }
       `}</style>
 
-      <div className={`rounded  mb-0.5 text-white flex justify-between items-center p-1  bg-gray-600  w-full`}>
-        <h4 className='ml-1 text-sm font-semibold  '>{title}</h4>
-        <div className='flex items-center gap-2'>
-          <div className='flex gap-1  items-center'>
+      <div
+        className={`rounded  mb-0.5 text-white flex justify-between items-center p-1  bg-gray-600  w-full`}
+      >
+        <h4 className="ml-1 text-sm font-semibold  ">{title}</h4>
+        <div className="flex items-center gap-2">
+          <div className="flex gap-1  items-center">
             {/* Other Buttons */}
 
             {headerButtons?.map((btn, i) => {
@@ -64,7 +74,7 @@ const TableHeader = ({ headerButtons, tableSitemap, title, handleCreateNew, hand
                   return (
                     <label
                       htmlFor={drawerId}
-                      className='mr-2 cursor-pointer'
+                      className="mr-2 cursor-pointer"
                       key={i}
                     >
                       {btn.icon}
@@ -77,7 +87,9 @@ const TableHeader = ({ headerButtons, tableSitemap, title, handleCreateNew, hand
                     <Button
                       key={i}
                       icon={btn.icon}
-                      onClick={() => (clickHandlerFunc ? clickHandlerFunc(btn.btnType) : null)}
+                      onClick={() =>
+                        clickHandlerFunc ? clickHandlerFunc(btn.btnType) : null
+                      }
                       btnName={btn.btnName}
                       className={btn?.className}
                     />
