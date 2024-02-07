@@ -1,4 +1,4 @@
-const data = [
+export const labelData = [
   {
     ResourcesID: "2F5BE181-DEC1-4DED-9DBA-041552EF3925",
     FactoryID: 1,
