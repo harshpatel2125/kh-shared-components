@@ -84,7 +84,7 @@ const DataGrid: FC<IDataGrid> = ({
   const router = useRouter();
 
   const isCellRendererType =
-    columnDefs?.actions?.hasOwnProperty("isCellrenderer");
+    columnDefs?.Actions?.hasOwnProperty("isCellrenderer");
 
   function getClickHandlerCallback(params: any, actionType: string) {
     switch (actionType) {
@@ -159,7 +159,7 @@ const DataGrid: FC<IDataGrid> = ({
   };
 
   const getUpdatedColumnDefs = () => {
-    const actionColumn = columnDefs?.actions;
+    const actionColumn = columnDefs?.Actions;
     const updatedColumn = {
       headerName: actionColumn.headerName,
       field: actionColumn.field,
@@ -167,13 +167,13 @@ const DataGrid: FC<IDataGrid> = ({
         cellRendererFunc(params, actionColumn?.cellActions),
     };
 
-    columnDefs.actions = updatedColumn;
+    columnDefs.Actions = updatedColumn;
 
     return columnDefs;
   };
 
   const getNewColumnDefs = () => {
-    return Object.values(columnDefs).map((ele, index) => {
+    return Object.values(columnDefs).map((ele: any, index: number) => {
       if (ele?.dropdown) {
         return {
           ...ele,
