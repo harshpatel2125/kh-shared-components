@@ -4,7 +4,6 @@ import CreatableSelect from "react-select/creatable";
 const primaryColor = "#2C2C2C";
 const secondaryColor = "#eeeff1";
 import { components } from "react-select";
-import { COLORS } from "@/constants/colors";
 
 interface Option {
   label?: any;
@@ -12,6 +11,7 @@ interface Option {
 }
 
 //  new
+
 interface SelectDropdownProps {
   label?: string;
   isSearchable?: boolean;
@@ -20,20 +20,12 @@ interface SelectDropdownProps {
   value?: Option | Option[] | null;
   onChange?: (newValue: any) => void;
   onCreateOption?: (inputValue: string) => void;
-  readOnly?: boolean;
+  mandatory?: boolean;
   dropdownBtnLabel?: string;
   defaultValue?: Option;
-  required?: boolean;
 }
 
-const SelectDropdown: React.FC<SelectDropdownProps> = ({ readOnly, required, defaultValue, dropdownBtnLabel, label, isSearchable, options, isLoading, value, onChange = () => { }, onCreateOption }) => {
-  
-  const handleInputChange = (newValue: Option | null) => {
-    if (!readOnly && onChange) {
-      onChange(newValue);
-    }
-  };
-
+const SelectDropdown: React.FC<SelectDropdownProps> = ({ defaultValue, dropdownBtnLabel, mandatory, label, isSearchable, options, isLoading, value, onChange = () => {}, onCreateOption }) => {
   const [labelColor, setLabelColor] = useState<any>(false);
   const [addBtn, setAddBtn] = useState(true);
   return (
@@ -69,7 +61,7 @@ const SelectDropdown: React.FC<SelectDropdownProps> = ({ readOnly, required, def
           }),
           control: (base: CSSObjectWithLabel, props: ControlProps<Option, false, GroupBase<Option>>) => ({
             ...base,
-            backgroundColor: readOnly ? COLORS.READ_ONLY_CSS : required ? COLORS.REQUIRED_CSS : "transparent",
+            backgroundColor: defaultValue ? "#bbbbbb12" : "transparent",
             fontSize: "14px",
             minHeight: "26px",
             margin: "0px",
@@ -140,14 +132,14 @@ const SelectDropdown: React.FC<SelectDropdownProps> = ({ readOnly, required, def
         isClearable
         isDisabled={isLoading}
         isLoading={isLoading}
-        onChange={handleInputChange}
+        onChange={(newValue) => onChange(newValue)}
         onCreateOption={onCreateOption}
         options={options}
         // value={value}
       />
       <label className={`font-light absolute  text-[10px] bg-[white] px-[3px] py-0 rounded-[10px] left-[2%] selectDropDown ${labelColor ? "text-blue-800" : "text-slate-700"} `}>
         {label ? label : "Label"}
-        {required ? "*" : ""}
+        {mandatory ? "*" : ""}
       </label>
     </div>
   );

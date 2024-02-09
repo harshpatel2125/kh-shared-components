@@ -1,68 +1,44 @@
-import { COLORS } from "@/constants/colors";
+"use client";
+
 import React, { useState, ChangeEvent, useRef } from "react";
 
-interface DateTimePickerProps {
-  readOnly?: boolean;
-  required?: boolean;
-  onChange?: (value: string | undefined) => void;
-}
-
-const DateTimePicker: React.FC<DateTimePickerProps> = ({ readOnly, required, onChange }) => {
+const DateTimePicker: React.FC = () => {
   const [dateTime, setDateTime] = useState<string | undefined>();
 
   const dateInputRef = useRef<HTMLInputElement>(null);
 
   const handleDateTimeChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (!readOnly) {
-      const value = event.target.value;
-      setDateTime(value);
-      onChange && onChange(value);
-    }
+    setDateTime(event.target.value);
   };
 
   const handleCheckboxClick = () => {
-    if (!readOnly) {
-      if (dateTime) {
-        setDateTime("");
-        onChange && onChange("");
-      } else {
-        // Open date input by focusing on it
-        dateInputRef.current?.focus();
-      }
-    }
-  };
-
-  const handleDivClick = () => {
-    // Focus on the date input when the surrounding div is clicked
-    if (!readOnly) {
+    if (dateTime) {
+      setDateTime("");
+    } else {
+      // Open date input by focusing on it
       dateInputRef.current?.focus();
     }
   };
 
-  const dynamicBgClass = readOnly ? COLORS.READ_ONLY : required ? COLORS.REQUIRED : "";
-
   return (
     <>
       <div
-        style={{ width: "100%", gap: "10px" }}
-        className={`${dynamicBgClass}  h-[30px] flex items-center border border-solid border-stone-300 px-2 py-0 rounded focus:border-stone-200 focus:outline-none`}
-        onClick={handleDivClick} // Attach onClick event handler to the div
+        style={{ width: "175px", gap: "10px" }}
+        className="flex items-center border border-solid border-base-300 px-2 py-1 rounded-md focus:border-blue-500 focus:outline-none "
       >
         <input
-          type='checkbox'
+          type="checkbox"
           checked={!!dateTime}
           onClick={handleCheckboxClick}
-          className='hover:bg-sky-700'
-          readOnly={readOnly} // Add readOnly attribute to prevent checkbox changes
+          className="hover:bg-sky-700"
         />
 
         <input
-          type='date'
-          className={`'prevent-select text-xs outline-0 p-0 py-0   ${dateTime ? " text-stone-800" : "text-stone-400"} '`}
+          type="date"
+          className="prevent-select text-sm outline-0"
           onChange={handleDateTimeChange}
-          value={dateTime || ''}
+          value={dateTime}
           ref={dateInputRef}
-          readOnly={readOnly} // Add readOnly attribute to prevent date input changes
         />
       </div>
     </>

@@ -6,7 +6,7 @@ interface DatePickerReactProps {
   placeholder?: string;
   initialDate?: Date;
   onChange?: ((date: Date | null) => void) | undefined;
-  value?: any;
+  value?: Date | null;
 }
 
 const DatePickerReact: React.FC<DatePickerReactProps> = ({ onChange, placeholder, initialDate, value }) => {
@@ -23,7 +23,7 @@ const DatePickerReact: React.FC<DatePickerReactProps> = ({ onChange, placeholder
 
   return (
     <DatePicker
-      className='border py-1.5 px-2 text-xs rounded w-[300px]'
+      className='border py-1 px-2 text-xs rounded'
       selected={date}
       isClearable
       placeholderText={placeholder || "Please pick the date"}

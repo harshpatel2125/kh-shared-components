@@ -32,13 +32,7 @@ export const HEADER_BUTTONS: headerButtonTypes = {
   save: {
     btnName: "Save",
     color: "tertiary",
-    icon: (
-      <SaveIcon
-        height='14'
-        width='14'
-        color='#000'
-      />
-    ),
+    icon: <SaveIcon height="14" width="14" color="#000" />,
 
     className: `${solidBtnStyle}`,
     btnType: IButtonType.FormSubmit,
@@ -46,13 +40,7 @@ export const HEADER_BUTTONS: headerButtonTypes = {
   new: {
     btnName: "New",
     color: "tertiary",
-    icon: (
-      <AddIcon
-        width='13'
-        height='13'
-        color='#000'
-      />
-    ),
+    icon: <AddIcon width="13" height="13" color="#000" />,
 
     className: `${solidBtnStyle}`,
     btnType: IButtonType.CreateNew,
@@ -68,26 +56,14 @@ export const HEADER_BUTTONS: headerButtonTypes = {
   filter: {
     btnName: "",
     color: "tertiary",
-    icon: (
-      <FilterIcon
-        height='15'
-        width='15'
-        color='#fff'
-      />
-    ),
+    icon: <FilterIcon height="15" width="15" color="#fff" />,
     className: filterButtonClass,
     btnType: IButtonType.Filter,
   },
   back: {
     btnName: "Back",
     color: "tertiary",
-    icon: (
-      <BackIcon
-        height='14'
-        width='10'
-        color='#000'
-      />
-    ),
+    icon: <BackIcon height="14" width="10" color="#000" />,
     className: `${solidBtnStyle}`,
     btnType: IButtonType.GoBack,
   },
@@ -95,26 +71,14 @@ export const HEADER_BUTTONS: headerButtonTypes = {
   asc: {
     btnName: "",
     color: "tertiary",
-    icon: (
-      <DownArrowIcon
-        height='16'
-        width='16'
-        color='#fff'
-      />
-    ),
+    icon: <DownArrowIcon height="16" width="16" color="#fff" />,
     className: `${buttonClass} ${filterButtonClass} bg-transparent hover:bg-transparent`,
     btnType: IButtonType.sortAsc,
   },
   desc: {
     btnName: "",
     color: "tertiary",
-    icon: (
-      <UpArrowIcon
-        height='16'
-        width='16'
-        color='#fff'
-      />
-    ),
+    icon: <UpArrowIcon height="16" width="16" color="#fff" />,
     className: `${buttonClass}  ${filterButtonClass}  bg-transparent hover:bg-transparent`,
     btnType: IButtonType.sortDesc,
   },

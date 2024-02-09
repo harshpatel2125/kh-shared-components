@@ -3,7 +3,6 @@
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css"; // Core CSS
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Theme
-import { useMemo } from "react";
 
 // Create new GridExample component
 export const GridExample = ({ rowData, colDefs }: any) => {
@@ -12,12 +11,6 @@ export const GridExample = ({ rowData, colDefs }: any) => {
   const autoSizeStrategy = {
     type: "fitGridWidth",
   };
-  const getRowId = useMemo(() => {
-    return (params: any) => {
-      console.log(params.data.id);
-      return params.data.id;
-    };
-  }, []);
 
   return (
     <div
@@ -30,7 +23,6 @@ export const GridExample = ({ rowData, colDefs }: any) => {
       }}
     >
       <AgGridReact
-        getRowId={getRowId}
         rowData={rowData}
         columnDefs={colDefs}
         pagination={true}

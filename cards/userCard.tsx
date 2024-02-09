@@ -7,26 +7,22 @@ type userCardProps = {
   userDept: any;
 };
 
-const UserCard: React.FC<userCardProps> = ({
-  userImage,
-  userName,
-  userDept,
-}: userCardProps) => {
+const UserCard: React.FC<userCardProps> = ({ userImage, userName, userDept }: userCardProps) => {
   return (
-    <div className="block rounded-lg  bg-white p-6 dashboard-card-shadow  ">
-      <div className="flex flex-col justify-center items-center">
-        <div className="rounded-full w-24 h-24 shadow-lg p-3">
+    <div className='block rounded-lg  bg-stone-100 p-6 dashboard-card-shadow  '>
+      <div className='flex flex-col justify-center items-center'>
+        <div className='rounded-full w-24 h-24 shadow-lg p-3'>
           <Image
             src={userImage || "/user1.png"}
             alt={userName}
             width={80}
             height={80}
-            className="object-contain"
+            className='object-contain'
           />
         </div>
-        <div className="text-center mt-2">
-          <p className="text-xl font-medium">{userName}</p>
-          <p className="text-md">[ {userDept} ]</p>
+        <div className='text-center mt-2'>
+          <p className='text-xl font-medium'>{userName}</p>
+          <p className='text-md'>[ {userDept} ]</p>
         </div>
       </div>
     </div>

@@ -1,41 +1,24 @@
 import React, { useMemo, FC, useCallback, useRef, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
 import { useRouter, usePathname } from "next/navigation";
-import { CheckboxSelectionCallbackParams, HeaderCheckboxSelectionCallbackParams } from "@ag-grid-community/core";
+import {
+  CheckboxSelectionCallbackParams,
+  HeaderCheckboxSelectionCallbackParams,
+} from "@ag-grid-community/core";
 import TextInput from "../FormElements/TextInput";
 import Button from "../button";
-import { ArrowPathIcon, DocumentArrowDownIcon, PencilIcon } from "@heroicons/react/24/outline";
-import { getIcon } from "@/utils/getIcons";
-import { TableCellActionTypes } from "@/constants/tableCols";
-import ButtonBorder from "../ButtonGroup/ButtonBorder";
-import { TETooltip } from "tw-elements-react";
+import { ArrowPathIcon } from "@heroicons/react/24/outline";
+import { getIcon } from "../../utils/getIcons";
+import { TableCellActionTypes } from "../../constants/tableCols";
 import GridDropdown from "./GridDropdown";
-import { CellEditorComponent } from "ag-grid-community/dist/lib/components/framework/componentTypes";
-import CustomPopup from "../popup/index";
-import { LocalStorageUtils, getLocalStorage } from "@/utils/localStorage";
-import { FunctionPagesApis } from "@/constants/functionPagesApis";
-import { IApiRequestsType } from "@/constants/functionPagesApis/apiTypes";
-import TaxPatternPopup from "../popup/TaxPatternPopup";
-import NotificationIcon from "@/assets/icons/NotificationIcon";
-// import jsPDF from 'jspdf';
-// import 'jspdf-autotable';
-
-var checkboxSelection = function (params: CheckboxSelectionCallbackParams) {
-  // we put checkbox on the name if we are not doing grouping
-  return params.api.getRowGroupColumns().length === 0;
-};
-
-var headerCheckboxSelection = function (params: HeaderCheckboxSelectionCallbackParams) {
-  // we put checkbox on the name if we are not doing grouping
-  return params.api.getRowGroupColumns().length === 0;
-};
+import { FunctionPagesApis } from "../../constants/functionPagesApis";
+// update
 const borderBtnStyle: string = "border border-black px-2";
 
 interface IDataGrid {
   rowData: Array<any>;
-  columnDefs: Array<any>;
+  columnDefs: any;
   filter?: boolean;
-  onEditPress?: (e: any) => void;
   onDropdownChange?: (rowIndex: number, value: any) => void; // Callback for dropdown
   onTextFieldChange?: (rowIndex: number, value: any) => void; // Callback for text field
   editable?: boolean;
@@ -50,19 +33,33 @@ interface IDataGrid {
   functionType?: string | null;
   pageType?: string | null;
   enablePDFExport?: any;
+  //
+  onEditRecord?: any;
 }
 
-const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEditPress, disablePagination, defaultPageSize, pageSizeSelector, gridHeight, enableCSVExport, enablePDFExport, enableSearch, propertyForEdit, enableEditBtn, functionType, pageType, onDropdownChange, onTextFieldChange }) => {
+const DataGrid: FC<IDataGrid> = ({
+  rowData,
+  filter,
+  columnDefs,
+  editable,
+  disablePagination,
+  defaultPageSize,
+  pageSizeSelector,
+  gridHeight,
+  enableCSVExport,
+  enablePDFExport,
+  enableSearch,
+  propertyForEdit,
+  enableEditBtn,
+  functionType,
+  pageType,
+  onDropdownChange,
+  onTextFieldChange,
+  //
+
+  onEditRecord,
+}) => {
   const gridRef = useRef<AgGridReact>(null);
-  const navigateToEditPage = (editId: string, data: any) => {
-    if (data && data.id) {
-      // Assuming 'edit' is the route for editing, and 'id' is the parameter for the edit page
-      router.push(`/edit/${editId}?data=${encodeURIComponent(JSON.stringify(data))}`);
-      console.log("Edit ID:", editId); // Log the ID to the console
-    } else {
-      console.error("Invalid rowData:", data);
-    }
-  };
 
   const [quickFilterText, setQuickFilterText] = React.useState("");
 
@@ -84,122 +81,22 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
     };
   }, [editable, filter]);
 
-  /** getTooltip utility has been deleted --  */
-
-  // // const updatedColumnDefs = useMemo(() => {
-
-  //   // const renderCell = (e: any) => {
-  //   //   const lowercasedSearchValue = quickFilterText.toLowerCase();
-  //   //   const originalString = e?.value?.toString().toLowerCase();
-  //   //   const isMatch =
-  //   //     lowercasedSearchValue &&
-  //   //     lowercasedSearchValue !== "" &&
-  //   //     lowercasedSearchValue?.length > 0 &&
-  //   //     originalString?.includes(lowercasedSearchValue);
-  //   //   const splitedString = originalString?.split("");
-
-  //   //   return (
-  //   //     <div>
-  //   //       {splitedString?.map((char: string, index: number) => (
-  //   //         <span
-  //   //           key={index}
-  //   //           style={{
-  //   //             background:
-  //   //               isMatch && lowercasedSearchValue?.includes(char)
-  //   //                 ? "yellow"
-  //   //                 : "",
-  //   //           }}
-  //   //         >
-  //   //           {char}
-  //   //         </span>
-  //   //       ))}
-  //   //     </div>
-  //   //   );
-  //   // };
-
-  //   // const renderEditCell = (e: any, a: any) => {
-  //   //   return (
-  //   //     <div className="flex h-full flex-row gap-1 items-center">
-  //   //       {getToolTips(cellIcons)}
-  //   //     </div>
-  //   //   );
-
-  //   // return (
-  //   //   <Button
-  //   //     onClick={() =>
-  //   //       onEditPress &&
-  //   //       propertyForEdit &&
-  //   //       onEditPress(e?.data?.[propertyForEdit])
-  //   //     }
-  //   //     icon={<PencilIcon className="h-3 w-3" />}
-  //   //     className="px-1 m-0 py-0 bg-transparent hover:bg-transparent"
-  //   //   />
-  //   // );
-  //   // };
-
-  // //   return columnDefs;
-  //   // const editColumn = {
-  //   //   headerName: "Action",
-  //   //   field: "",
-  //   //   cellRenderer: renderEditCell,
-  //   //   // width: 100,
-  //   // };
-  //   // const headerColumn = {
-  //   //   headerName: "",
-  //   //   field: "",
-  //   //   checkboxSelection: true,
-  //   //   headerCheckboxSelection: true,
-  //   //   // width: 50,
-  //   // };
-  //   // if (enableEditBtn) {
-  //   //   return [...newColumnDefs];
-  //   // } else return [...newColumnDefs];
-  // // }, [quickFilterText, columnDefs]);
-
   const router = useRouter();
-  const pathname = usePathname();
 
-  const isCellRendererType = columnDefs[0]?.hasOwnProperty("isCellrenderer");
-  const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
-  const [selectedRowData, setSelectedRowData] = useState<any | null>(null);
-  const [showTaxPopup, setShowTaxPopup] = useState<boolean>(false);
+  const isCellRendererType =
+    columnDefs?.Actions?.hasOwnProperty("isCellrenderer");
 
-  function getClickHandlerCallback(data: any, actionType: string, rowData: any) {
-    let pageApis = functionType && pageType && FunctionPagesApis.hasOwnProperty(functionType) && FunctionPagesApis[functionType][pageType];
-
+  function getClickHandlerCallback(params: any, actionType: string) {
     switch (actionType) {
       case TableCellActionTypes.Delete:
         // call detele record
         return () => {
-          setSelectedRowData(rowData);
-          setShowConfirmation(true);
+          // setSelectedRowData(rowData);
         };
 
       case TableCellActionTypes.Edit:
         // call edit record
-        return () => {
-          if (rowData && rowData.length > 0) {
-            const firstRowData = rowData[0]; // Assuming you want the id from the first row
-            if (firstRowData && firstRowData.id) {
-              // Define the router instance
-
-              // Fetch data for editing (Replace 'YourAPIEndpoint' with the actual API endpoint)
-              fetch(`https://kh-pos-backend-api.onrender.com/api/User/${firstRowData.id}`)
-                .then((response) => response.json())
-                .then((data) => {
-                  // Assuming you have a function to navigate to the edit page
-                  router.push(`/edit/${firstRowData.id}?data=${encodeURIComponent(JSON.stringify(data))}`);
-                })
-                .catch((error) => console.error("Error fetching data:", error));
-
-              console.log("Edit ID:", firstRowData.id);
-            } else {
-              console.error("Invalid row data:", firstRowData);
-            }
-          } else {
-            console.error("No row data available");
-          }
-        };
+        return () => onEditRecord(params);
 
       case TableCellActionTypes.Rights:
         // call rights record
@@ -223,7 +120,7 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
         // call suspend record
 
         return () => {
-          setShowTaxPopup((prev) => !prev);
+          console.log("tax pattern handle");
         };
 
       default:
@@ -233,25 +130,19 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
     }
   }
 
-  const handleDeleteClick = (rowData: any) => {
-    setSelectedRowData(rowData); // Save the selected row data
-    setShowConfirmation(true); // Show the confirmation popup
-  };
-  [selectedRowData];
-
-  const cellRendererFunc = (data: any, cellIcons: any) => {
+  const cellRendererFunc = (params: any, cellIcons: any) => {
     return (
-      <div className='flex h-full flex-row gap-0.5 items-center'>
+      <div className="flex h-full flex-row gap-0.5 items-center">
         {cellIcons?.map((item: any, i: number) => {
-          const clickHandler = () => {
-            const handler = getClickHandlerCallback(data, item?.actionType, rowData);
-            handler();
-          };
+          const clickHandler = getClickHandlerCallback(
+            params,
+            item?.actionType
+          );
 
           return (
             <div
               key={i}
-              className='tooltip tooltip-right'
+              className="tooltip tooltip-right"
               data-tip={item?.icon}
             >
               <div
@@ -266,19 +157,23 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
       </div>
     );
   };
+
   const getUpdatedColumnDefs = () => {
-    const actionColumn = columnDefs[0];
+    const actionColumn = columnDefs?.Actions;
     const updatedColumn = {
       headerName: actionColumn.headerName,
       field: actionColumn.field,
-      cellRenderer: (params: any) => cellRendererFunc(params, actionColumn?.cellActions),
+      cellRenderer: (params: any) =>
+        cellRendererFunc(params, actionColumn?.cellActions),
     };
-    columnDefs[0] = updatedColumn;
+
+    columnDefs.Actions = updatedColumn;
+
     return columnDefs;
   };
 
   const getNewColumnDefs = () => {
-    return columnDefs.map((ele, index) => {
+    return Object.values(columnDefs).map((ele: any, index: number) => {
       if (ele?.dropdown) {
         return {
           ...ele,
@@ -362,27 +257,31 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
 
   return (
     <div
-      className='ag-theme-balham h-full rounded'
+      className="ag-theme-balham h-full rounded"
       style={{
-        height: gridHeight ? gridHeight : enableSearch || enableCSVExport ? "76vh" : "78vh",
+        height: gridHeight
+          ? gridHeight
+          : enableSearch || enableCSVExport
+          ? "76vh"
+          : "78vh",
       }}
     >
       {(enableSearch || enableCSVExport || enablePDFExport) && (
         <div
-          className='w-full  pb-1   mb-[-2px] rounded-t flex flex-row justify-between content-center '
+          className="w-full  pb-1   mb-[-2px] rounded-t flex flex-row justify-between content-center "
           style={{
             alignItems: "center",
             justifyContent: !enableCSVExport ? "flex-end" : "space-between",
           }}
         >
-          <div className='flex gap-2'>
+          <div className="flex gap-2">
             {enableCSVExport && (
               <>
                 {/* ------ Reusable button added -------- */}
                 <Button
                   className={borderBtnStyle}
                   onClick={handleExport}
-                  btnName='Export to CSV'
+                  btnName="Export to CSV"
                 />
               </>
             )}
@@ -392,23 +291,23 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
                 <Button
                   className={borderBtnStyle}
                   // onClick={handleExportPDF}
-                  btnName='Export to PDF'
+                  btnName="Export to PDF"
                 />
               </>
             )}
             {enableCSVExport && (
               <Button
-                btnName='Reset All'
+                btnName="Reset All"
                 className={borderBtnStyle}
                 onClick={handleReset}
-                icon={<ArrowPathIcon className='h-3 w-3 ' />}
+                icon={<ArrowPathIcon className="h-3 w-3 " />}
               />
             )}
           </div>
 
           {enableSearch && (
-            <div className='flex gap-2 content-center '>
-              <div className='w-full'>
+            <div className="flex gap-2 content-center ">
+              <div className="w-full">
                 {/* <TextInput
                   className='h-7  '
                   // label="Search . . ."
@@ -419,8 +318,8 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
                   }}
                 /> */}
                 <input
-                  className='border border-slate-300 focus:outline-none focus:border-slate-900 rounded py-[4px] w-52 px-3'
-                  placeholder='search . . . '
+                  className="border border-slate-300 focus:outline-none focus:border-slate-900 rounded py-[4px] w-52 px-3"
+                  placeholder="search . . . "
                   value={quickFilterText}
                   onChange={(e) => {
                     handleSearch(e);
@@ -435,7 +334,9 @@ const DataGrid: FC<IDataGrid> = ({ rowData, filter, columnDefs, editable, onEdit
         autoSizeStrategy={autoSizeStrategy}
         ref={gridRef}
         rowData={rowData}
-        columnDefs={isCellRendererType ? getUpdatedColumnDefs() : getNewColumnDefs()}
+        columnDefs={
+          isCellRendererType ? getUpdatedColumnDefs() : getNewColumnDefs()
+        }
         defaultColDef={defaultColDef}
         pivotPanelShow={"always"}
         rowGroupPanelShow={"always"}
