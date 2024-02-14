@@ -75,7 +75,6 @@ const FormUI: FC<DataFormProps> = ({
   handleTogglePassword,
 }) => {
   //modify
-
   const getFileUri = (event: any, fieldIndex: any) => {
     const binaryFile = event?.target?.files?.[0];
 
@@ -157,13 +156,6 @@ const FormUI: FC<DataFormProps> = ({
   // };
 
   function handleChange(key: any, stateValue: any) {
-    console.log(
-      {
-        ...formState,
-        [key]: { ...formState[key], value: stateValue },
-      },
-      "change"
-    );
     setFormState({
       ...formState,
       [key]: { ...formState[key], value: stateValue },
