@@ -11,12 +11,9 @@ import TableHeader from "../table/tableHeader";
  * in this parent component of forms
  */
 
-const DataFormWrapper = ({ data }: any) => {
-  const [fieldsState, setFieldsState] = React.useState<Array<IFieldType>>(
-    data?.formFields
-  );
+const DataFormWrapper = ({ data, formFields }: any) => {
+  const [fieldsState, setFieldsState] = React.useState(formFields);
   const [formError, setFormError] = React.useState(false);
-
   const router = useRouter();
 
   const handleSubmitForm = () => {
@@ -116,23 +113,14 @@ const DataFormWrapper = ({ data }: any) => {
     );
   }
 
-  const {
-    THButtons,
-    THSitemap,
-    THtitle,
-    formFields,
-    column,
-    showTableHeader,
-    tableContainerCss,
-  } = data;
-  // api -->
+  const { THButtons, THtitle, column, showTableHeader, tableContainerCss } =
+    data;
 
   return (
     <div className="m-0">
       {showTableHeader ? (
         <TableHeader
           headerButtons={THButtons}
-          tableSitemap={THSitemap}
           title={THtitle}
           handleGoBack={handleGoBack}
           handleFormSubmission={handleSubmitForm}
@@ -141,7 +129,7 @@ const DataFormWrapper = ({ data }: any) => {
       <FormUI
         // formState={formFields}
         formState={fieldsState}
-        setFieldsState={setFieldsState}
+        setFormState={setFieldsState}
         column={column ? column : 3}
         formError={formError}
         containerClassName={tableContainerCss}

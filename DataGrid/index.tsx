@@ -8,11 +8,11 @@ import {
 import TextInput from "../FormElements/TextInput";
 import Button from "../button";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
-import { getIcon } from "../../utils/getIcons";
-import { TableCellActionTypes } from "../../constants/tableCols";
+import { getIcon } from "@/utils/getIcons";
+import { TableCellActionTypes } from "@/constants/tableCols";
 import GridDropdown from "./GridDropdown";
-import { FunctionPagesApis } from "../../constants/functionPagesApis";
-// update
+import { FunctionPagesApis } from "@/constants/functionPagesApis";
+
 const borderBtnStyle: string = "border border-black px-2";
 
 interface IDataGrid {

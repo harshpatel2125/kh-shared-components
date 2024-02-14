@@ -13,11 +13,9 @@ export interface TableHeaderProps {
   drawerId?: string;
   showFilterBtn?: boolean;
   handleSort?: (sortType: any) => any;
-  tableSitemap?: any;
 }
 
 const TableHeader = ({
-  tableSitemap,
   headerButtons,
   title,
   handleCreateNew,
