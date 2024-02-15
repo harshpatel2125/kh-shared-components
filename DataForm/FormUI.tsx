@@ -269,6 +269,7 @@ const FormUI: FC<DataFormProps> = ({
       case IInputType.Email:
         return (
           <TextInput
+            id={ele.key}
             className="mb-2"
             type="email"
             readOnly={ele?.readOnly}

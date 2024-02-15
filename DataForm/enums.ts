@@ -15,7 +15,3 @@ export enum IInputType {
   Checkbox="checkbox",
 }
 
-export enum IApiType{
-  get='get',
-  post='post',
-}
