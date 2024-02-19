@@ -8,11 +8,12 @@ import {
 import TextInput from "../FormElements/TextInput";
 import Button from "../button";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
-import { getIcon } from "../../utils/getIcons";
-import { TableCellActionTypes } from "../../constants/tableCols";
+import { getIcon } from "@/utils/getIcons";
+import { TableCellActionTypes } from "@/constants/tableCols";
 import GridDropdown from "./GridDropdown";
-import { FunctionPagesApis } from "../../constants/functionPagesApis";
-// update
+import { FunctionPagesApis } from "@/constants/functionPagesApis";
+import CustomPopup from "../popup";
+
 const borderBtnStyle: string = "border border-black px-2";
 
 interface IDataGrid {
@@ -62,6 +63,9 @@ const DataGrid: FC<IDataGrid> = ({
   const gridRef = useRef<AgGridReact>(null);
 
   const [quickFilterText, setQuickFilterText] = React.useState("");
+  const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
+  const [selectedRowData, setSelectedRowData] = useState<any | null>(null);
+
 
   const defaultColDef = useMemo<any>(() => {
     return {
@@ -82,7 +86,8 @@ const DataGrid: FC<IDataGrid> = ({
   }, [editable, filter]);
 
   const router = useRouter();
-
+ 
+  [selectedRowData];
   const isCellRendererType =
     columnDefs?.Actions?.hasOwnProperty("isCellrenderer");
 
@@ -91,7 +96,8 @@ const DataGrid: FC<IDataGrid> = ({
       case TableCellActionTypes.Delete:
         // call detele record
         return () => {
-          // setSelectedRowData(rowData);
+          setSelectedRowData(rowData);
+          setShowConfirmation(true);
         };
 
       case TableCellActionTypes.Edit:
@@ -129,16 +135,29 @@ const DataGrid: FC<IDataGrid> = ({
         };
     }
   }
+  const handleDeleteClick = (rowData: any) => {
+    setSelectedRowData(rowData); // Save the selected row data
+    setShowConfirmation(true); // Show the confirmation popup
+  };
+  [selectedRowData];
 
   const cellRendererFunc = (params: any, cellIcons: any) => {
     return (
       <div className="flex h-full flex-row gap-0.5 items-center">
-        {cellIcons?.map((item: any, i: number) => {
+        {/* {cellIcons?.map((item: any, i: number) => {
           const clickHandler = getClickHandlerCallback(
             params,
             item?.actionType
-          );
-
+          ); */}
+          {cellIcons?.map((item: any, i: number) => {
+            const clickHandler = (e: any) => {
+              if (item?.actionType === TableCellActionTypes.Delete) {
+                handleDeleteClick(e.data);
+              } else {
+                const handler = getClickHandlerCallback(params,item?.actionType);
+                handler();
+              }
+            };
           return (
             <div
               key={i}
@@ -243,7 +262,16 @@ const DataGrid: FC<IDataGrid> = ({
     gridRef.current!.api.setGridOption("quickFilterText", e?.target?.value);
     setQuickFilterText(e?.target?.value);
   };
+  const handleCancel = () => {
+    // Handle cancel logic
+    setShowConfirmation(false);
+  };
 
+  const handleConfirm = () => {
+    // Handle confirm logic, e.g., delete operation
+    console.log("Deleting data:", selectedRowData);
+    setShowConfirmation(false);
+  };
   const handleReset = () => {
     setQuickFilterText("");
     gridRef.current!.api.setFilterModel(null);
@@ -360,7 +388,7 @@ const DataGrid: FC<IDataGrid> = ({
         taxPattern="pattern"
         taxPercentage="percentage"
       /> */}
-      {/* <CustomPopup
+      <CustomPopup
         title="Are you sure to delete this data?"
         showModal={showConfirmation}
         setShowModal={setShowConfirmation}
@@ -379,7 +407,7 @@ const DataGrid: FC<IDataGrid> = ({
             Submit
           </button>
         </div>
-      </CustomPopup> */}
+      </CustomPopup>
     </div>
   );
 };

@@ -1,47 +1,64 @@
-"use client";
+import { COLORS } from "@/constants/colors";
+import React, { useState, ChangeEvent, useEffect } from "react";
+import ErrorMessage from "../errorMessage";
 
-import React, { useState, ChangeEvent, useRef } from "react";
+interface DateTimePickerProps {
+  id: string;
+  label: string;
+  value: string;
+  errorMsg: string;
+  onChange: (key: string, stateValue: string) => void;
+  readOnly?: boolean;
+  required?: boolean;
+}
 
-const DateTimePicker: React.FC = () => {
-  const [dateTime, setDateTime] = useState<string | undefined>();
-
-  const dateInputRef = useRef<HTMLInputElement>(null);
-
+const DateTimePicker: React.FC<DateTimePickerProps> = ({
+  id,
+  label,
+  value,
+  errorMsg,
+  readOnly,
+  required,
+  onChange,
+}) => {
   const handleDateTimeChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setDateTime(event.target.value);
-  };
-
-  const handleCheckboxClick = () => {
-    if (dateTime) {
-      setDateTime("");
-    } else {
-      // Open date input by focusing on it
-      dateInputRef.current?.focus();
+    if (!readOnly) {
+      const date: string = event.target.value;
+      onChange(id, date);
     }
   };
 
-  return (
-    <>
-      <div
-        style={{ width: "175px", gap: "10px" }}
-        className="flex items-center border border-solid border-base-300 px-2 py-1 rounded-md focus:border-blue-500 focus:outline-none "
-      >
-        <input
-          type="checkbox"
-          checked={!!dateTime}
-          onClick={handleCheckboxClick}
-          className="hover:bg-sky-700"
-        />
+  useEffect(() => {
+    if (readOnly) {
+      const today = new Date();
+      const dd = String(today.getDate()).padStart(2, "0");
+      const mm = String(today.getMonth() + 1).padStart(2, "0");
+      const yyyy = today.getFullYear();
 
-        <input
-          type="date"
-          className="prevent-select text-sm outline-0"
-          onChange={handleDateTimeChange}
-          value={dateTime}
-          ref={dateInputRef}
-        />
-      </div>
-    </>
+      let currDate = yyyy + "-" + mm + "-" + dd;
+      onChange(id, currDate);
+    }
+  }, [readOnly]);
+
+  return (
+    <div className="flex flex-col">
+      <label htmlFor={id} className="sr-only">
+        {label}
+      </label>
+      <input
+        id={id}
+        type="date"
+        value={value}
+        onChange={handleDateTimeChange}
+        className={`prevent-select text-xs outline-none px-4 py-2 rounded border border-solid border-stone-300 focus:border-stone-200 ${
+          value ? "text-stone-800" : "text-stone-400"
+        } ${readOnly ? COLORS.READ_ONLY : ""}`}
+        readOnly={readOnly}
+        disabled={readOnly}
+        placeholder={label}
+      />
+      <ErrorMessage errorMessage={errorMsg} />
+    </div>
   );
 };
 
